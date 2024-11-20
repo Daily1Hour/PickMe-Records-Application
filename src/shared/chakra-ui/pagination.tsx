@@ -45,8 +45,7 @@ export const Pagination = () => {
           <PaginationPrevTrigger
             onClick={() => handlePageChange(page - 1)}
             disabled={page === 1}
-          >
-            Prev
+          >◀
           </PaginationPrevTrigger>
 
           {Array.from({ length: Math.ceil(count / pageSize) }, (_, index) => {
@@ -71,7 +70,7 @@ export const Pagination = () => {
             onClick={() => handlePageChange(page + 1)}
             disabled={page === Math.ceil(count / pageSize)}
           >
-            Next
+            ▶
           </PaginationNextTrigger>
         </HStack>
       </PaginationRoot>

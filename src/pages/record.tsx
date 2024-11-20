@@ -1,27 +1,32 @@
 import { Pagination } from "../shared/chakra-ui/pagination";
 import { Field } from "../shared/chakra-ui/recordBox";
-import { Stack, Heading, Button, Input } from "@chakra-ui/react";
+import { Stack, Heading, Button, Input, Flex } from "@chakra-ui/react";
 
 function Record() {
     return (
         <>
             <Stack>
                 <Heading>내 기록</Heading>
-                <Stack>
-                    <Field label="회사이름" required>
-                        <Input />
-                    </Field>
-                    <Field label="면접유형">
-                        <Input />
-                    </Field>
-                    <Field label="면접질문">
-                        <Input />
-                    </Field>
-                    <Button>등록</Button>
-                </Stack>
+                <form style={{width:"1000px", height:"500px", outline:"auto", outlineColor:"darkgray", padding:'20px'}}>
+                    <Stack gap="10">
+                        <Field 
+                        label="회사이름"
+                        required>
+                            <Input />
+                        </Field>
+                        <Field label="면접유형">
+                            <Input />
+                        </Field>
+                        <Field label="면접질문">
+                            <Input />
+                        </Field>
+                    </Stack>
+                    <Button
+                    margin="20px"
+                    type="submit"
+                    colorPalette="orange">등록</Button>
+                </form>
             </Stack>
-
-            <Pagination />
         </>
     );
 }
