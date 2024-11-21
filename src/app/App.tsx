@@ -1,6 +1,6 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Provider as ChakraProvider } from "../shared/chakra-ui/provider";
-import Record from "../pages/record";
+import Record from "../components/record";
 
 const queryClient = new QueryClient();
 

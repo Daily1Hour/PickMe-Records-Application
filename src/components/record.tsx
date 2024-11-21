@@ -22,9 +22,9 @@ function Record() {
                         </Field>
                     </Stack>
                     <Button
-                    margin="20px"
+                    m="20px"
                     type="submit"
-                    colorPalette="orange">등록</Button>
+                    bg="#009A6E">등록</Button>
                 </form>
             </Stack>
         </>
