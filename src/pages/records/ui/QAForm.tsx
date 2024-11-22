@@ -1,7 +1,6 @@
-import React, { useState } from "react";
-import { Box, Button, Input, VStack, Heading } from "@chakra-ui/react";
+import { Box, Button, Input, VStack } from "@chakra-ui/react";
 
-import { Field } from "./recordBox";
+import { Field } from "../../../shared/chakra-ui/recordBox";
 
 interface FormData {
     id: number;
@@ -9,42 +8,20 @@ interface FormData {
     answer: string;
 }
 
-const QAForm: React.FC = () => {
-    const [forms, setForms] = useState<FormData[]>([]);
+interface QAFormProps {
+    forms: FormData[];
+    onAddForm: () => void;
+    onUpdateForm: (id: number, field: keyof FormData, value: string) => void;
+    onDeleteForm: (id: number) => void;
+  }
 
-    // 폼 추가 핸들러
-    const addForm = () => {
-        setForms((prevForms) => [
-            ...prevForms,
-            { id: Date.now(), question: "", answer: "" },
-        ]);
-    };
-
-    // 폼 삭제 핸들러
-    const deleteForm = (id: number) => {
-        setForms((prevForms) => prevForms.filter((form) => form.id !== id));
-    };
-
-    // 폼 데이터 변경 핸들러
-    const handleInputChange = (
-        id: number,
-        field: keyof FormData,
-        value: string,
-    ) => {
-        setForms((prevForms) =>
-            prevForms.map((form) =>
-                form.id === id ? { ...form, [field]: value } : form,
-            ),
-        );
-    };
-
-    // 폼 제출 핸들러 (전체 폼 데이터 출력)
-    const handleSubmit = (event: React.FormEvent) => {
-        event.preventDefault();
-        console.log(forms);
-    };
-
-    return (
+  const QAForm: React.FC<QAFormProps> = ({
+    forms,
+    onAddForm,
+    onUpdateForm,
+    onDeleteForm,
+  }) =>
+    {return (
         <Box p={8}>
             <VStack align="stretch">
                 <form>
@@ -59,7 +36,7 @@ const QAForm: React.FC = () => {
                                 <Input
                                     value={form.question}
                                     onChange={(e) =>
-                                        handleInputChange(
+                                        onUpdateForm(
                                             form.id,
                                             "question",
                                             e.target.value,
@@ -73,7 +50,7 @@ const QAForm: React.FC = () => {
                                 <Input
                                     value={form.answer}
                                     onChange={(e) =>
-                                        handleInputChange(
+                                        onUpdateForm(
                                             form.id,
                                             "answer",
                                             e.target.value,
@@ -86,22 +63,14 @@ const QAForm: React.FC = () => {
                             <Button
                                 bg="grey"
                                 size="sm"
-                                onClick={() => deleteForm(form.id)}>
+                                onClick={() => onDeleteForm(form.id)}>
                                 X
                             </Button>
                         </Box>
                     ))}
                 </form>
-                <Button bg="green" onClick={addForm} size="sm">
+                <Button bg="green" onClick={onAddForm} size="sm">
                     +
-                </Button>
-                <Button
-                    m="20px"
-                    type="submit"
-                    bg="#009A6E"
-                    onClick={handleSubmit}
-                >
-                    저장
                 </Button>
             </VStack>
         </Box>
