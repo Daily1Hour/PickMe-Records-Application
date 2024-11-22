@@ -1,6 +1,6 @@
-import { Box, Button, Input, VStack } from "@chakra-ui/react";
+import { Box, Button, HStack, Input, VStack } from "@chakra-ui/react";
 
-import { Field } from "../../../shared/chakra-ui/recordBox";
+import { Field } from "../../../shared/chakra-ui/Field";
 
 interface FormData {
     id: number;
@@ -22,11 +22,12 @@ interface QAFormProps {
     onDeleteForm,
   }) =>
     {return (
-        <Box p={8}>
+        <Box>
             <VStack align="stretch">
                 <form>
                     {forms.map((form) => (
                         <Box
+                            m={10}
                             key={form.id}
                             p={4}
                             borderWidth="1px"
@@ -60,16 +61,19 @@ interface QAFormProps {
                                     variant="flushed"
                                 />
                             </Field>
-                            <Button
+                            <HStack justifyContent="flex-end">
+                            <Button 
+                                m={4}
                                 bg="grey"
                                 size="sm"
                                 onClick={() => onDeleteForm(form.id)}>
                                 X
                             </Button>
+                            </HStack>
                         </Box>
                     ))}
                 </form>
-                <Button bg="green" onClick={onAddForm} size="sm">
+                <Button bg="#009A6E" onClick={onAddForm} w="50px">
                     +
                 </Button>
             </VStack>

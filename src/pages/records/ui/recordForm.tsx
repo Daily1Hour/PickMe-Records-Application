@@ -1,5 +1,5 @@
-import { Field } from "../../../shared/chakra-ui/recordBox";
-import { Stack, Heading, Button, Input } from "@chakra-ui/react";
+import { Field } from "../../../shared/chakra-ui/Field";
+import { Stack, Heading, Button, Input, HStack } from "@chakra-ui/react";
 import QAForm from "./QAForm";
 import { useState } from "react";
 
@@ -15,10 +15,13 @@ interface QAData {
     answer: string;
 }
 
-
 function Record() {
-    const [forms, setForms] = useState<RecordFormData[]>([{ id: Date.now(), company: '', category: '' }]) // 기본 폼 하나 추가]);
-    const [qaforms, qasetForms] = useState<QAData[]>([{id: Date.now(), question: '', answer: ''}]);
+    const [forms, setForms] = useState<RecordFormData[]>([
+        { id: Date.now(), company: "", category: "" },
+    ]); // 기본 폼 하나 추가]);
+    const [qaforms, qasetForms] = useState<QAData[]>([
+        { id: Date.now(), question: "", answer: "" },
+    ]);
 
     const addForm = () => {
         qasetForms((prevForms) => [
@@ -111,14 +114,18 @@ function Record() {
                                     onDeleteForm={deleteForm}
                                 />
                             </Stack>
-                            <Button
-                                m="20px"
-                                type="submit"
-                                bg="#009A6E"
-                                onClick={handleSubmit}
-                            >
-                                등록
-                            </Button>
+                            <HStack justifyContent="flex-end">
+                                <Button
+                                    m="20px"
+                                    type="submit"
+                                    bg="#009A6E"
+                                    borderRadius="30px"
+                                    w="100px"
+                                    onClick={handleSubmit}
+                                >
+                                    등록
+                                </Button>
+                            </HStack>
                         </>
                     ))}
                 </form>
