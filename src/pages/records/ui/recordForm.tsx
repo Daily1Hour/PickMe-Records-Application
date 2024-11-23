@@ -80,7 +80,7 @@ function Record() {
                     {forms.map((form) => (
                         <>
                             <Stack key={form.id} gap="10">
-                                <Field label="회사이름" required>
+                                <Field label="회사 이름" required>
                                     <Input
                                         value={form.company}
                                         onChange={(e) =>
@@ -93,7 +93,7 @@ function Record() {
                                         variant="flushed"
                                     />
                                 </Field>
-                                <Field label="면접유형">
+                                <Field label="면접 유형">
                                     <Input
                                         value={form.category}
                                         onChange={(e) =>
@@ -123,7 +123,7 @@ function Record() {
                                     w="100px"
                                     onClick={handleSubmit}
                                 >
-                                    등록
+                                    수정
                                 </Button>
                             </HStack>
                         </>

@@ -1,6 +1,14 @@
-import { Box, Button, HStack, Input, VStack } from "@chakra-ui/react";
+import {
+    Box,
+    Button,
+    HStack,
+    VStack,
+    Editable,
+    IconButton,
+} from "@chakra-ui/react";
 
 import { Field } from "../../../shared/chakra-ui/Field";
+import { LuCheck, LuPencilLine, LuX } from "react-icons/lu";
 
 interface FormData {
     id: number;
@@ -33,42 +41,98 @@ const QAForm: React.FC<QAFormProps> = ({
                             borderWidth="1px"
                             borderRadius="md"
                         >
-                            <Field label="면접질문">
-                                <Input
-                                    value={form.question}
-                                    onChange={(e) =>
-                                        onUpdateForm(
-                                            form.id,
-                                            "question",
-                                            e.target.value,
-                                        )
-                                    }
-                                    placeholder="질문"
-                                    variant="flushed"
-                                />
+                            <Field label="면접 질문" my={4}>
+                                <Editable.Root defaultValue="질문을 입력해주세요.">
+                                    <Editable.Preview />
+                                    <Editable.Textarea
+                                        value={form.question}
+                                        onChange={(e) =>
+                                            onUpdateForm(
+                                                form.id,
+                                                "question",
+                                                e.target.value,
+                                            )
+                                        }
+                                        h="100px"
+                                    />
+                                    <Editable.Control>
+                                        <Editable.EditTrigger asChild>
+                                            <IconButton
+                                                variant="ghost"
+                                                size="xs"
+                                            >
+                                                <LuPencilLine />
+                                            </IconButton>
+                                        </Editable.EditTrigger>
+                                        <Editable.CancelTrigger asChild>
+                                            <IconButton
+                                                variant="outline"
+                                                size="xs"
+                                            >
+                                                <LuX />
+                                            </IconButton>
+                                        </Editable.CancelTrigger>
+                                        <Editable.SubmitTrigger asChild>
+                                            <IconButton
+                                                variant="outline"
+                                                size="xs"
+                                            >
+                                                <LuCheck />
+                                            </IconButton>
+                                        </Editable.SubmitTrigger>
+                                    </Editable.Control>
+                                </Editable.Root>
                             </Field>
                             <Field label="답변">
-                                <Input
-                                    value={form.answer}
-                                    onChange={(e) =>
-                                        onUpdateForm(
-                                            form.id,
-                                            "answer",
-                                            e.target.value,
-                                        )
-                                    }
-                                    placeholder="답변"
-                                    variant="flushed"
-                                />
+                                <Editable.Root defaultValue="답변을 입력해주세요.">
+                                    <Editable.Preview />
+                                    <Editable.Textarea
+                                        value={form.answer}
+                                        onChange={(e) =>
+                                            onUpdateForm(
+                                                form.id,
+                                                "answer",
+                                                e.target.value,
+                                            )
+                                        }
+                                        h="100px"
+                                    />
+                                    <Editable.Control>
+                                        <Editable.EditTrigger asChild>
+                                            <IconButton
+                                                variant="ghost"
+                                                size="xs"
+                                            >
+                                                <LuPencilLine />
+                                            </IconButton>
+                                        </Editable.EditTrigger>
+                                        <Editable.CancelTrigger asChild>
+                                            <IconButton
+                                                variant="outline"
+                                                size="xs"
+                                            >
+                                                <LuX />
+                                            </IconButton>
+                                        </Editable.CancelTrigger>
+                                        <Editable.SubmitTrigger asChild>
+                                            <IconButton
+                                                variant="outline"
+                                                size="xs"
+                                            >
+                                                <LuCheck />
+                                            </IconButton>
+                                        </Editable.SubmitTrigger>
+                                    </Editable.Control>
+                                </Editable.Root>
                             </Field>
                             <HStack justifyContent="flex-end">
                                 <Button
                                     m={4}
-                                    bg="grey"
+                                    bg="none"
                                     size="sm"
                                     onClick={() => onDeleteForm(form.id)}
                                 >
-                                    X
+                                    ✖
                                 </Button>
                             </HStack>
                         </Box>

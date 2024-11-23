@@ -18,7 +18,7 @@ const Sidebar: React.FC = () => {
     const [isCollapsed, setIsCollapsed] = useState(false); // 사이드바 접힘 상태 관리
 
     return (
-        <Flex h="50vh" w="300px" position="fixed">
+        <Flex h="50vh" w="300px" position="fixed" zIndex={40}>
             {/* 사이드바 */}
             <IconButton
                 aria-label="Toggle Sidebar"
