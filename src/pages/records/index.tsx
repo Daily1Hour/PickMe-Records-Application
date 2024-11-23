@@ -2,7 +2,7 @@ import Record from "./ui/recordForm";
 import PDFUploadForm from "./ui/pdfForm";
 import Sidebar from "./ui/sidebar";
 
-import { Box, HStack, Flex} from "@chakra-ui/react";
+import { Box, HStack, Flex } from "@chakra-ui/react";
 
 function RecordPage() {
     return (
@@ -12,7 +12,7 @@ function RecordPage() {
                 <Flex direction="column" align="center" maxW="800px" mx="auto">
                     <HStack gap={4}>
                         <Box w="600px">
-                        <PDFUploadForm />
+                            <PDFUploadForm />
                         </Box>
                         <Record />
                     </HStack>

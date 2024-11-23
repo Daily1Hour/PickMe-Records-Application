@@ -30,7 +30,6 @@ const PDFUploadForm: React.FC = () => {
     return (
         <Box
             p={8}
-
             width="600px"
             height="700px"
             position="fixed"
@@ -42,7 +41,8 @@ const PDFUploadForm: React.FC = () => {
                     <Input
                         type="file"
                         accept=".pdf"
-                        onChange={handleFileChange} />
+                        onChange={handleFileChange}
+                    />
                 </Field>
                 {selectedFile && (
                     <HStack justify="space-between" width="100%">

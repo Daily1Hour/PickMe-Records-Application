@@ -13,15 +13,15 @@ interface QAFormProps {
     onAddForm: () => void;
     onUpdateForm: (id: number, field: keyof FormData, value: string) => void;
     onDeleteForm: (id: number) => void;
-  }
+}
 
-  const QAForm: React.FC<QAFormProps> = ({
+const QAForm: React.FC<QAFormProps> = ({
     forms,
     onAddForm,
     onUpdateForm,
     onDeleteForm,
-  }) =>
-    {return (
+}) => {
+    return (
         <Box>
             <VStack align="stretch">
                 <form>
@@ -62,13 +62,14 @@ interface QAFormProps {
                                 />
                             </Field>
                             <HStack justifyContent="flex-end">
-                            <Button 
-                                m={4}
-                                bg="grey"
-                                size="sm"
-                                onClick={() => onDeleteForm(form.id)}>
-                                X
-                            </Button>
+                                <Button
+                                    m={4}
+                                    bg="grey"
+                                    size="sm"
+                                    onClick={() => onDeleteForm(form.id)}
+                                >
+                                    X
+                                </Button>
                             </HStack>
                         </Box>
                     ))}
