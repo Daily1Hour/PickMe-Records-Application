@@ -23,7 +23,7 @@ const Sidebar: React.FC = () => {
       <IconButton
             aria-label="Toggle Sidebar"
             onClick={() => setIsCollapsed(!isCollapsed)}
-            bg="transparent"
+            bg="gray.800"
             color="white"
             position="absolute"
             _hover={{ bg: "gray.700" }}>
@@ -31,6 +31,7 @@ const Sidebar: React.FC = () => {
             </IconButton>
       <Box
         as="nav"
+        borderRadius="15px"
         w={isCollapsed ? "100px" : "250px"} // 접힘 상태에 따라 폭 변경
         visibility={isCollapsed? "hidden":"visible"}
         bg="gray.800"

@@ -72,7 +72,7 @@ function Record() {
                 <Heading>내 기록</Heading>
                 <form
                     style={{
-                        width: "1000px",
+                        width: "800px",
                         height: "500px",
                         padding: "20px",
                     }}

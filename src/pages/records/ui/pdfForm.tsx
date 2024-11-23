@@ -30,24 +30,24 @@ const PDFUploadForm: React.FC = () => {
     return (
         <Box
             p={8}
-            borderWidth="1px"
-            borderRadius="md"
+
             width="600px"
             height="700px"
+            position="fixed"
             alignContent="center"
+            top="50px"
         >
             <VStack align="stretch">
-                <Field label="이력서를 업로드해주세요.">
+                <Field label="이력서를 업로드해주세요." zIndex="0">
                     <Input
                         type="file"
                         accept=".pdf"
-                        onChange={handleFileChange}
-                    />
+                        onChange={handleFileChange} />
                 </Field>
                 {selectedFile && (
                     <HStack justify="space-between" width="100%">
                         <Text>
-                            선택된 파일: <strong>{selectedFile.name}</strong>
+                            📄: <strong>{selectedFile.name}</strong>
                         </Text>
                         <Button
                             colorScheme="red"
