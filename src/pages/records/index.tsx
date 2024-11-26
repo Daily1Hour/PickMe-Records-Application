@@ -1,4 +1,4 @@
-import Record from "./ui/recordForm";
+import RecordForm from "./ui/recordForm";
 import PDFUploadForm from "./ui/pdfForm";
 import Sidebar from "./ui/sidebar";
 
@@ -14,7 +14,7 @@ function RecordPage() {
                         <Box w="600px">
                             <PDFUploadForm />
                         </Box>
-                        <Record />
+                        <RecordForm />
                     </HStack>
                 </Flex>
             </Box>

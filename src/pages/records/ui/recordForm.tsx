@@ -1,137 +1,76 @@
-import { Field } from "../../../shared/chakra-ui/Field";
-import { Stack, Heading, Button, Input, HStack } from "@chakra-ui/react";
+import { Stack, Heading, Button, Input, HStack, Box } from "@chakra-ui/react";
 import QAForm from "./QAForm";
-import { useState } from "react";
+import { useForm, FormProvider, Controller } from "react-hook-form";
 
-interface RecordFormData {
-    id: number;
+interface FormData {
     company: string;
     category: string;
+    questions: { question: string; answer: string }[];
 }
 
-interface QAData {
-    id: number;
-    question: string;
-    answer: string;
-}
+function RecordForm() {
+    const methods = useForm<FormData>({
+        defaultValues: {
+            company: "",
+            category: "",
+            questions: [{ question: "", answer: "" }],
+        },
+    });
 
-function Record() {
-    const [forms, setForms] = useState<RecordFormData[]>([
-        { id: Date.now(), company: "", category: "" },
-    ]); // 기본 폼 하나 추가]);
-    const [qaforms, qasetForms] = useState<QAData[]>([
-        { id: Date.now(), question: "", answer: "" },
-    ]);
-
-    const addForm = () => {
-        qasetForms((prevForms) => [
-            ...prevForms,
-            { id: Date.now(), question: "", answer: "" },
-        ]);
-    };
-
-    // 폼 데이터 업데이트
-    const updateForm = (id: number, field: keyof QAData, value: string) => {
-        qasetForms(
-            qaforms.map((form) =>
-                form.id === id ? { ...form, [field]: value } : form,
-            ),
-        );
-    };
-
-    // 폼 삭제
-    const deleteForm = (id: number) => {
-        qasetForms(qaforms.filter((form) => form.id !== id));
-    };
-
-    const handleInputChange = (
-        id: number,
-        field: keyof RecordFormData,
-        value: string,
-    ) => {
-        setForms((prevForms) =>
-            prevForms.map((form) =>
-                form.id === id ? { ...form, [field]: value } : form,
-            ),
-        );
-        qasetForms((prevForms) =>
-            prevForms.map((form) =>
-                form.id === id ? { ...form, [field]: value } : form,
-            ),
-        );
-    };
-
-    const handleSubmit = (event: React.FormEvent) => {
-        event.preventDefault();
-        console.log(qaforms, forms);
+    const onSubmit = (data: FormData) => {
+        console.log("Submitted Data:", data);
     };
 
     return (
-        <>
-            <Stack>
-                <Heading>내 기록</Heading>
-                <form
-                    style={{
-                        width: "800px",
-                        height: "500px",
-                        padding: "20px",
-                    }}
-                >
-                    {forms.map((form) => (
-                        <>
-                            <Stack key={form.id} gap="10">
-                                <Field label="회사 이름" required>
+        <FormProvider {...methods}>
+            <form
+                onSubmit={methods.handleSubmit(onSubmit)}
+                style={{ width: "800px", height: "500px", padding: "20px" }}
+            >
+                <Stack>
+                    <Heading>내 기록</Heading>
+                    <Box>
+                        <Stack gap="10">
+                            <Controller
+                                name="company"
+                                control={methods.control}
+                                render={({ field }) => (
                                     <Input
-                                        value={form.company}
-                                        onChange={(e) =>
-                                            handleInputChange(
-                                                form.id,
-                                                "company",
-                                                e.target.value,
-                                            )
-                                        }
+                                        {...field}
                                         variant="flushed"
+                                        placeholder="회사 이름"
                                     />
-                                </Field>
-                                <Field label="면접 유형">
+                                )}
+                            />
+                            <Controller
+                                name="category"
+                                control={methods.control}
+                                render={({ field }) => (
                                     <Input
-                                        value={form.category}
-                                        onChange={(e) =>
-                                            handleInputChange(
-                                                form.id,
-                                                "category",
-                                                e.target.value,
-                                            )
-                                        }
-                                        placeholder="ex)1차 면접"
+                                        {...field}
                                         variant="flushed"
+                                        placeholder="면접 유형"
                                     />
-                                </Field>
-                                <QAForm
-                                    forms={qaforms}
-                                    onAddForm={addForm}
-                                    onUpdateForm={updateForm}
-                                    onDeleteForm={deleteForm}
-                                />
-                            </Stack>
-                            <HStack justifyContent="flex-end">
-                                <Button
-                                    m="20px"
-                                    type="submit"
-                                    bg="#009A6E"
-                                    borderRadius="30px"
-                                    w="100px"
-                                    onClick={handleSubmit}
-                                >
-                                    수정
-                                </Button>
-                            </HStack>
-                        </>
-                    ))}
-                </form>
-            </Stack>
-        </>
+                                )}
+                            />
+                        </Stack>
+                        <QAForm name="questions" />
+                        <HStack justifyContent="flex-end">
+                            <Button
+                                m="20px"
+                                type="submit"
+                                bg="#009A6E"
+                                borderRadius="30px"
+                                w="100px"
+                            >
+                                수정
+                            </Button>
+                        </HStack>
+                    </Box>
+                </Stack>
+            </form>
+        </FormProvider>
     );
 }
 
-export default Record;
+export default RecordForm;
