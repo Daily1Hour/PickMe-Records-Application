@@ -11,21 +11,16 @@ import {
     Flex,
 } from "@chakra-ui/react";
 
-type MenuItem = {
-    label: string;
-    icon: React.ReactNode;
-};
-
-// 메뉴 데이터
-const menuItems: MenuItem[] = [
-    { label: "회사명 | 면접유형 1", icon: <FiClipboard /> },
-    { label: "회사명 | 면접유형 2", icon: <FiClipboard /> }
-];
 
 import { useRef } from "react";
-import { FiClipboard } from "react-icons/fi";
+
+type SidebarProps = {
+    menuItems: { label: string; id: string }[];
+    onSelect: (id: string) => void;
+};
+
 // 사이드바 컴포넌트
-const Sidebar: React.FC<{ onSelect: (menuLabel: string) => void }> = ({ onSelect }) => {
+const Sidebar: React.FC<SidebarProps> = ({ menuItems, onSelect }) => {
     const ref = useRef<HTMLButtonElement>(null);
     return (
         <PopoverRoot initialFocusEl={() => ref.current}>
@@ -38,17 +33,16 @@ const Sidebar: React.FC<{ onSelect: (menuLabel: string) => void }> = ({ onSelect
                 <PopoverHeader>목록</PopoverHeader>
                 <PopoverArrow />
                 <PopoverBody>
-                    {menuItems.map((item, index) => (
+                    {menuItems.map((item) => (
                         <Flex
-                            key={index}
+                            key={item.id}
                             align="center"
                             p="2"
                             rounded="md"
                             _hover={{ bg: "gray.700" }}
                             cursor="pointer"
-                            onClick={() => onSelect(item.label)} 
+                            onClick={() => onSelect(item.id)} // 선택된 ID 전달
                         >
-                            {item.icon}
                             <Text ml="4">{item.label}</Text>
                         </Flex>
                     ))}

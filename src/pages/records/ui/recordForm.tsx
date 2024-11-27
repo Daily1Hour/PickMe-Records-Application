@@ -1,4 +1,4 @@
-import { Stack, Heading, Button, Input, HStack, Box } from "@chakra-ui/react";
+import { Stack, Heading, Button, Input, HStack } from "@chakra-ui/react";
 import QAForm from "./QAForm";
 import { useForm, FormProvider, Controller } from "react-hook-form";
 import { useEffect } from "react";
