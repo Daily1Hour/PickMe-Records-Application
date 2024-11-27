@@ -1,6 +1,7 @@
 import { Stack, Heading, Button, Input, HStack, Box } from "@chakra-ui/react";
 import QAForm from "./QAForm";
 import { useForm, FormProvider, Controller } from "react-hook-form";
+import { useEffect } from "react";
 
 interface FormDataValues {
     company: string;
@@ -8,7 +9,7 @@ interface FormDataValues {
     questions: { question: string; answer: string }[];
 }
 
-function RecordForm() {
+const RecordForm: React.FC<{ defaultValues: FormDataValues }> = ({ defaultValues }) => {
     const methods = useForm<FormDataValues>({
         defaultValues: {
             company: "",
@@ -16,6 +17,13 @@ function RecordForm() {
             questions: [{ question: "", answer: "" }],
         },
     });
+
+    const { reset } = methods;
+
+    useEffect(() => {
+        // 선택된 데이터로 폼 초기화
+        reset(defaultValues);
+    }, [defaultValues, reset]);
 
     const onSubmit = (data: FormDataValues) => {
         console.log("Submitted Data:", data);
@@ -29,7 +37,6 @@ function RecordForm() {
             >
                 <Stack>
                     <Heading>내 기록</Heading>
-                    <Box>
                         <Stack gap="10">
                             <Controller
                                 name="company"
@@ -66,7 +73,6 @@ function RecordForm() {
                                 수정
                             </Button>
                         </HStack>
-                    </Box>
                 </Stack>
             </form>
         </FormProvider>

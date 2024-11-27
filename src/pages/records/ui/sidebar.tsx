@@ -18,13 +18,14 @@ type MenuItem = {
 
 // 메뉴 데이터
 const menuItems: MenuItem[] = [
-    { label: "회사명 | 면접유형", icon: <FiClipboard /> },
+    { label: "회사명 | 면접유형 1", icon: <FiClipboard /> },
+    { label: "회사명 | 면접유형 2", icon: <FiClipboard /> }
 ];
 
 import { useRef } from "react";
 import { FiClipboard } from "react-icons/fi";
 // 사이드바 컴포넌트
-const Sidebar: React.FC = () => {
+const Sidebar: React.FC<{ onSelect: (menuLabel: string) => void }> = ({ onSelect }) => {
     const ref = useRef<HTMLButtonElement>(null);
     return (
         <PopoverRoot initialFocusEl={() => ref.current}>
@@ -45,6 +46,7 @@ const Sidebar: React.FC = () => {
                             rounded="md"
                             _hover={{ bg: "gray.700" }}
                             cursor="pointer"
+                            onClick={() => onSelect(item.label)} 
                         >
                             {item.icon}
                             <Text ml="4">{item.label}</Text>
