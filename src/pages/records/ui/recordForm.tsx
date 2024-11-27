@@ -2,14 +2,14 @@ import { Stack, Heading, Button, Input, HStack, Box } from "@chakra-ui/react";
 import QAForm from "./QAForm";
 import { useForm, FormProvider, Controller } from "react-hook-form";
 
-interface FormData {
+interface FormDataValues {
     company: string;
     category: string;
     questions: { question: string; answer: string }[];
 }
 
 function RecordForm() {
-    const methods = useForm<FormData>({
+    const methods = useForm<FormDataValues>({
         defaultValues: {
             company: "",
             category: "",
@@ -17,7 +17,7 @@ function RecordForm() {
         },
     });
 
-    const onSubmit = (data: FormData) => {
+    const onSubmit = (data: FormDataValues) => {
         console.log("Submitted Data:", data);
     };
 

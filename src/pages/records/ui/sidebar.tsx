@@ -1,8 +1,16 @@
-import React, { useState } from "react";
-import { Box, Flex, Text, IconButton } from "@chakra-ui/react";
-import { FiChevronRight, FiChevronLeft, FiClipboard } from "react-icons/fi";
+import {
+    Button,
+    PopoverArrow,
+    PopoverBody,
+    PopoverCloseTrigger,
+    PopoverContent,
+    PopoverHeader,
+    PopoverRoot,
+    PopoverTrigger,
+    Text,
+    Flex,
+} from "@chakra-ui/react";
 
-// 사이드바 메뉴 항목의 타입 정의
 type MenuItem = {
     label: string;
     icon: React.ReactNode;
@@ -13,56 +21,39 @@ const menuItems: MenuItem[] = [
     { label: "회사명 | 면접유형", icon: <FiClipboard /> },
 ];
 
+import { useRef } from "react";
+import { FiClipboard } from "react-icons/fi";
 // 사이드바 컴포넌트
 const Sidebar: React.FC = () => {
-    const [isCollapsed, setIsCollapsed] = useState(false); // 사이드바 접힘 상태 관리
-
+    const ref = useRef<HTMLButtonElement>(null);
     return (
-        <Flex h="50vh" w="300px" position="fixed" zIndex={40}>
-            {/* 사이드바 */}
-            <IconButton
-                aria-label="Toggle Sidebar"
-                onClick={() => setIsCollapsed(!isCollapsed)}
-                bg="gray.800"
-                color="white"
-                position="absolute"
-                _hover={{ bg: "gray.700" }}
-            >
-                {isCollapsed ? <FiChevronRight /> : <FiChevronLeft />}
-            </IconButton>
-            <Box
-                as="nav"
-                borderRadius="15px"
-                w={isCollapsed ? "100px" : "250px"} // 접힘 상태에 따라 폭 변경
-                visibility={isCollapsed ? "hidden" : "visible"}
-                bg="gray.800"
-                color="white"
-                p="4"
-                transition="width 0.3s"
-            >
-                <Text
-                    fontSize="2xl"
-                    fontWeight="bold"
-                    mb="6"
-                    placeSelf="center"
-                >
-                    목록
-                </Text>
-                {menuItems.map((item, index) => (
-                    <Flex
-                        key={index}
-                        align="center"
-                        p="2"
-                        rounded="md"
-                        _hover={{ bg: "gray.700" }}
-                        cursor="pointer"
-                    >
-                        {item.icon}
-                        <Text ml="4">{item.label}</Text>
-                    </Flex>
-                ))}
-            </Box>
-        </Flex>
+        <PopoverRoot initialFocusEl={() => ref.current}>
+            <PopoverTrigger asChild position="fixed">
+                <Button size="sm" variant="outline">
+                    ☰
+                </Button>
+            </PopoverTrigger>
+            <PopoverContent position="fixed" mt="10">
+                <PopoverHeader>목록</PopoverHeader>
+                <PopoverArrow />
+                <PopoverBody>
+                    {menuItems.map((item, index) => (
+                        <Flex
+                            key={index}
+                            align="center"
+                            p="2"
+                            rounded="md"
+                            _hover={{ bg: "gray.700" }}
+                            cursor="pointer"
+                        >
+                            {item.icon}
+                            <Text ml="4">{item.label}</Text>
+                        </Flex>
+                    ))}
+                </PopoverBody>
+                <PopoverCloseTrigger />
+            </PopoverContent>
+        </PopoverRoot>
     );
 };
 
