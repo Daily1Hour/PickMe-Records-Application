@@ -26,7 +26,7 @@ if (Test-Path "pom.xml") {
 }
 
 # Spring Gradle 의존성 설치
-if (Test-Path "build.gradle" -or Test-Path "build.gradle.kts") {
+if ((Test-Path "build.gradle") -or (Test-Path "build.gradle.kts")) {
     Write-Host "Installing Gradle dependencies..."
     .\gradlew clean build
 }
