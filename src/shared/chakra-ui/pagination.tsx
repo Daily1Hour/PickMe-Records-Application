@@ -1,6 +1,6 @@
 "use client";
 
-import { HStack, Stack, Text, Button,  PaginationItem,
+import { HStack, Stack, Text,  PaginationItem,
   PaginationNextTrigger,
   PaginationPrevTrigger,
   PaginationRoot, } from "@chakra-ui/react";

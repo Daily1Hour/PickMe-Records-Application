@@ -1,0 +1,42 @@
+name: Vite Build
+
+on:
+  pull_request: # PR이 열릴 때마다 실행
+    branches:
+      - main
+
+permissions:
+  contents: write # 레포지토리 콘텐츠에 대한 쓰기 권한
+  actions: read # 액션에 대한 읽기 권한
+  pull-requests: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "22"
+
+      - name: Install dependencies
+        run: npm ci # 의존성 설치
+
+      - name: Run tests
+        run: npm run test # 테스트 실행
+
+      - name: Lint code
+        run: npm run lint # 린트 실행
+
+      - name: Build Vite project
+        run: npm run build # Vite 프로젝트 빌드
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v4 # 아티팩트를 업로드하는 액션
+        with:
+          name: build-artifact # 아티팩트 이름
+          path: dist
