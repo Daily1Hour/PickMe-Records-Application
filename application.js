@@ -1,0 +1,1 @@
+import{R as e,b as n,j as s}from"./assets/index-D6aYILDP.js";import{i as m}from"./assets/single-spa-react-CjqfbTZA.js";import{A as p}from"./assets/App-DtuoemO7.js";const a=m({React:e,ReactDOM:n,rootComponent:p,errorBoundary(o,r,t){return console.error(o,r,t),s.jsx("div",{children:"Error"})}}),{bootstrap:f,mount:l,unmount:x}=a;export{f as bootstrap,l as mount,x as unmount};

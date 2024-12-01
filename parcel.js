@@ -1,0 +1,1 @@
+import{R as o,b as t,j as r}from"./assets/index-D6aYILDP.js";import{i as s}from"./assets/single-spa-react-CjqfbTZA.js";const m=s({React:o,ReactDOM:t,rootComponent:()=>r.jsx("div",{})});export{m as parcel};
