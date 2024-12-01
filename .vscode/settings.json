@@ -1,0 +1,16 @@
+{
+    "explorer.fileNesting.enabled": true,
+    "explorer.fileNesting.patterns": {
+        ".env": ".env.*",
+        "setup.ps1": "setup.*, .gitconfig, .gitmessage",
+        "tsconfig.json": "tsconfig.*.json, env.d.ts",
+        "vite.config.*": "jsconfig*, vitest.config.*, cypress.config.*, playwright.config.*, vite-env.d.ts",
+        "package.json": "package-lock.json, pnpm*, .yarnrc*, yarn*, .eslint*, eslint*, .prettier*, prettier*, .editorconfig, steiger.config.ts"
+    },
+    "cSpell.words": [
+        "chakra",
+        "pickme",
+        "steiger",
+        "tanstack"
+    ]
+}
