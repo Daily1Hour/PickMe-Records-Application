@@ -5,11 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "vite build",
+    "build:single-spa": "vite build --config vite.single-spa.config.ts",
     "test": "echo \"Error: no test specified\"",
-    "lint": "npx steiger ./src",
     "preview": "vite preview",
-    "start": "npm run build && npm run preview"
+    "lint": "npx steiger ./src",
+    "start": "npm run build && npm run build:single-spa && npm run preview"
   },
   "dependencies": {
     "@chakra-ui/react": "3.0.0",

@@ -37,7 +37,11 @@ jobs:
       #  run: npm run lint # 린트 실행
 
       - name: Build Vite project
-        run: npm run build # Vite 프로젝트 빌드
+        env:
+          VITE_PARCEL_URL: ${{ secrets.VITE_PARCEL_URL }} # 환경 변수 설정
+        run: |
+          npm run build # Vite 프로젝트 빌드
+          npm run build:single-spa # single-spa 앱 빌드
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v4 # 아티팩트를 업로드하는 액션
