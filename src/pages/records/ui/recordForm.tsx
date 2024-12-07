@@ -1,7 +1,10 @@
-import { Stack, Heading, Button, Input, HStack } from "@chakra-ui/react";
+import { Stack, Heading, Button, Input, HStack, Box } from "@chakra-ui/react";
 import QAForm from "./QAForm";
 import { useForm, FormProvider, Controller } from "react-hook-form";
 import { useEffect } from "react";
+import {
+    createRecord, InterviewRecordCreateDTO
+} from "../api/recordsApi";
 
 interface FormDataValues {
     company: string;
@@ -9,7 +12,9 @@ interface FormDataValues {
     questions: { question: string; answer: string }[];
 }
 
-const RecordForm: React.FC<{ defaultValues: FormDataValues }> = ({ defaultValues }) => {
+const RecordForm: React.FC<{ defaultValues: FormDataValues }> = ({
+    defaultValues,
+}) => {
     const methods = useForm<FormDataValues>({
         defaultValues: {
             company: "",
@@ -21,22 +26,36 @@ const RecordForm: React.FC<{ defaultValues: FormDataValues }> = ({ defaultValues
     const { reset } = methods;
 
     useEffect(() => {
-        // 선택된 데이터로 폼 초기화
         reset(defaultValues);
     }, [defaultValues, reset]);
 
-    const onSubmit = (data: FormDataValues) => {
-        console.log("Submitted Data:", data);
+    const onSubmit = async (data: FormDataValues) => {
+        try {
+            const payload: InterviewRecordCreateDTO = {
+                enterpriseName: data.company,
+                category: data.category,
+                details: data.questions.map(question => ({
+                    question: question.question,
+                    answer: question.answer,
+                })), // 질문과 답변 배열을 API에 맞는 형식으로 변환
+            };
+    
+            await createRecord(payload);
+            alert("Record created successfully!");
+        } catch (error) {
+            console.error("Error creating record:", error);
+            alert("Failed to create record.");
+        }
     };
-
     return (
-        <FormProvider {...methods}>
-            <form
-                onSubmit={methods.handleSubmit(onSubmit)}
-                style={{ width: "800px", height: "500px", padding: "20px" }}
-            >
-                <Stack>
-                    <Heading>내 기록</Heading>
+        <Box>
+            <FormProvider {...methods}>
+                <form
+                    onSubmit={methods.handleSubmit(onSubmit)}
+                    style={{ width: "800px", height: "500px", padding: "20px" }}
+                >
+                    <Stack>
+                        <Heading>내 기록</Heading>
                         <Stack gap="10">
                             <Controller
                                 name="company"
@@ -73,10 +92,11 @@ const RecordForm: React.FC<{ defaultValues: FormDataValues }> = ({ defaultValues
                                 수정
                             </Button>
                         </HStack>
-                </Stack>
-            </form>
-        </FormProvider>
+                    </Stack>
+                </form>
+            </FormProvider>
+        </Box>
     );
-}
+};
 
 export default RecordForm;
