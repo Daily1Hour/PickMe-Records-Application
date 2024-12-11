@@ -2,16 +2,25 @@ import { Box, Button, HStack, VStack, Editable } from "@chakra-ui/react";
 import { Field } from "../../../shared/chakra-ui/Field";
 import EditableControl from "./editable-control";
 import { useFieldArray, useFormContext, Controller } from "react-hook-form";
+import { useEffect } from "react";
 
 interface QAFormProps {
     name: string;
+    details: { question: string; answer: string }[];
 }
 
-const QAForm: React.FC<QAFormProps> = ({ name }) => {
+const QAForm: React.FC<QAFormProps> = ({ name, details }) => {
     const { control } = useFormContext();
     const { fields, append, remove } = useFieldArray({
         name,
     });
+
+    useEffect(() => {
+        if (details && details.length > 0) {
+            details.forEach(detail => append(detail)); // 초기 데이터를 필드에 추가
+        }
+    }, [details, append]);
+
 
     return (
         <VStack align="stretch">
