@@ -21,7 +21,6 @@ const QAForm: React.FC<QAFormProps> = ({ name, details }) => {
         }
     }, [details, append]);
 
-
     return (
         <VStack align="stretch">
             {fields.map((field, index) => (

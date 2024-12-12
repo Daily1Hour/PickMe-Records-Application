@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import { Box, VStack, Input, Text, Button, HStack } from "@chakra-ui/react";
 
 import { Field } from "../../../shared/chakra-ui/Field";
+import { FaRegFilePdf } from "react-icons/fa6";
+import { SlTrash } from "react-icons/sl";
+
 
 const PDFUploadForm: React.FC = () => {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -47,14 +50,14 @@ const PDFUploadForm: React.FC = () => {
                 {selectedFile && (
                     <HStack justify="space-between" width="100%">
                         <Text>
-                            📄: <strong>{selectedFile.name}</strong>
+                            <FaRegFilePdf /> <strong>{selectedFile.name}</strong>
                         </Text>
                         <Button
                             colorScheme="red"
                             size="sm"
                             onClick={handleFileDelete}
                         >
-                            X
+                            <SlTrash />
                         </Button>
                     </HStack>
                 )}
