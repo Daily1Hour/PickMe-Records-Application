@@ -3,8 +3,9 @@ import QAForm from "./QAForm";
 import { useForm, FormProvider, Controller } from "react-hook-form";
 import { useEffect } from "react";
 import {
-    createRecord, InterviewRecordCreateDTO
+    createRecord
 } from "../api/recordsApi";
+import { InterviewRecordCreateDTO } from "../api/recordsApiList"
 
 interface FormDataValues {
     company: string;
@@ -42,7 +43,7 @@ const RecordForm: React.FC<{ defaultValues: FormDataValues }> = ({
     
             await createRecord(payload);
             alert("저장했습니다.");
-        } catch (error) {
+        } catch (error) {-
             console.error("Error creating record:", error);
             alert("Failed to create record.");
         }
