@@ -35,7 +35,6 @@ const RecordForm: React.FC<{ defaultValues: FormDataValues; recordId: string }> 
     const onSubmit = async (data: FormDataValues) => {
         try {
             if (!recordId) {
-                // Create new record (POST)
                 const payload: InterviewRecordCreateDTO = {
                     enterpriseName: data.company,
                     category: data.category,
@@ -46,9 +45,8 @@ const RecordForm: React.FC<{ defaultValues: FormDataValues; recordId: string }> 
                 };
 
                 await createRecord(payload);
-                alert("Record has been created successfully.");
+                alert("저장했습니다.");
             } else {
-                // Update record (PUT)
                 const updatedPayload: InterviewRecordUpdateDTO = {
                     enterpriseName: data.company,
                     category: data.category,
@@ -56,13 +54,12 @@ const RecordForm: React.FC<{ defaultValues: FormDataValues; recordId: string }> 
 
                 await updateRecord(recordId, updatedPayload);
 
-                // Update questions (PUT per question)
                 for (let i = 0; i < data.questions.length; i++) {
                     const detail = data.questions[i];
                     await updateDetail(recordId, i, detail);
                 }
 
-                alert("Record and questions have been updated successfully.");
+                alert("저장했습니다.");
             }
         } catch (error) {
             console.error("Error processing the record:", error);
@@ -104,7 +101,7 @@ const RecordForm: React.FC<{ defaultValues: FormDataValues; recordId: string }> 
                                 )}
                             />
                         </Stack>
-                        <QAForm name="questions" details={defaultValues.questions || []} />
+                        <QAForm name="questions" details={defaultValues.questions || []} interviewRecordId={recordId} />
                         <HStack justifyContent="flex-end">
                             <Button
                                 m="20px"

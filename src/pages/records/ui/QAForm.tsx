@@ -3,13 +3,15 @@ import { Field } from "../../../shared/chakra-ui/Field";
 import EditableControl from "./editable-control";
 import { useFieldArray, useFormContext, Controller } from "react-hook-form";
 import { useEffect } from "react";
+import { createDetail } from "@/pages/records/api/recordsApi";
 
 interface QAFormProps {
     name: string;
     details: { question: string; answer: string }[];
+    interviewRecordId: string; // 추가: Record ID를 받아 API에 사용
 }
 
-const QAForm: React.FC<QAFormProps> = ({ name, details }) => {
+const QAForm: React.FC<QAFormProps> = ({ name, details, interviewRecordId }) => {
     const { control } = useFormContext();
     const { fields, append, remove } = useFieldArray({
         name,
@@ -20,6 +22,25 @@ const QAForm: React.FC<QAFormProps> = ({ name, details }) => {
             details.forEach(detail => append(detail)); // 초기 데이터를 필드에 추가
         }
     }, [details, append]);
+
+    const handleAddDetail = async () => {
+        try {
+            const newDetail = { question: "", answer: "" };
+
+            const response = await createDetail(interviewRecordId, newDetail);
+            console.log("New detail created:", response);
+
+            append(
+                { question: response.question,
+                    answer: response.answer,
+                }
+            ); // 필드 추가
+
+            // 서버의 최신 데이터를 반영하여 폼 상태를 업데이트
+        } catch (error) {
+            console.error("Failed to create detail:", error);
+        }
+    };
 
     return (
         <VStack align="stretch">
@@ -48,10 +69,10 @@ const QAForm: React.FC<QAFormProps> = ({ name, details }) => {
                         <Controller
                             name={`${name}.${index}.answer`}
                             control={control}
-                            render={({ field }) => (
-                                <Editable.Root defaultValue={field.value} onSubmit={field.onChange}>
-                                    <Editable.Preview>{field.value || "답변을 입력해주세요"}</Editable.Preview>
-                                    <Editable.Textarea {...field} h="100px" />
+                            render={({ field: answerField }) => (
+                                <Editable.Root defaultValue={answerField.value} onSubmit={answerField.onChange}>
+                                    <Editable.Preview>{answerField.value || "답변을 입력해주세요"}</Editable.Preview>
+                                    <Editable.Textarea {...answerField} h="100px" />
                                     <EditableControl />
                                 </Editable.Root>
                             )}
@@ -69,7 +90,7 @@ const QAForm: React.FC<QAFormProps> = ({ name, details }) => {
                     </HStack>
                 </Box>
             ))}
-            <Button bg="#009A6E" onClick={() => append({})} w="50px">
+            <Button bg="#009A6E" onClick={handleAddDetail} w="50px">
                 +
             </Button>
         </VStack>

@@ -19,6 +19,7 @@ export const updateDetail = async (
     detailIndex: number,
     payload: { question: string; answer: string }
 ) => {
+    
     try {
         const response = await axios.put(`${SERVER_URL}/records/interview/${interviewRecordId}/detail/${detailIndex}`, payload, {
             headers: {
@@ -51,7 +52,7 @@ export const createDetail = async (
     data: RecordDetailCreateDTO
 ) => {
     const response = await axios.post(
-        `${SERVER_URL}/records/interview/${interviewRecordId}/details`,
+        `${SERVER_URL}/records/interview/${interviewRecordId}/detail`,
         data,
         {
             headers: {
@@ -88,3 +89,5 @@ export const updateRecord = async (interviewRecordId: string, data: InterviewRec
         throw error;
     }
 };
+
+// export const deleteDetail = async ( )
