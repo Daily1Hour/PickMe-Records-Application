@@ -2,9 +2,8 @@ import { useState, useEffect } from "react";
 import Sidebar from "./ui/sidebar";
 import RecordForm from "./ui/recordForm";
 import PDFUploadForm from "./ui/pdfForm";
-import { fetchSidebarData, fetchRecordDetails, createDetail, fetchRecordById } from "./api/recordsApi";
+import { fetchSidebarData, fetchRecordById } from "./api/recordsApi";
 import { Box, HStack, Flex, Spinner, Text } from "@chakra-ui/react";
-import { RecordDetailCreateDTO } from "./api/recordsApiList";
 
 const RecordPage = () => {
     const [menuItems, setMenuItems] = useState<{ id: string; label: string }[]>([]);
@@ -12,7 +11,6 @@ const RecordPage = () => {
         { id: string, company: string; category: string; questions: { question: string; answer: string }[] } | null>(null);
     const [loading, setLoading] = useState(false); // 로딩 상태 관리
     const [error, setError] = useState<string | null>(null); // 에러 상태 관리
-
 
     useEffect(() => {
         const loadSidebarData = async () => {

@@ -95,3 +95,9 @@ export const deleteDetail = async ( interviewRecordId: string, detailIndex: numb
         { headers: { 'Authorization': `Bearer ${TOKEN}`,}});
     return response.data;
 }
+
+export const deleteRecord = async ( interviewRecordId: string ) => {
+     const response = await axios.delete(`${SERVER_URL}/records/interview/${interviewRecordId}`,
+     { headers: { 'Authorization' : `Bearer ${TOKEN}`,}});
+     return response.data;
+}
