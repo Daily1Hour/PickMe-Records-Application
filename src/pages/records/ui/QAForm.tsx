@@ -3,7 +3,7 @@ import { Field } from "../../../shared/chakra-ui/Field";
 import EditableControl from "./editable-control";
 import { useFieldArray, useFormContext, Controller } from "react-hook-form";
 import { useEffect } from "react";
-import { createDetail } from "@/pages/records/api/recordsApi";
+import { createDetail, deleteDetail } from "@/pages/records/api/recordsApi";
 
 interface QAFormProps {
     name: string;
@@ -28,7 +28,6 @@ const QAForm: React.FC<QAFormProps> = ({ name, details, interviewRecordId }) => 
             const newDetail = { question: "", answer: "" };
 
             const response = await createDetail(interviewRecordId, newDetail);
-            console.log("New detail created:", response);
 
             append(
                 { question: response.question,
@@ -39,6 +38,19 @@ const QAForm: React.FC<QAFormProps> = ({ name, details, interviewRecordId }) => 
             // 서버의 최신 데이터를 반영하여 폼 상태를 업데이트
         } catch (error) {
             console.error("Failed to create detail:", error);
+        }
+    };
+    
+    const handleDeleteDetail = async (index: number) => {
+        try {
+            // API 호출하여 해당 detail 삭제
+            await deleteDetail(interviewRecordId, index);
+
+            // 삭제된 항목을 `remove`로 폼에서 제거
+            remove(index);
+        } catch (error) {
+            console.error("Failed to delete detail:", error);
+            alert("Failed to delete question and answer.");
         }
     };
 
@@ -83,7 +95,7 @@ const QAForm: React.FC<QAFormProps> = ({ name, details, interviewRecordId }) => 
                             m={4}
                             bg="none"
                             size="sm"
-                            onClick={() => remove(index)}
+                            onClick={() => handleDeleteDetail(index)}
                         >
                             ✖
                         </Button>
