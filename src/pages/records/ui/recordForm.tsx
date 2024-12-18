@@ -3,9 +3,11 @@ import QAForm from "./QAForm";
 import { useForm, FormProvider, Controller } from "react-hook-form";
 import { useEffect } from "react";
 import {
-    createRecord
+    createRecord,
+    updateDetail,
+    updateRecord,
 } from "../api/recordsApi";
-import { InterviewRecordCreateDTO } from "../api/recordsApiList"
+import { InterviewRecordCreateDTO, InterviewRecordUpdateDTO } from "../api/recordsApiList"
 
 interface FormDataValues {
     company: string;
@@ -13,8 +15,8 @@ interface FormDataValues {
     questions: { question: string; answer: string }[];
 }
 
-const RecordForm: React.FC<{ defaultValues: FormDataValues }> = ({
-    defaultValues,
+const RecordForm: React.FC<{ defaultValues: FormDataValues; recordId: string }> = ({
+    defaultValues, recordId,
 }) => {
     const methods = useForm<FormDataValues>({
         defaultValues: {
@@ -32,22 +34,43 @@ const RecordForm: React.FC<{ defaultValues: FormDataValues }> = ({
 
     const onSubmit = async (data: FormDataValues) => {
         try {
-            const payload: InterviewRecordCreateDTO = {
-                enterpriseName: data.company,
-                category: data.category,
-                details: data.questions.map(question => ({
-                    question: question.question,
-                    answer: question.answer,
-                })), // 질문과 답변 배열을 API에 맞는 형식으로 변환
-            };
-    
-            await createRecord(payload);
-            alert("저장했습니다.");
-        } catch (error) {-
-            console.error("Error creating record:", error);
-            alert("Failed to create record.");
+            if (!recordId) {
+                // Create new record (POST)
+                const payload: InterviewRecordCreateDTO = {
+                    enterpriseName: data.company,
+                    category: data.category,
+                    details: data.questions.map((q) => ({
+                        question: q.question,
+                        answer: q.answer,
+                    })),
+                };
+
+                await createRecord(payload);
+                alert("Record has been created successfully.");
+            } else {
+                // Update record (PUT)
+                const updatedPayload: InterviewRecordUpdateDTO = {
+                    enterpriseName: data.company,
+                    category: data.category,
+                };
+
+                await updateRecord(recordId, updatedPayload);
+
+                // Update questions (PUT per question)
+                for (let i = 0; i < data.questions.length; i++) {
+                    const detail = data.questions[i];
+                    await updateDetail(recordId, i, detail);
+                }
+
+                alert("Record and questions have been updated successfully.");
+            }
+        } catch (error) {
+            console.error("Error processing the record:", error);
+            alert("Failed to process the record.");
         }
     };
+
+
     return (
         <Box>
             <FormProvider {...methods}>

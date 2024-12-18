@@ -14,11 +14,32 @@ export const fetchRecordDetails = async (ResponseParams: string): Promise<Interv
     return response.data;
 };
 
-export const updateRecordDetails = async (id: string, data: InterviewRecordUpdateDTO) => {
-    await axios.put(`${SERVER_URL}/records/${id}`, data, {headers:{'Authorization': `Bearer ${TOKEN}`, "Content-Type": "application/json"}});};
+export const updateDetail = async (
+    interviewRecordId: string,
+    detailIndex: number,
+    payload: { question: string; answer: string }
+) => {
+    try {
+        const response = await axios.put(`${SERVER_URL}/records/interview/${interviewRecordId}/detail/${detailIndex}`, payload, {
+            headers: {
+                "Content-Type": "application/json",
+                Authorization: `Bearer ${TOKEN}`,
+            },
+        });
 
-export const createRecord = async (data: InterviewRecordCreateDTO) => {
-    await axios.post(`${SERVER_URL}/records/interview`, data, {headers:{'Authorization': `Bearer ${TOKEN}`, "Content-Type": "application/json"}});};
+        return response.data;
+    } catch (error) {
+        console.error("Error in updateDetail:", error);
+        throw error;
+    }
+};
+
+export const createRecord = async (data: InterviewRecordCreateDTO): Promise<{ id: string }> => {
+    const response = await axios.post(`${SERVER_URL}/records/interview`, data, {
+        headers: { Authorization: `Bearer ${TOKEN}`, "Content-Type": "application/json" },
+    });
+    return response.data; // 서버가 반환하는 데이터를 그대로 반환
+};
 
 export const fetchRecords = async (interviewId: string) => {
     const response = await axios.get(`${SERVER_URL}/records/interview${interviewId}`, {headers:{'Authorization': `Bearer ${TOKEN}`}});    
@@ -26,11 +47,11 @@ export const fetchRecords = async (interviewId: string) => {
 };
 
 export const createDetail = async (
-    interviewId: string,
+    interviewRecordId: string,
     data: RecordDetailCreateDTO
 ) => {
     const response = await axios.post(
-        `${SERVER_URL}/records/interview/${interviewId}/details`, // interviewId를 URL에 포함
+        `${SERVER_URL}/records/interview/${interviewRecordId}/details`,
         data,
         {
             headers: {
@@ -50,4 +71,20 @@ export const fetchRecordById = async (interviewRecordId: string) => {
             }
         });
         return response.data; // 면접 기록 데이터 반환
+};
+
+export const updateRecord = async (interviewRecordId: string, data: InterviewRecordUpdateDTO ) => {
+    try {
+        const response = await axios.put(`${SERVER_URL}/records/interview/${interviewRecordId}`, data, {
+            headers: {
+                'Authorization': `Bearer ${TOKEN}`,
+                "Content-Type": "application/json",
+            }
+        });
+
+        return response.data;
+    } catch (error) {
+        console.error("Error in updateRecord:", error);
+        throw error;
+    }
 };

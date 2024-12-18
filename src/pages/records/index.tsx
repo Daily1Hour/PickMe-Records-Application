@@ -9,7 +9,7 @@ import { RecordDetailCreateDTO } from "./api/recordsApiList";
 const RecordPage = () => {
     const [menuItems, setMenuItems] = useState<{ id: string; label: string }[]>([]);
     const [selectedData, setSelectedData] = useState<
-        { company: string; category: string; questions: { question: string; answer: string }[] } | null>(null);
+        { id: string, company: string; category: string; questions: { question: string; answer: string }[] } | null>(null);
     const [loading, setLoading] = useState(false); // 로딩 상태 관리
     const [error, setError] = useState<string | null>(null); // 에러 상태 관리
 
@@ -43,10 +43,10 @@ const RecordPage = () => {
         try {
             // 선택된 항목의 상세 데이터 호출
             const data = await fetchRecordById(interviewRecordId);
-            console.log(interviewRecordId)
 
             // questions이 없을 경우 빈 배열로 초기화
             setSelectedData({
+                id: interviewRecordId,
                 company: data.enterpriseName,
                 category: data.category,
                 questions: data.details ? data.details.map((detail: { question: any; answer: any; }) => ({
@@ -77,7 +77,20 @@ const RecordPage = () => {
                         ) : error ? (
                             <Text color="red.500">{error}</Text>
                         ) : (
-                            <RecordForm defaultValues={selectedData || { company: "", category: "", questions: [] }} />
+                            <RecordForm defaultValues={
+                                selectedData
+                                    ? {
+                                          company: selectedData.company,
+                                          category: selectedData.category,
+                                          questions: selectedData.questions,
+                                      }
+                                    : {
+                                          company: "",
+                                          category: "",
+                                          questions: [],
+                                      }
+                            }
+                            recordId={selectedData?.id || ""} />
                         )}
                     </HStack>
                 </Flex>
