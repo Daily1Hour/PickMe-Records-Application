@@ -3,8 +3,11 @@ import QAForm from "./QAForm";
 import { useForm, FormProvider, Controller } from "react-hook-form";
 import { useEffect } from "react";
 import {
-    createRecord, InterviewRecordCreateDTO
+    createRecord,
+    updateDetail,
+    updateRecord,
 } from "../api/recordsApi";
+import { InterviewRecordCreateDTO, InterviewRecordUpdateDTO } from "../api/recordsApiList"
 
 interface FormDataValues {
     company: string;
@@ -12,8 +15,8 @@ interface FormDataValues {
     questions: { question: string; answer: string }[];
 }
 
-const RecordForm: React.FC<{ defaultValues: FormDataValues }> = ({
-    defaultValues,
+const RecordForm: React.FC<{ defaultValues: FormDataValues; recordId: string }> = ({
+    defaultValues, recordId,
 }) => {
     const methods = useForm<FormDataValues>({
         defaultValues: {
@@ -31,22 +34,40 @@ const RecordForm: React.FC<{ defaultValues: FormDataValues }> = ({
 
     const onSubmit = async (data: FormDataValues) => {
         try {
-            const payload: InterviewRecordCreateDTO = {
-                enterpriseName: data.company,
-                category: data.category,
-                details: data.questions.map(question => ({
-                    question: question.question,
-                    answer: question.answer,
-                })), // 질문과 답변 배열을 API에 맞는 형식으로 변환
-            };
-    
-            await createRecord(payload);
-            alert("저장했습니다.");
+            if (!recordId) {
+                const payload: InterviewRecordCreateDTO = {
+                    enterpriseName: data.company,
+                    category: data.category,
+                    details: data.questions.map((q) => ({
+                        question: q.question,
+                        answer: q.answer,
+                    })),
+                };
+
+                await createRecord(payload);
+                alert("저장했습니다.");
+            } else {
+                const updatedPayload: InterviewRecordUpdateDTO = {
+                    enterpriseName: data.company,
+                    category: data.category,
+                };
+
+                await updateRecord(recordId, updatedPayload);
+
+                for (let i = 0; i < data.questions.length; i++) {
+                    const detail = data.questions[i];
+                    await updateDetail(recordId, i, detail);
+                }
+
+                alert("저장했습니다.");
+            }
         } catch (error) {
-            console.error("Error creating record:", error);
-            alert("Failed to create record.");
+            console.error("Error processing the record:", error);
+            alert("Failed to process the record.");
         }
     };
+
+
     return (
         <Box>
             <FormProvider {...methods}>
@@ -80,7 +101,7 @@ const RecordForm: React.FC<{ defaultValues: FormDataValues }> = ({
                                 )}
                             />
                         </Stack>
-                        <QAForm name="questions" details={defaultValues.questions || []} />
+                        <QAForm name="questions" details={defaultValues.questions || []} interviewRecordId={recordId} />
                         <HStack justifyContent="flex-end">
                             <Button
                                 m="20px"
@@ -100,85 +121,3 @@ const RecordForm: React.FC<{ defaultValues: FormDataValues }> = ({
 };
 
 export default RecordForm;
-
-// import { Stack, Heading, Button, Input, Box, HStack } from "@chakra-ui/react";
-// import { useForm, FormProvider, Controller } from "react-hook-form";
-// import QAForm from "./QAForm";
-// import { createRecord } from "../api/recordsApi";
-
-// interface FormDataValues {
-//     company: string;
-//     category: string;
-//     questions: { question: string; answer: string }[];
-// }
-
-// const RecordForm: React.FC = () => {
-//     const methods = useForm<FormDataValues>({
-//         defaultValues: {
-//             company: "",
-//             category: "",
-//             questions: [{ question: "", answer: "" }],
-//         },
-//     });
-
-//     const onSubmit = async (data: FormDataValues) => {
-//         try {
-//             await createRecord({
-//                 enterpriseName: data.company,
-//                 category: data.category,
-//                 details: data.questions.map(question => ({
-//                     question: question.question,
-//                     answer: question.answer,
-//                 })),
-//             });
-//             alert("Record created successfully!");
-//         } catch (error) {
-//             console.error("Error creating record:", error);
-//             alert("Failed to create record.");
-//         }
-//     };
-
-//     return (
-//         <Box>
-//             <FormProvider {...methods}>
-//                 <form onSubmit={methods.handleSubmit(onSubmit)} style={{ width: "800px", padding: "20px" }}>
-//                     <Stack>
-//                         <Heading>새 기록 추가</Heading>
-//                         <Stack gap="10">
-//                             <Controller
-//                                 name="company"
-//                                 control={methods.control}
-//                                 render={({ field }) => (
-//                                     <Input
-//                                         {...field}
-//                                         variant="flushed"
-//                                         placeholder="회사 이름"
-//                                     />
-//                                 )}
-//                             />
-//                             <Controller
-//                                 name="category"
-//                                 control={methods.control}
-//                                 render={({ field }) => (
-//                                     <Input
-//                                         {...field}
-//                                         variant="flushed"
-//                                         placeholder="면접 유형"
-//                                     />
-//                                 )}
-//                             />
-//                         </Stack>
-//                         <QAForm name="questions" details={[]} />
-//                         <HStack justifyContent="flex-end">
-//                             <Button type="submit" bg="#009A6E" borderRadius="30px" w="100px">
-//                                 생성
-//                             </Button>
-//                         </HStack>
-//                     </Stack>
-//                 </form>
-//             </FormProvider>
-//         </Box>
-//     );
-// };
-
-// export default RecordForm;
