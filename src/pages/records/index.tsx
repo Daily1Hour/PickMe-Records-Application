@@ -7,8 +7,7 @@ import { Box, HStack, Flex, Spinner, Text } from "@chakra-ui/react";
 
 const RecordPage = () => {
     const [menuItems, setMenuItems] = useState<{ id: string; label: string }[]>([]);
-    const [selectedData, setSelectedData] = useState<
-        { id: string, company: string; category: string; questions: { question: string; answer: string }[] } | null>(null);
+    const [selectedData, setSelectedData] = useState<{ id: string, company: string; category: string; questions: { question: string; answer: string }[];}>({ id: "", company: "", category: "", questions: [] });
     const [loading, setLoading] = useState(false); // 로딩 상태 관리
     const [error, setError] = useState<string | null>(null); // 에러 상태 관리
 
@@ -47,7 +46,7 @@ const RecordPage = () => {
                 id: interviewRecordId,
                 company: data.enterpriseName,
                 category: data.category,
-                questions: data.details ? data.details.map((detail: { question: any; answer: any; }) => ({
+                questions: data.details ? data.details.map((detail: { question: string; answer: string; }) => ({
                     question: detail.question,
                     answer: detail.answer,
                 })) : [], // details가 없다면 빈 배열로 처리
@@ -75,19 +74,7 @@ const RecordPage = () => {
                         ) : error ? (
                             <Text color="red.500">{error}</Text>
                         ) : (
-                            <RecordForm defaultValues={
-                                selectedData
-                                    ? {
-                                          company: selectedData.company,
-                                          category: selectedData.category,
-                                          questions: selectedData.questions,
-                                      }
-                                    : {
-                                          company: "",
-                                          category: "",
-                                          questions: [],
-                                      }
-                            }
+                            <RecordForm defaultValues={selectedData}
                             recordId={selectedData?.id || ""} />
                         )}
                     </HStack>
