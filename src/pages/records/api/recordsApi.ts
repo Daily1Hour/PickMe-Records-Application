@@ -1,5 +1,5 @@
 import axios from "axios";
-import { InterviewRecordCreateDTO, InterviewRecordResponseDTO, InterviewRecordUpdateDTO, RecordDetailCreateDTO } from "./recordsApiList";
+import { InterviewRecordCreateDTO, InterviewRecordResponseDTO, InterviewRecordUpdateDTO, RecordDetailCreateDTO } from "./recordsDTOList";
 
 const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 const TOKEN = import.meta.env.VITE_TOKEN;

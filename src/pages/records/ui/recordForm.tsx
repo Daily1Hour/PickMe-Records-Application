@@ -7,7 +7,7 @@ import {
     updateDetail,
     updateRecord,
 } from "../api/recordsApi";
-import { InterviewRecordCreateDTO, InterviewRecordUpdateDTO } from "../api/recordsApiList"
+import { InterviewRecordCreateDTO, InterviewRecordUpdateDTO } from "../api/recordsDTOList"
 
 interface FormDataValues {
     company: string;
