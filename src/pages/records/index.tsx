@@ -74,7 +74,7 @@ const RecordPage = () => {
                         ) : error ? (
                             <Text color="red.500">{error}</Text>
                         ) : (
-                            <RecordForm defaultValues={selectedData}
+                            <RecordForm recordValues={selectedData}
                             recordId={selectedData?.id || ""} />
                         )}
                     </HStack>

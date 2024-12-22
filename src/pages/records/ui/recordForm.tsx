@@ -15,8 +15,8 @@ interface FormDataValues {
     questions: { question: string; answer: string }[];
 }
 
-const RecordForm: React.FC<{ defaultValues: FormDataValues; recordId: string }> = ({
-    defaultValues, recordId,
+const RecordForm: React.FC<{ recordValues: FormDataValues; recordId: string }> = ({
+    recordValues: defaultValues, recordId,
 }) => {
     const methods = useForm<FormDataValues>({
         defaultValues: {
