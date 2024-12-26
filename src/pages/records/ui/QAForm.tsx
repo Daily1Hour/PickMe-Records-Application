@@ -50,6 +50,7 @@ const QAForm: React.FC<QAFormProps> = ({ name, details, interviewRecordId }) => 
 
     return (
         <VStack align="stretch">
+            
             {fields.map((field, index) => (
                 <Box
                     m={5}

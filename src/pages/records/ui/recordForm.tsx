@@ -17,9 +17,9 @@ interface FormDataValues {
 
 const RecordForm: React.FC<{ recordValues: FormDataValues; recordId?: string }> = ({
     recordValues: formValues,
-    recordId: initialRecordId,
+    recordId: interviewRecordId,
 }) => {
-    const [recordId, setRecordId] = useState(initialRecordId || null);  // recordId가 null로 초기화됩니다.
+    const [recordId, setRecordId] = useState(interviewRecordId || null);  // recordId가 null로 초기화됩니다.
     const methods = useForm<FormDataValues>({
         defaultValues: {
             company: "",
@@ -47,7 +47,7 @@ const RecordForm: React.FC<{ recordValues: FormDataValues; recordId?: string }> 
                 };
 
                 const newRecord = await createRecord(payload);
-                setRecordId(newRecord.id);  // 새로운 레코드가 생성되면 ID를 설정
+                setRecordId(newRecord.interviewRecordId);  // 새로운 레코드가 생성되면 ID를 설정
                 alert("저장했습니다.");
             } else {  // 기존 레코드 수정
                 const updatedPayload: InterviewRecordUpdateDTO = {

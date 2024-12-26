@@ -31,7 +31,7 @@ export const updateDetail = async (interviewRecordId: string, detailIndex: numbe
     }
 };
 
-export const createRecord = async (data: InterviewRecordCreateDTO): Promise<{ id: string }> => {
+export const createRecord = async (data: InterviewRecordCreateDTO): Promise<{ interviewRecordId: string }> => {
     const response = await client.post(`/interview`, data);
     return response.data;
 };
