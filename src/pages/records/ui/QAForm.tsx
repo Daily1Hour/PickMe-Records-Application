@@ -8,49 +8,43 @@ import { createDetail, deleteDetail } from "@/pages/records/api/recordsApi";
 interface QAFormProps {
     name: string;
     details: { question: string; answer: string }[];
-    interviewRecordId: string; // 추가: Record ID를 받아 API에 사용
+    interviewRecordId: string | null; // null 허용
 }
 
 const QAForm: React.FC<QAFormProps> = ({ name, details, interviewRecordId }) => {
-    const { control } = useFormContext();
+    const { control, resetField } = useFormContext();
     const { fields, append, remove } = useFieldArray({
         name,
     });
 
     useEffect(() => {
-        if (details && details.length > 0) {
-            details.forEach(detail => append(detail)); // 초기 데이터를 필드에 추가
-        }
-    }, [details, append]);
+        resetField(name, { defaultValue: details });
+    }, [details, resetField, name]);
 
     const handleAddDetail = async () => {
+        if (!interviewRecordId) return; // recordId가 없으면 추가 불가
+
         try {
             const newDetail = { question: "", answer: "" };
 
             const response = await createDetail(interviewRecordId, newDetail);
-
-            append(
-                { question: response.question,
-                    answer: response.answer,
-                }
-            ); // 필드 추가
-
-            // 서버의 최신 데이터를 반영하여 폼 상태를 업데이트
+            append({
+                question: response.question,
+                answer: response.answer,
+            });
         } catch (error) {
             console.error("Failed to create detail:", error);
         }
     };
-    
-    const handleDeleteDetail = async (index: number) => {
-        try {
-            // API 호출하여 해당 detail 삭제
-            await deleteDetail(interviewRecordId, index);
 
-            // 삭제된 항목을 `remove`로 폼에서 제거
+    const handleDeleteDetail = async (index: number) => {
+        if (!interviewRecordId) return; // recordId가 없으면 삭제 불가
+
+        try {
+            await deleteDetail(interviewRecordId, index);
             remove(index);
         } catch (error) {
             console.error("Failed to delete detail:", error);
-            alert("Failed to delete question and answer.");
         }
     };
 
@@ -81,10 +75,10 @@ const QAForm: React.FC<QAFormProps> = ({ name, details, interviewRecordId }) => 
                         <Controller
                             name={`${name}.${index}.answer`}
                             control={control}
-                            render={({ field: answerField }) => (
-                                <Editable.Root defaultValue={answerField.value} onSubmit={answerField.onChange}>
-                                    <Editable.Preview>{answerField.value || "답변을 입력해주세요"}</Editable.Preview>
-                                    <Editable.Textarea {...answerField} h="100px" />
+                            render={({ field }) => (
+                                <Editable.Root defaultValue={field.value} onSubmit={field.onChange}>
+                                    <Editable.Preview>{field.value || "답변을 입력해주세요"}</Editable.Preview>
+                                    <Editable.Textarea {...field} h="100px" />
                                     <EditableControl />
                                 </Editable.Root>
                             )}
@@ -102,9 +96,11 @@ const QAForm: React.FC<QAFormProps> = ({ name, details, interviewRecordId }) => 
                     </HStack>
                 </Box>
             ))}
-            <Button bg="#009A6E" onClick={handleAddDetail} w="50px">
-                +
-            </Button>
+            {interviewRecordId && ( // recordId가 있을 때만 버튼 표시
+                <Button bg="#009A6E" onClick={handleAddDetail} w="50px">
+                    +
+                </Button>
+            )}
         </VStack>
     );
 };
