@@ -49,6 +49,7 @@ const RecordPage = () => {
                 category: "",
                 questions: [],
             });
+            console.log(selectedData)
             console.log("새로운 레코드 생성, id가 null로 설정됨");
             return;
         }
@@ -100,6 +101,7 @@ const RecordPage = () => {
                             <Text color="red.500">{error}</Text>
                         ) : (
                             <RecordForm
+                                key={selectedData.id}
                                 recordValues={selectedData}
                                 recordId={selectedData?.id ?? undefined}
                             />
