@@ -22,6 +22,7 @@ import { GrFormPrevious, GrFormNext } from "react-icons/gr";
 
 import { useEffect, useRef, useState } from "react";
 import { deleteRecord, fetchSidebarData } from "../api/recordsApi";
+import { usePagenation } from "../hook/usePagenation";
 
 type SidebarProps = {
     onSelect: (id: string | null) => void;
@@ -31,21 +32,15 @@ const Sidebar: React.FC<SidebarProps> = ({ onSelect }) => {
     const [menuItems, setMenuItems] = useState<{ id: string; label: string }[]>(
         [],
     );
-    const itemsPerPage = 10;
 
     const ref = useRef<HTMLButtonElement>(null);
-    const [currentPage, setCurrentPage] = useState(0);
-    const totalPages = Math.ceil(menuItems.length / itemsPerPage);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [recordToDelete, setRecordToDelete] = useState<string | null>(null);
     const [isDialogOpen, setDialogOpen] = useState(false);
 
-    const paginatedItems = menuItems.slice(
-        currentPage * itemsPerPage,
-        (currentPage + 1) * itemsPerPage,
-    );
-
+    const { paginatedItems, handlePageChange, currentPage, totalPages } =
+        usePagenation<{id:string; label: string}>(menuItems);
     const loadSidebarData = async () => {
         setLoading(true);
         setError(null);
@@ -67,14 +62,6 @@ const Sidebar: React.FC<SidebarProps> = ({ onSelect }) => {
     useEffect(() => {
         loadSidebarData();
     }, []);
-
-    const handlePageChange = (direction: "next" | "prev") => {
-        if (direction === "next" && currentPage < totalPages - 1) {
-            setCurrentPage(currentPage + 1);
-        } else if (direction === "prev" && currentPage > 0) {
-            setCurrentPage(currentPage - 1);
-        }
-    };
 
     const handleDelete = (interviewRecordId: string) => {
         setRecordToDelete(interviewRecordId);

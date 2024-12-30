@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Sidebar from "./ui/sidebar";
-import RecordDetails from "./ui/RecordDetails";
+import RecordDetails from "./ui/recordDetails";
 
 const RecordPage = () => {
     const [selectedId, setSelectedId] = useState<string | null>(null);
