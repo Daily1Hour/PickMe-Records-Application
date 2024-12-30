@@ -1,7 +1,8 @@
+import { useEffect, useState } from "react";
 import { Box, Flex, HStack, } from "@chakra-ui/react";
+
 import PDFUploadForm from "./ui/pdfForm";
 import RecordForm from "./ui/recordForm";
-import { useEffect, useState } from "react";
 import { fetchRecordById } from "./api/detailsApi";
 
 const RecordDetails = ({ id }: { id: string | null }) => {

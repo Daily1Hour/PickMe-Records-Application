@@ -1,3 +1,4 @@
+import { useState } from "react";
 import {
     DialogRoot,
     DialogContent,
@@ -7,7 +8,7 @@ import {
     Text,
     DialogCloseTrigger,
 } from "@chakra-ui/react";
-import { useState } from "react";
+
 import { deleteRecord } from "../api/sideApi";
 
 export const DeleteConfirm = ({

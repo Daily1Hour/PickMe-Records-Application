@@ -1,7 +1,8 @@
-import { Stack, Heading, Button, Input, HStack, Box } from "@chakra-ui/react";
-import QAForm from "./QAForm";
-import { useForm, FormProvider, Controller } from "react-hook-form";
 import { useEffect, useState } from "react";
+import { useForm, FormProvider, Controller } from "react-hook-form";
+import { Stack, Heading, Button, Input, HStack, Box } from "@chakra-ui/react";
+
+import QAForm from "./QAForm";
 import { InterviewRecordCreateDTO, InterviewRecordUpdateDTO } from "../api/recordsDTOList"
 import { createRecord, updateRecord, updateDetail } from "../api/detailsApi";
 

@@ -1,9 +1,10 @@
-import { Box, Button, HStack, VStack, Editable } from "@chakra-ui/react";
-import { Field } from "../../../shared/chakra-ui/Field";
-import EditableControl from "./editable-control";
-import { useFieldArray, useFormContext, Controller } from "react-hook-form";
 import { useEffect } from "react";
+import { useFieldArray, useFormContext, Controller } from "react-hook-form";
+import { Box, Button, HStack, VStack, Editable } from "@chakra-ui/react";
+
+import EditableControl from "./editable-control";
 import { createDetail, deleteDetail } from "../api/detailsApi";
+import { Field } from "@/shared/chakra-ui/Field";
 
 interface QAFormProps {
     name: string;
