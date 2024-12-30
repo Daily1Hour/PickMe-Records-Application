@@ -1,4 +1,4 @@
-import { Box, Flex, HStack, Spinner, Text } from "@chakra-ui/react";
+import { Box, Flex, HStack, } from "@chakra-ui/react";
 import PDFUploadForm from "./pdfForm";
 import RecordForm from "./recordForm";
 import { useEffect, useState } from "react";

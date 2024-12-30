@@ -20,16 +20,19 @@ import {
 import { RxHamburgerMenu } from "react-icons/rx";
 import { GrFormPrevious, GrFormNext } from "react-icons/gr";
 
-import { useRef, useState } from "react";
-import { deleteRecord } from "../api/recordsApi";
+import { useEffect, useRef, useState } from "react";
+import { deleteRecord, fetchSidebarData } from "../api/recordsApi";
 
 type SidebarProps = {
-    menuItems: { label: string; id: string }[];
     onSelect: (id: string | null) => void;
-    itemsPerPage: number;
 };
 
-const Sidebar: React.FC<SidebarProps> = ({ menuItems, onSelect, itemsPerPage }) => {
+const Sidebar: React.FC<SidebarProps> = ({ onSelect }) => {
+    const [menuItems, setMenuItems] = useState<{ id: string; label: string }[]>(
+        [],
+    );
+    const itemsPerPage = 10;
+
     const ref = useRef<HTMLButtonElement>(null);
     const [currentPage, setCurrentPage] = useState(0);
     const totalPages = Math.ceil(menuItems.length / itemsPerPage);
@@ -40,8 +43,30 @@ const Sidebar: React.FC<SidebarProps> = ({ menuItems, onSelect, itemsPerPage }) 
 
     const paginatedItems = menuItems.slice(
         currentPage * itemsPerPage,
-        (currentPage + 1) * itemsPerPage
+        (currentPage + 1) * itemsPerPage,
     );
+
+    const loadSidebarData = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            const data = await fetchSidebarData();
+            const formattedMenuItems = data.map((item) => ({
+                id: item.interviewRecordId,
+                label: `${item.enterpriseName} | ${item.category}`,
+            }));
+            setMenuItems(formattedMenuItems);
+        } catch (err) {
+            setError("Failed to load sidebar data.");
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        loadSidebarData();
+    }, []);
 
     const handlePageChange = (direction: "next" | "prev") => {
         if (direction === "next" && currentPage < totalPages - 1) {
@@ -109,10 +134,19 @@ const Sidebar: React.FC<SidebarProps> = ({ menuItems, onSelect, itemsPerPage }) 
                                 _hover={{ bg: "gray.100" }}
                                 cursor="pointer"
                             >
-                                <Text ml="4" minWidth="200px" onClick={() => onSelect(item.id)}>
+                                <Text
+                                    ml="4"
+                                    minWidth="200px"
+                                    onClick={() => onSelect(item.id)}
+                                >
                                     {item.label}
                                 </Text>
-                                <Text ml="auto" color="gray" cursor="pointer" onClick={() => handleDelete(item.id)}>
+                                <Text
+                                    ml="auto"
+                                    color="gray"
+                                    cursor="pointer"
+                                    onClick={() => handleDelete(item.id)}
+                                >
                                     x
                                 </Text>
                             </Flex>
@@ -141,16 +175,25 @@ const Sidebar: React.FC<SidebarProps> = ({ menuItems, onSelect, itemsPerPage }) 
                 </PopoverBody>
                 <PopoverCloseTrigger />
             </PopoverContent>
-            <DialogRoot open={isDialogOpen} onOpenChange={(e) => setDialogOpen(e.open)}>
+            <DialogRoot
+                open={isDialogOpen}
+                onOpenChange={(e) => setDialogOpen(e.open)}
+            >
                 <DialogContent padding={4} position="fixed" left="500px">
                     <Text>정말 삭제하시겠습니까?</Text>
                     <DialogFooter>
                         <DialogActionTrigger asChild>
-                            <Button variant="outline" onClick={() => setDialogOpen(false)}>
+                            <Button
+                                variant="outline"
+                                onClick={() => setDialogOpen(false)}
+                            >
                                 취소
                             </Button>
                         </DialogActionTrigger>
-                        <Button colorScheme="red" onClick={handleDeleteConfirmation}>
+                        <Button
+                            colorScheme="red"
+                            onClick={handleDeleteConfirmation}
+                        >
                             삭제
                         </Button>
                     </DialogFooter>
