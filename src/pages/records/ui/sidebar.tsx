@@ -11,18 +11,14 @@ import {
     Flex,
     HStack,
     Box,
-    DialogContent,
-    DialogFooter,
-    DialogActionTrigger,
-    DialogCloseTrigger,
-    DialogRoot,
 } from "@chakra-ui/react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { GrFormPrevious, GrFormNext } from "react-icons/gr";
 
 import { useEffect, useRef, useState } from "react";
-import { deleteRecord, fetchSidebarData } from "../api/recordsApi";
+import { fetchSidebarData } from "../api/recordsApi";
 import { usePagenation } from "../hook/usePagenation";
+import { DeleteConfirm } from "./deleteConfirm";
 
 type SidebarProps = {
     onSelect: (id: string | null) => void;
@@ -66,25 +62,6 @@ const Sidebar: React.FC<SidebarProps> = ({ onSelect }) => {
     const handleDelete = (interviewRecordId: string) => {
         setRecordToDelete(interviewRecordId);
         setDialogOpen(true);
-    };
-
-    const handleDeleteConfirmation = async () => {
-        if (!recordToDelete) return;
-
-        setLoading(true);
-        setError(null);
-
-        try {
-            await deleteRecord(recordToDelete);
-            alert("삭제했습니다.");
-            setRecordToDelete(null);
-            setDialogOpen(false);
-        } catch (err) {
-            setError("Failed to delete the record.");
-            console.error(err);
-        } finally {
-            setLoading(false);
-        }
     };
 
     return (
@@ -162,31 +139,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onSelect }) => {
                 </PopoverBody>
                 <PopoverCloseTrigger />
             </PopoverContent>
-            <DialogRoot
-                open={isDialogOpen}
-                onOpenChange={(e) => setDialogOpen(e.open)}
-            >
-                <DialogContent padding={4} position="fixed" left="500px">
-                    <Text>정말 삭제하시겠습니까?</Text>
-                    <DialogFooter>
-                        <DialogActionTrigger asChild>
-                            <Button
-                                variant="outline"
-                                onClick={() => setDialogOpen(false)}
-                            >
-                                취소
-                            </Button>
-                        </DialogActionTrigger>
-                        <Button
-                            colorScheme="red"
-                            onClick={handleDeleteConfirmation}
-                        >
-                            삭제
-                        </Button>
-                    </DialogFooter>
-                    <DialogCloseTrigger />
-                </DialogContent>
-            </DialogRoot>
+          <DeleteConfirm recordToDelete={recordToDelete} isDialogOpen={isDialogOpen} setDialogOpen={setDialogOpen}  />
         </PopoverRoot>
     );
 };
