@@ -25,7 +25,6 @@ const RecordDetails = ({ id }: { id: string | null }) => {
                 questions: [],
             });
             console.log(selectedData);
-            console.log("새로운 레코드 생성, id가 null로 설정됨");
             return;
         }
         ;(async function fetchData() {
