@@ -8,7 +8,7 @@ import {
     DialogCloseTrigger,
 } from "@chakra-ui/react";
 import { useState } from "react";
-import { deleteRecord } from "../api/recordsApi";
+import { deleteRecord } from "../api/sideApi";
 
 export const DeleteConfirm = ({
     recordToDelete,

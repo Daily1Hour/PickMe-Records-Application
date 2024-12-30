@@ -16,9 +16,9 @@ import { RxHamburgerMenu } from "react-icons/rx";
 import { GrFormPrevious, GrFormNext } from "react-icons/gr";
 
 import { useEffect, useRef, useState } from "react";
-import { fetchSidebarData } from "../api/recordsApi";
-import { usePagenation } from "../hook/usePagenation";
-import { DeleteConfirm } from "./deleteConfirm";
+import { usePagenation } from "./hook/usePagenation";
+import { DeleteConfirm } from "./ui/deleteConfirm";
+import { fetchSidebarData } from "./api/sideApi";
 
 type SidebarProps = {
     onSelect: (id: string | null) => void;

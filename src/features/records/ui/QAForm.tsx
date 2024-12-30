@@ -3,7 +3,7 @@ import { Field } from "../../../shared/chakra-ui/Field";
 import EditableControl from "./editable-control";
 import { useFieldArray, useFormContext, Controller } from "react-hook-form";
 import { useEffect } from "react";
-import { createDetail, deleteDetail } from "@/pages/records/api/recordsApi";
+import { createDetail, deleteDetail } from "../api/detailsApi";
 
 interface QAFormProps {
     name: string;
