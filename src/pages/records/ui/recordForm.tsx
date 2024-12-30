@@ -1,13 +1,13 @@
 import { Stack, Heading, Button, Input, HStack, Box } from "@chakra-ui/react";
 import QAForm from "./QAForm";
 import { useForm, FormProvider, Controller } from "react-hook-form";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
     createRecord,
     updateDetail,
     updateRecord,
 } from "../api/recordsApi";
-import { InterviewRecordCreateDTO, InterviewRecordUpdateDTO } from "../api/recordsApiList"
+import { InterviewRecordCreateDTO, InterviewRecordUpdateDTO } from "../api/recordsDTOList"
 
 interface FormDataValues {
     company: string;
@@ -15,9 +15,11 @@ interface FormDataValues {
     questions: { question: string; answer: string }[];
 }
 
-const RecordForm: React.FC<{ defaultValues: FormDataValues; recordId: string }> = ({
-    defaultValues, recordId,
+const RecordForm: React.FC<{ recordValues: FormDataValues; recordId?: string }> = ({
+    recordValues: formValues,
+    recordId: interviewRecordId,
 }) => {
+    const [recordId, setRecordId] = useState(interviewRecordId || null);  // recordId가 null로 초기화됩니다.
     const methods = useForm<FormDataValues>({
         defaultValues: {
             company: "",
@@ -29,12 +31,12 @@ const RecordForm: React.FC<{ defaultValues: FormDataValues; recordId: string }> 
     const { reset } = methods;
 
     useEffect(() => {
-        reset(defaultValues);
-    }, [defaultValues, reset]);
+        reset(formValues);
+    }, [formValues, reset]);
 
     const onSubmit = async (data: FormDataValues) => {
         try {
-            if (!recordId) {
+            if (recordId === null) {  // recordId가 null일 때 새로운 레코드 생성
                 const payload: InterviewRecordCreateDTO = {
                     enterpriseName: data.company,
                     category: data.category,
@@ -44,9 +46,10 @@ const RecordForm: React.FC<{ defaultValues: FormDataValues; recordId: string }> 
                     })),
                 };
 
-                await createRecord(payload);
+                const newRecord = await createRecord(payload);
+                setRecordId(newRecord.interviewRecordId);  // 새로운 레코드가 생성되면 ID를 설정
                 alert("저장했습니다.");
-            } else {
+            } else {  // 기존 레코드 수정
                 const updatedPayload: InterviewRecordUpdateDTO = {
                     enterpriseName: data.company,
                     category: data.category,
@@ -59,14 +62,13 @@ const RecordForm: React.FC<{ defaultValues: FormDataValues; recordId: string }> 
                     await updateDetail(recordId, i, detail);
                 }
 
-                alert("저장했습니다.");
+                alert("수정했습니다.");
             }
         } catch (error) {
             console.error("Error processing the record:", error);
             alert("Failed to process the record.");
         }
     };
-
 
     return (
         <Box>
@@ -101,7 +103,11 @@ const RecordForm: React.FC<{ defaultValues: FormDataValues; recordId: string }> 
                                 )}
                             />
                         </Stack>
-                        <QAForm name="questions" details={defaultValues.questions || []} interviewRecordId={recordId} />
+                        <QAForm
+                            name="questions"
+                            details={formValues.questions || []}
+                            interviewRecordId={recordId || ""}
+                        />
                         <HStack justifyContent="flex-end">
                             <Button
                                 m="20px"
@@ -110,7 +116,7 @@ const RecordForm: React.FC<{ defaultValues: FormDataValues; recordId: string }> 
                                 borderRadius="30px"
                                 w="100px"
                             >
-                                수정
+                                {recordId ? "수정" : "저장"}
                             </Button>
                         </HStack>
                     </Stack>

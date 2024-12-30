@@ -16,7 +16,6 @@ import {
     DialogActionTrigger,
     DialogCloseTrigger,
     DialogRoot,
-    DialogTrigger,
 } from "@chakra-ui/react";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { GrFormPrevious, GrFormNext } from "react-icons/gr";
@@ -26,18 +25,18 @@ import { deleteRecord } from "../api/recordsApi";
 
 type SidebarProps = {
     menuItems: { label: string; id: string }[];
-    onSelect: (id: string) => void;
+    onSelect: (id: string | null) => void;
     itemsPerPage: number;
 };
 
 const Sidebar: React.FC<SidebarProps> = ({ menuItems, onSelect, itemsPerPage }) => {
     const ref = useRef<HTMLButtonElement>(null);
-    const [currentPage, setCurrentPage] = useState(0); // 현재 페이지 상태 관리
-    const totalPages = Math.ceil(menuItems.length / itemsPerPage); // 총 페이지 수 계산
+    const [currentPage, setCurrentPage] = useState(0);
+    const totalPages = Math.ceil(menuItems.length / itemsPerPage);
     const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null); // 에러 상태 관리
-    const [recordToDelete, setRecordToDelete] = useState<string | null>(null); // 삭제할 기록 ID
-    const [isDialogOpen, setDialogOpen] = useState(false); // 삭제 다이얼로그 상태
+    const [error, setError] = useState<string | null>(null);
+    const [recordToDelete, setRecordToDelete] = useState<string | null>(null);
+    const [isDialogOpen, setDialogOpen] = useState(false);
 
     const paginatedItems = menuItems.slice(
         currentPage * itemsPerPage,
@@ -53,8 +52,8 @@ const Sidebar: React.FC<SidebarProps> = ({ menuItems, onSelect, itemsPerPage }) 
     };
 
     const handleDelete = (interviewRecordId: string) => {
-        setRecordToDelete(interviewRecordId); // 삭제할 record ID 설정
-        setDialogOpen(true); // 다이얼로그 열기
+        setRecordToDelete(interviewRecordId);
+        setDialogOpen(true);
     };
 
     const handleDeleteConfirmation = async () => {
@@ -66,8 +65,8 @@ const Sidebar: React.FC<SidebarProps> = ({ menuItems, onSelect, itemsPerPage }) 
         try {
             await deleteRecord(recordToDelete);
             alert("삭제했습니다.");
-            setRecordToDelete(null); // 삭제한 record ID 초기화
-            setDialogOpen(false); // 다이얼로그 닫기
+            setRecordToDelete(null);
+            setDialogOpen(false);
         } catch (err) {
             setError("Failed to delete the record.");
             console.error(err);
@@ -84,7 +83,20 @@ const Sidebar: React.FC<SidebarProps> = ({ menuItems, onSelect, itemsPerPage }) 
                 </Button>
             </PopoverTrigger>
             <PopoverContent position="fixed" mt="10">
-                <PopoverHeader>목록</PopoverHeader>
+                <PopoverHeader>
+                    <Flex justify="space-between" align="center">
+                        <Text>목록</Text>
+                        <Button
+                            size="xs"
+                            colorScheme="teal"
+                            onClick={() => {
+                                onSelect(null);
+                            }}
+                        >
+                            새 폼 추가
+                        </Button>
+                    </Flex>
+                </PopoverHeader>
                 <PopoverArrow />
                 <PopoverBody>
                     <Box minHeight="400px">
@@ -129,7 +141,7 @@ const Sidebar: React.FC<SidebarProps> = ({ menuItems, onSelect, itemsPerPage }) 
                 </PopoverBody>
                 <PopoverCloseTrigger />
             </PopoverContent>
-            <DialogRoot open={isDialogOpen} onOpenChange={(e)=>setDialogOpen(e.open)}>
+            <DialogRoot open={isDialogOpen} onOpenChange={(e) => setDialogOpen(e.open)}>
                 <DialogContent padding={4} position="fixed" left="500px">
                     <Text>정말 삭제하시겠습니까?</Text>
                     <DialogFooter>

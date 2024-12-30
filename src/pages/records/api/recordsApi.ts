@@ -1,33 +1,29 @@
 import axios from "axios";
-import { InterviewRecordCreateDTO, InterviewRecordResponseDTO, InterviewRecordUpdateDTO, RecordDetailCreateDTO } from "./recordsApiList";
+import { InterviewRecordCreateDTO, InterviewRecordResponseDTO, InterviewRecordUpdateDTO, RecordDetailCreateDTO } from "./recordsDTOList";
 
 const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 const TOKEN = import.meta.env.VITE_TOKEN;
 
+const client = axios.create({
+    baseURL: `${SERVER_URL}/records`,
+    headers: {
+      Authorization: `Bearer ${TOKEN}`,
+      "Content-Type": "application/json"
+    }});
+
 export const fetchSidebarData = async (): Promise<{ interviewRecordId: string; enterpriseName: string; category: string }[]> => {
-    const response = await axios.get(`${SERVER_URL}/records/sidebar`, {headers: { Authorization: `Bearer ${TOKEN}` }});
+    const response = await client.get('/sidebar');
     return response.data;
 };
 
 export const fetchRecordDetails = async (ResponseParams: string): Promise<InterviewRecordResponseDTO> => {
-    const response = await axios.get(`${SERVER_URL}/records/interview`, {params: ResponseParams, headers:{'Authorization': `Bearer ${TOKEN}`}});
+    const response = await client.get('/interview',{params: ResponseParams});
     return response.data;
 };
 
-export const updateDetail = async (
-    interviewRecordId: string,
-    detailIndex: number,
-    payload: { question: string; answer: string }
-) => {
-    
+export const updateDetail = async (interviewRecordId: string, detailIndex: number, payload: { question: string; answer: string }) => {
     try {
-        const response = await axios.put(`${SERVER_URL}/records/interview/${interviewRecordId}/detail/${detailIndex}`, payload, {
-            headers: {
-                "Content-Type": "application/json",
-                Authorization: `Bearer ${TOKEN}`,
-            },
-        });
-
+        const response = await client.put(`/interview/${interviewRecordId}/detail/${detailIndex}`, payload);
         return response.data;
     } catch (error) {
         console.error("Error in updateDetail:", error);
@@ -35,54 +31,29 @@ export const updateDetail = async (
     }
 };
 
-export const createRecord = async (data: InterviewRecordCreateDTO): Promise<{ id: string }> => {
-    const response = await axios.post(`${SERVER_URL}/records/interview`, data, {
-        headers: { Authorization: `Bearer ${TOKEN}`, "Content-Type": "application/json" },
-    });
-    return response.data; // 서버가 반환하는 데이터를 그대로 반환
-};
-
-export const fetchRecords = async (interviewId: string) => {
-    const response = await axios.get(`${SERVER_URL}/records/interview${interviewId}`, {headers:{'Authorization': `Bearer ${TOKEN}`}});    
+export const createRecord = async (data: InterviewRecordCreateDTO): Promise<{ interviewRecordId: string }> => {
+    const response = await client.post(`/interview`, data);
     return response.data;
 };
 
-export const createDetail = async (
-    interviewRecordId: string,
-    data: RecordDetailCreateDTO
-) => {
-    const response = await axios.post(
-        `${SERVER_URL}/records/interview/${interviewRecordId}/detail`,
-        data,
-        {
-            headers: {
-                Authorization: `Bearer ${TOKEN}`,
-                "Content-Type": "application/json",
-            },
-        }
-    );
+export const fetchRecords = async (interviewId: string) => {
+    const response = await client.get(`/interview${interviewId}`);
+    return response.data;
+};
+
+export const createDetail = async (interviewRecordId: string, data: RecordDetailCreateDTO) => {
+    const response = await client.post(`/interview/${interviewRecordId}/detail`, data);
     return response.data;
 };
 
 export const fetchRecordById = async (interviewRecordId: string) => {
-        const response = await axios.get(`${SERVER_URL}/records/interview/${interviewRecordId}`, {
-            headers: {
-                'Authorization': `Bearer ${TOKEN}`,
-                "Content-Type": "application/json",
-            }
-        });
-        return response.data; // 면접 기록 데이터 반환
+    const response = await client.get(`/interview/${interviewRecordId}`);
+    return response.data;
 };
 
 export const updateRecord = async (interviewRecordId: string, data: InterviewRecordUpdateDTO ) => {
     try {
-        const response = await axios.put(`${SERVER_URL}/records/interview/${interviewRecordId}`, data, {
-            headers: {
-                'Authorization': `Bearer ${TOKEN}`,
-                "Content-Type": "application/json",
-            }
-        });
-
+        const response = await client.put(`/interview/${interviewRecordId}`, data);
         return response.data;
     } catch (error) {
         console.error("Error in updateRecord:", error);
@@ -91,13 +62,11 @@ export const updateRecord = async (interviewRecordId: string, data: InterviewRec
 };
 
 export const deleteDetail = async ( interviewRecordId: string, detailIndex: number ) => {
-    const response = await axios.delete(`${SERVER_URL}/records/interview/${interviewRecordId}/detail/${detailIndex}`,
-        { headers: { 'Authorization': `Bearer ${TOKEN}`,}});
+    const response = await client.delete(`/interview/${interviewRecordId}/detail/${detailIndex}`);
     return response.data;
 }
 
 export const deleteRecord = async ( interviewRecordId: string ) => {
-     const response = await axios.delete(`${SERVER_URL}/records/interview/${interviewRecordId}`,
-     { headers: { 'Authorization' : `Bearer ${TOKEN}`,}});
-     return response.data;
+    const response = await client.delete(`/interview/${interviewRecordId}`);
+    return response.data;
 }
