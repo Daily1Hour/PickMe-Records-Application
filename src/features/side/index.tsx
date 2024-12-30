@@ -1,4 +1,5 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { GrFormPrevious, GrFormNext } from "react-icons/gr";
 import {
@@ -25,39 +26,22 @@ type SidebarProps = {
 };
 
 const Sidebar: React.FC<SidebarProps> = ({ onSelect }) => {
-    const [menuItems, setMenuItems] = useState<{ id: string; label: string }[]>(
-        [],
-    );
-
     const ref = useRef<HTMLButtonElement>(null);
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
     const [recordToDelete, setRecordToDelete] = useState<string | null>(null);
     const [isDialogOpen, setDialogOpen] = useState(false);
 
-    const { paginatedItems, handlePageChange, currentPage, totalPages } =
-        usePagenation<{id:string; label: string}>(menuItems);
-    const loadSidebarData = async () => {
-        setLoading(true);
-        setError(null);
-        try {
-            const data = await fetchSidebarData();
-            const formattedMenuItems = data.map((item) => ({
-                id: item.interviewRecordId,
-                label: `${item.enterpriseName} | ${item.category}`,
-            }));
-            setMenuItems(formattedMenuItems);
-        } catch (err) {
-            setError("Failed to load sidebar data.");
-            console.error(err);
-        } finally {
-            setLoading(false);
-        }
-    };
+    const { data, isError, error } = useQuery({
+        queryKey: ["side"],
+        queryFn: fetchSidebarData,
+    });
 
-    useEffect(() => {
-        loadSidebarData();
-    }, []);
+    const formattedMenuItems = data?.map((item) => ({
+        id: item.interviewRecordId,
+        label: `${item.enterpriseName} | ${item.category}`,
+    }));
+
+    const { paginatedItems, handlePageChange, currentPage, totalPages } =
+        usePagenation<{ id: string; label: string }>(formattedMenuItems || []);
 
     const handleDelete = (interviewRecordId: string) => {
         setRecordToDelete(interviewRecordId);
@@ -115,7 +99,9 @@ const Sidebar: React.FC<SidebarProps> = ({ onSelect }) => {
                                 </Text>
                             </Flex>
                         ))}
-                        {error && <Text color="red.500">{error}</Text>}
+                        {isError && (
+                            <Text color="red.500">{error.message}</Text>
+                        )}
                     </Box>
                     <HStack mt={4} justify="space-between">
                         <Button
@@ -139,7 +125,11 @@ const Sidebar: React.FC<SidebarProps> = ({ onSelect }) => {
                 </PopoverBody>
                 <PopoverCloseTrigger />
             </PopoverContent>
-          <DeleteConfirm recordToDelete={recordToDelete} isDialogOpen={isDialogOpen} setDialogOpen={setDialogOpen}  />
+            <DeleteConfirm
+                recordToDelete={recordToDelete}
+                isDialogOpen={isDialogOpen}
+                setDialogOpen={setDialogOpen}
+            />
         </PopoverRoot>
     );
 };
