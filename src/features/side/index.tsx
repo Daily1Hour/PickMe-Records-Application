@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { RxHamburgerMenu } from "react-icons/rx";
-import { GrFormPrevious, GrFormNext } from "react-icons/gr";
+import { GrFormPrevious, GrFormNext, GrFormClose, GrFormAdd } from "react-icons/gr";
 import {
     Button,
     PopoverArrow,
@@ -60,13 +60,14 @@ const Sidebar: React.FC<SidebarProps> = ({ onSelect }) => {
                     <Flex justify="space-between" align="center">
                         <Text>목록</Text>
                         <Button
-                            size="xs"
-                            colorScheme="teal"
+                            bg="none"
+                            color="gray"
+                            _hover={{ bg: "gray.100" }}
                             onClick={() => {
                                 onSelect(null);
                             }}
                         >
-                            새 폼 추가
+                            <GrFormAdd />
                         </Button>
                     </Flex>
                 </PopoverHeader>
@@ -89,14 +90,15 @@ const Sidebar: React.FC<SidebarProps> = ({ onSelect }) => {
                                 >
                                     {item.label}
                                 </Text>
-                                <Text
+                                <Button
                                     ml="auto"
+                                    bg="none"
                                     color="gray"
                                     cursor="pointer"
                                     onClick={() => handleDelete(item.id)}
                                 >
-                                    x
-                                </Text>
+                                    <GrFormClose />
+                                </Button>
                             </Flex>
                         ))}
                         {isError && (
@@ -106,20 +108,22 @@ const Sidebar: React.FC<SidebarProps> = ({ onSelect }) => {
                     <HStack mt={4} justify="space-between">
                         <Button
                             size="sm"
+                            bg="none"
                             onClick={() => handlePageChange("prev")}
                             disabled={currentPage === 0}
                         >
-                            <GrFormPrevious />
+                            <GrFormPrevious color="black" />
                         </Button>
                         <Text>
                             {currentPage + 1} / {totalPages}
                         </Text>
                         <Button
                             size="sm"
+                            bg="none"
                             onClick={() => handlePageChange("next")}
                             disabled={currentPage === totalPages - 1}
                         >
-                            <GrFormNext />
+                            <GrFormNext color="black" />
                         </Button>
                     </HStack>
                 </PopoverBody>
