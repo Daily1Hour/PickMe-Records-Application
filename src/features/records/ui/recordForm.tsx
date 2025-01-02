@@ -11,9 +11,9 @@ import { createRecord, updateRecord, updateDetail } from "../api/detailsApi";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface FormDataValues {
-    company: string;
+    enterpriseName: string;
     category: string;
-    questions: { question: string; answer: string }[];
+    details: { question: string; answer: string }[];
 }
 
 const RecordForm: React.FC<{
@@ -23,9 +23,9 @@ const RecordForm: React.FC<{
     const [recordId, setRecordId] = useState(interviewRecordId || null); // recordId가 null로 초기화됩니다.
     const methods = useForm<FormDataValues>({
         defaultValues: {
-            company: "",
+            enterpriseName: "",
             category: "",
-            questions: [{ question: "", answer: "" }],
+            details: [{ question: "", answer: "" }],
         },
     });
 
@@ -55,9 +55,9 @@ const RecordForm: React.FC<{
             if (recordId === null) {
                 // recordId가 null일 때 새로운 레코드 생성
                 const payload: InterviewRecordCreateDTO = {
-                    enterpriseName: data.company,
+                    enterpriseName: data.enterpriseName,
                     category: data.category,
-                    details: data.questions.map((q) => ({
+                    details: data.details.map((q) => ({
                         question: q.question,
                         answer: q.answer,
                     })),
@@ -70,14 +70,14 @@ const RecordForm: React.FC<{
                 // 기존 레코드 수정
 
                 const updatedPayload: InterviewRecordUpdateDTO = {
-                    enterpriseName: data.company,
+                    enterpriseName: data.enterpriseName,
                     category: data.category,
                 };
 
                 update({ recordId, updatedPayload });
 
-                for (let i = 0; i < data.questions.length; i++) {
-                    const detail = data.questions[i];
+                for (let i = 0; i < data.details.length; i++) {
+                    const detail = data.details[i];
                     await updateDetail(recordId, i, detail);
                 }
 
@@ -100,7 +100,7 @@ const RecordForm: React.FC<{
                         <Heading>내 기록</Heading>
                         <Stack gap="10">
                             <Controller
-                                name="company"
+                                name="enterpriseName"
                                 control={methods.control}
                                 render={({ field }) => (
                                     <Input
@@ -123,8 +123,8 @@ const RecordForm: React.FC<{
                             />
                         </Stack>
                         <QAForm
-                            name="questions"
-                            details={formValues.questions || []}
+                            name="details"
+                            details={formValues.details || []}
                             interviewRecordId={recordId || ""}
                         />
                         <HStack justifyContent="flex-end">
