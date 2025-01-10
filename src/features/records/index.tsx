@@ -1,7 +1,7 @@
 import { Box, Flex, HStack } from "@chakra-ui/react";
 
-import PDFUploadForm from "./ui/pdfForm";
-import RecordForm from "./ui/recordForm";
+import PDFUploadForm from "./ui/PDFUploadForm";
+import RecordForm from "./ui/RecordForm";
 import { fetchRecordById } from "./api/detailsApi";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
