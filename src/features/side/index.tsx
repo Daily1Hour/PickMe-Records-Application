@@ -83,11 +83,11 @@ const Sidebar: React.FC<SidebarProps> = ({ onSelect }) => {
                                 rounded="md"
                                 _hover={{ bg: "gray.100" }}
                                 cursor="pointer"
+                                onClick={() => onSelect(item.id)}
                             >
                                 <Text
                                     ml="4"
                                     minWidth="200px"
-                                    onClick={() => onSelect(item.id)}
                                 >
                                     {item.label}
                                 </Text>
