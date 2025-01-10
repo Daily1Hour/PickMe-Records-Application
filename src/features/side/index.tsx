@@ -1,7 +1,12 @@
 import { useRef, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { RxHamburgerMenu } from "react-icons/rx";
-import { GrFormPrevious, GrFormNext, GrFormClose, GrFormAdd } from "react-icons/gr";
+import {
+    GrFormPrevious,
+    GrFormNext,
+    GrFormClose,
+    GrFormAdd,
+} from "react-icons/gr";
 import {
     Button,
     PopoverArrow,
@@ -20,20 +25,19 @@ import {
 import { usePagenation } from "./hook/usePagenation";
 import { DeleteConfirm } from "./ui/deleteConfirm";
 import { fetchSidebarData } from "./api/sideApi";
+import { NavLink, useNavigate } from "react-router-dom";
 
-type SidebarProps = {
-    onSelect: (id: string | null) => void;
-};
 
-const Sidebar: React.FC<SidebarProps> = ({ onSelect }) => {
+const Sidebar = () => {
     const ref = useRef<HTMLButtonElement>(null);
     const [recordToDelete, setRecordToDelete] = useState<string | null>(null);
     const [isDialogOpen, setDialogOpen] = useState(false);
 
+    const navigate = useNavigate();
     const { data, isError, error } = useQuery({
         queryKey: ["side"],
         queryFn: fetchSidebarData,
-        refetchOnWindowFocus: false
+        refetchOnWindowFocus: false,
     });
 
     const formattedMenuItems = data?.map((item) => ({
@@ -60,7 +64,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onSelect }) => {
                 <PopoverHeader>
                     <Flex justify="space-between" align="center">
                         <Text>목록</Text>
-                        <Button
+                        {/* <Button
                             bg="none"
                             color="gray"
                             _hover={{ bg: "gray.100" }}
@@ -69,7 +73,17 @@ const Sidebar: React.FC<SidebarProps> = ({ onSelect }) => {
                             }}
                         >
                             <GrFormAdd />
-                        </Button>
+                        </Button> */}
+                        <NavLink to={`/`}>
+                            <Button
+                                bg="none"
+                                color="gray"
+                                _hover={{ bg: "gray.100" }}
+                                title="작성하기"
+                            >
+                                <GrFormAdd />
+                            </Button>
+                        </NavLink>
                     </Flex>
                 </PopoverHeader>
                 <PopoverArrow />
@@ -81,14 +95,14 @@ const Sidebar: React.FC<SidebarProps> = ({ onSelect }) => {
                                 align="center"
                                 p="2"
                                 rounded="md"
+                                title={item.label}
                                 _hover={{ bg: "gray.100" }}
                                 cursor="pointer"
-                                onClick={() => onSelect(item.id)}
+                                onClick={() =>
+                                    navigate(`/${item.id}`)
+                                }
                             >
-                                <Text
-                                    ml="4"
-                                    minWidth="200px"
-                                >
+                                <Text ml="4" minWidth="200px">
                                     {item.label}
                                 </Text>
                                 <Button

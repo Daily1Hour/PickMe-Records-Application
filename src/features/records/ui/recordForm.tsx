@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { useForm, FormProvider, Controller } from "react-hook-form";
 import { Stack, Heading, Button, Input, HStack, Box } from "@chakra-ui/react";
 
@@ -10,6 +10,7 @@ import {
 } from "../api/recordsDTOList";
 import { createRecord, updateRecord, updateDetail } from "../api/detailsApi";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
 interface FormDataValues {
     enterpriseName: string;
@@ -20,8 +21,8 @@ interface FormDataValues {
 const RecordForm: React.FC<{
     recordValues: FormDataValues;
     recordId?: string;
-}> = ({ recordValues: formValues, recordId: interviewRecordId }) => {
-    const [recordId, setRecordId] = useState(interviewRecordId || null); // recordId가 null로 초기화됩니다.
+}> = ({ recordValues: formValues, recordId }) => {
+    const navigate = useNavigate();
     const methods = useForm<FormDataValues>({
         defaultValues: {
             enterpriseName: "",
@@ -73,11 +74,11 @@ const RecordForm: React.FC<{
 
     const onSubmit = async (data: FormDataValues) => {
         try {
-            if (recordId === null) {
+            if (! recordId) {
                 // recordId가 null일 때 새로운 레코드 생성
 
                 const newRecord = await create({ data });
-                setRecordId(newRecord.interviewRecordId); // 새로운 레코드가 생성되면 ID를 설정
+                navigate(`/${newRecord.interviewRecordId}`)
                 alert("저장했습니다.");
             } else {
                 // 기존 레코드 수정

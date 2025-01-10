@@ -7,8 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 
 const RecordDetails = () => {
-    console.log("das")
-    const { id } = useParams<{ id: string }>();
+    const { id } = useParams<{ id: string | undefined}>();
     const { data } = useQuery({
         queryKey: ["record", id],
         queryFn: () => {
@@ -36,7 +35,7 @@ const RecordDetails = () => {
                         <RecordForm
                             key={data.id}
                             recordValues={data}
-                            recordId={data?.id ?? undefined}
+                            recordId={id}
                         />
                     </HStack>
                 </Flex>

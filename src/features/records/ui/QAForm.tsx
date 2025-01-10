@@ -5,6 +5,11 @@ import { Box, Button, HStack, VStack, Editable } from "@chakra-ui/react";
 import EditableControl from "./editable-control";
 import { createDetail, deleteDetail } from "../api/detailsApi";
 import { Field } from "@/shared/chakra-ui/Field";
+import {
+    useMutation,
+    useQueryClient,
+} from "@tanstack/react-query";
+import { RecordDetailCreateDTO } from "../api/recordsDTOList";
 
 interface QAFormProps {
     name: string;
@@ -12,13 +17,40 @@ interface QAFormProps {
     interviewRecordId: string | null; // null 허용
 }
 
-const QAForm: React.FC<QAFormProps> = ({ name, details, interviewRecordId }) => {
+const QAForm: React.FC<QAFormProps> = ({
+    name,
+    details,
+    interviewRecordId,
+}) => {
     const { control, resetField } = useFormContext();
-    const { fields, append, remove } = useFieldArray({
+    const { fields, append,  } = useFieldArray({
         name,
     });
 
-    console.log(interviewRecordId)
+    const queryclient = useQueryClient();
+
+    const { mutateAsync: createDetailMutation } = useMutation({
+        mutationFn: ({
+            interviewRecordId,
+            data,
+        }: {
+            interviewRecordId: string;
+            data: RecordDetailCreateDTO;
+        }) => createDetail(interviewRecordId, data),
+    });
+
+    const { mutate: deleteDetailMutation } = useMutation({
+        mutationFn: ({
+            interviewRecordId,
+            detailIndex,
+        }: {
+            interviewRecordId: string;
+            detailIndex: number;
+        }) => deleteDetail(interviewRecordId, detailIndex),
+        onSuccess: ()=> {
+            queryclient.refetchQueries({ queryKey: ["record"] });
+        }
+    });
 
     useEffect(() => {
         resetField(name, { defaultValue: details });
@@ -29,9 +61,12 @@ const QAForm: React.FC<QAFormProps> = ({ name, details, interviewRecordId }) => 
 
         try {
             const newDetail = { question: "", answer: "" };
-            console.log(interviewRecordId)
 
-            const response = await createDetail(interviewRecordId, newDetail);
+            const response = await createDetailMutation({
+                interviewRecordId,
+                data: newDetail,
+            });
+
             append({
                 question: response.question,
                 answer: response.answer,
@@ -43,10 +78,11 @@ const QAForm: React.FC<QAFormProps> = ({ name, details, interviewRecordId }) => 
 
     const handleDeleteDetail = async (detailIndex: number) => {
         if (!interviewRecordId) return; // recordId가 없으면 삭제 불가
-
         try {
-            await deleteDetail(interviewRecordId, detailIndex);
-            remove(detailIndex);
+            deleteDetailMutation({
+                interviewRecordId,
+                detailIndex,
+            });
         } catch (error) {
             console.error("Failed to delete detail:", error);
         }
@@ -54,7 +90,6 @@ const QAForm: React.FC<QAFormProps> = ({ name, details, interviewRecordId }) => 
 
     return (
         <VStack align="stretch">
-            
             {fields.map((field, detailIndex) => (
                 <Box
                     m={5}
@@ -68,8 +103,13 @@ const QAForm: React.FC<QAFormProps> = ({ name, details, interviewRecordId }) => 
                             name={`${name}.${detailIndex}.question`}
                             control={control}
                             render={({ field }) => (
-                                <Editable.Root defaultValue={field.value} onSubmit={field.onChange}>
-                                    <Editable.Preview>{field.value || "질문을 입력해주세요"}</Editable.Preview>
+                                <Editable.Root
+                                    defaultValue={field.value}
+                                    onSubmit={field.onChange}
+                                >
+                                    <Editable.Preview>
+                                        {field.value || "질문을 입력해주세요"}
+                                    </Editable.Preview>
                                     <Editable.Textarea {...field} h="100px" />
                                     <EditableControl />
                                 </Editable.Root>
@@ -81,8 +121,13 @@ const QAForm: React.FC<QAFormProps> = ({ name, details, interviewRecordId }) => 
                             name={`${name}.${detailIndex}.answer`}
                             control={control}
                             render={({ field }) => (
-                                <Editable.Root defaultValue={field.value} onSubmit={field.onChange}>
-                                    <Editable.Preview>{field.value || "답변을 입력해주세요"}</Editable.Preview>
+                                <Editable.Root
+                                    defaultValue={field.value}
+                                    onSubmit={field.onChange}
+                                >
+                                    <Editable.Preview>
+                                        {field.value || "답변을 입력해주세요"}
+                                    </Editable.Preview>
                                     <Editable.Textarea {...field} h="100px" />
                                     <EditableControl />
                                 </Editable.Root>
