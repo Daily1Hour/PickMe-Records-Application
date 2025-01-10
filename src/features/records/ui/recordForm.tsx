@@ -6,6 +6,7 @@ import QAForm from "./QAForm";
 import {
     InterviewRecordCreateDTO,
     InterviewRecordUpdateDTO,
+    RecordDetailUpdateDTO,
 } from "../api/recordsDTOList";
 import { createRecord, updateRecord, updateDetail } from "../api/detailsApi";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -33,17 +34,37 @@ const RecordForm: React.FC<{
 
     const queryclient = useQueryClient();
 
-    const { mutate: update } = useMutation({
-        mutationFn: ({
-            recordId,
-            updatedPayload,
-        }: {
-            recordId: string;
-            updatedPayload: InterviewRecordUpdateDTO;
-        }) => updateRecord(recordId, updatedPayload),
+    const { mutateAsync: create } = useMutation({
+        mutationFn: ({ data }: { data: InterviewRecordCreateDTO }) =>
+            createRecord(data),
         onSuccess: () => {
             queryclient.refetchQueries({ queryKey: ["side"] });
         },
+    });
+
+    const { mutate: update } = useMutation({
+        mutationFn: ({
+            recordId,
+            data,
+        }: {
+            recordId: string;
+            data: InterviewRecordUpdateDTO;
+        }) => updateRecord(recordId, data),
+        onSuccess: () => {
+            queryclient.refetchQueries({ queryKey: ["side"] });
+        },
+    });
+
+    const { mutate: updateDetailMutation } = useMutation({
+        mutationFn: ({
+            recordId,
+            index,
+            detail,
+        }: {
+            recordId: string;
+            index: number;
+            detail: RecordDetailUpdateDTO;
+        }) => updateDetail(recordId, index, detail),
     });
 
     useEffect(() => {
@@ -54,33 +75,16 @@ const RecordForm: React.FC<{
         try {
             if (recordId === null) {
                 // recordId가 null일 때 새로운 레코드 생성
-                const payload: InterviewRecordCreateDTO = {
-                    enterpriseName: data.enterpriseName,
-                    category: data.category,
-                    details: data.details.map((q) => ({
-                        question: q.question,
-                        answer: q.answer,
-                    })),
-                };
 
-                const newRecord = await createRecord(payload);
+                const newRecord = await create({ data });
                 setRecordId(newRecord.interviewRecordId); // 새로운 레코드가 생성되면 ID를 설정
                 alert("저장했습니다.");
             } else {
                 // 기존 레코드 수정
-
-                const updatedPayload: InterviewRecordUpdateDTO = {
-                    enterpriseName: data.enterpriseName,
-                    category: data.category,
-                };
-
-                update({ recordId, updatedPayload });
-
-                for (let i = 0; i < data.details.length; i++) {
-                    const detail = data.details[i];
-                    await updateDetail(recordId, i, detail);
-                }
-
+                update({ recordId, data });
+                data.details.forEach((detail, index) => {
+                    updateDetailMutation({ recordId, index, detail });
+                });
                 alert("수정했습니다.");
             }
         } catch (error) {

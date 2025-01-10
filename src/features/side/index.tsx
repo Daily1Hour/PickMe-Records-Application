@@ -33,6 +33,7 @@ const Sidebar: React.FC<SidebarProps> = ({ onSelect }) => {
     const { data, isError, error } = useQuery({
         queryKey: ["side"],
         queryFn: fetchSidebarData,
+        refetchOnWindowFocus: false
     });
 
     const formattedMenuItems = data?.map((item) => ({

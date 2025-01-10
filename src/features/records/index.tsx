@@ -19,6 +19,7 @@ const RecordDetails = ({ id }: { id: string | null }) => {
             }
             return fetchRecordById(id);
         },
+        staleTime: 1000*60*60
     });
 
     return (

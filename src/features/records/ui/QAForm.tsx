@@ -18,6 +18,8 @@ const QAForm: React.FC<QAFormProps> = ({ name, details, interviewRecordId }) => 
         name,
     });
 
+    console.log(interviewRecordId)
+
     useEffect(() => {
         resetField(name, { defaultValue: details });
     }, [details, resetField, name]);
@@ -27,6 +29,7 @@ const QAForm: React.FC<QAFormProps> = ({ name, details, interviewRecordId }) => 
 
         try {
             const newDetail = { question: "", answer: "" };
+            console.log(interviewRecordId)
 
             const response = await createDetail(interviewRecordId, newDetail);
             append({
@@ -38,12 +41,12 @@ const QAForm: React.FC<QAFormProps> = ({ name, details, interviewRecordId }) => 
         }
     };
 
-    const handleDeleteDetail = async (index: number) => {
+    const handleDeleteDetail = async (detailIndex: number) => {
         if (!interviewRecordId) return; // recordId가 없으면 삭제 불가
 
         try {
-            await deleteDetail(interviewRecordId, index);
-            remove(index);
+            await deleteDetail(interviewRecordId, detailIndex);
+            remove(detailIndex);
         } catch (error) {
             console.error("Failed to delete detail:", error);
         }
@@ -52,7 +55,7 @@ const QAForm: React.FC<QAFormProps> = ({ name, details, interviewRecordId }) => 
     return (
         <VStack align="stretch">
             
-            {fields.map((field, index) => (
+            {fields.map((field, detailIndex) => (
                 <Box
                     m={5}
                     key={field.id}
@@ -62,7 +65,7 @@ const QAForm: React.FC<QAFormProps> = ({ name, details, interviewRecordId }) => 
                 >
                     <Field label="면접 질문" my={4}>
                         <Controller
-                            name={`${name}.${index}.question`}
+                            name={`${name}.${detailIndex}.question`}
                             control={control}
                             render={({ field }) => (
                                 <Editable.Root defaultValue={field.value} onSubmit={field.onChange}>
@@ -75,7 +78,7 @@ const QAForm: React.FC<QAFormProps> = ({ name, details, interviewRecordId }) => 
                     </Field>
                     <Field label="답변">
                         <Controller
-                            name={`${name}.${index}.answer`}
+                            name={`${name}.${detailIndex}.answer`}
                             control={control}
                             render={({ field }) => (
                                 <Editable.Root defaultValue={field.value} onSubmit={field.onChange}>
@@ -91,7 +94,7 @@ const QAForm: React.FC<QAFormProps> = ({ name, details, interviewRecordId }) => 
                             m={4}
                             bg="none"
                             size="sm"
-                            onClick={() => handleDeleteDetail(index)}
+                            onClick={() => handleDeleteDetail(detailIndex)}
                         >
                             ✖
                         </Button>
