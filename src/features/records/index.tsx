@@ -4,12 +4,15 @@ import PDFUploadForm from "./ui/pdfForm";
 import RecordForm from "./ui/recordForm";
 import { fetchRecordById } from "./api/detailsApi";
 import { useQuery } from "@tanstack/react-query";
+import { useParams } from "react-router-dom";
 
-const RecordDetails = ({ id }: { id: string | null }) => {
+const RecordDetails = () => {
+    console.log("das")
+    const { id } = useParams<{ id: string }>();
     const { data } = useQuery({
         queryKey: ["record", id],
         queryFn: () => {
-            if (id === null) {
+            if (!id) {
                 return {
                     id: null, // id를 null로 설정하여 새로운 레코드를 생성할 수 있게 함
                     enterpriseName: "",
