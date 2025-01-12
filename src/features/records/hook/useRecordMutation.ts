@@ -16,14 +16,20 @@ export default function useRecordMutation() {
         mutationFn: createRecord,
         onSuccess: ({ interviewRecordId }) => {
             queryClient.refetchQueries({ queryKey: ["side"] });
+            queryClient.refetchQueries({
+                queryKey: ["record", interviewRecordId],
+            });
             navigate(`/${interviewRecordId}`);
         },
     });
 
     const { mutate: update } = useMutation({
         mutationFn: updateRecord,
-        onSuccess: () => {
+        onSuccess: ({ interviewRecordId }) => {
             queryClient.refetchQueries({ queryKey: ["side"] });
+            queryClient.refetchQueries({
+                queryKey: ["record", interviewRecordId],
+            });
         },
     });
 
