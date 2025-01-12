@@ -2,12 +2,13 @@ import { useEffect } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { Box, HStack, VStack } from "@chakra-ui/react";
 
+import Detail from "@/entities/records/model/Detail";
 import QAFormField from "./QAFormField";
 import DeleteRecord from "./DeleteRecord";
 import AddenRecord from "./AddenRecord";
 
 interface QAFormProps {
-    details: { question: string; answer: string }[];
+    details: Detail[];
     interviewRecordId: string;
 }
 

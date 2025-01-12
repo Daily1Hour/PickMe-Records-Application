@@ -1,11 +1,12 @@
-import { Stack, Input } from "@chakra-ui/react";
 import { Control, Controller } from "react-hook-form";
-import FormDataValues from "../model/FormDataValues";
+import { Stack, Input } from "@chakra-ui/react";
+
+import Record from "@/entities/records/model/Record";
 
 export default function TitleForm({
     control,
 }: {
-    control: Control<FormDataValues, FormDataValues>;
+    control: Control<Record, Record>;
 }) {
     return (
         <Stack gap="10">

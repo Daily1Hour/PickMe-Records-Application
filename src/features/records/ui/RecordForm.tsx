@@ -1,20 +1,20 @@
 import { useForm, FormProvider } from "react-hook-form";
 import { Stack, Heading, Button, HStack, Box } from "@chakra-ui/react";
 
-import FormDataValues from "../model/FormDataValues";
+import Record from "@/entities/records/model/Record";
 import useRecordMutation from "../hook/useRecordMutation";
 import QAForm from "./QAForm";
 import TitleForm from "./TitleForm";
 
 const RecordForm: React.FC<{
-    recordValues: FormDataValues;
+    recordValues: Record;
     recordId?: string;
 }> = ({ recordValues, recordId }) => {
     const methods = useForm({ defaultValues: recordValues });
 
     const { create, update, updateDetail } = useRecordMutation();
 
-    const onSubmit = async (data: FormDataValues) => {
+    const onSubmit = async (data: Record) => {
         try {
             if (!recordId) {
                 // recordId가 null일 때 새로운 레코드 생성

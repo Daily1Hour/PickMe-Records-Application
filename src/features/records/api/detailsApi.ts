@@ -1,9 +1,13 @@
+import axios from "axios";
+
+import Detail from "@/entities/records/model/Detail";
+import Record from "@/entities/records/model/Record";
 import {
+    InterviewRecordResponseDTO,
+    RecordDetailCreateDTO,
     InterviewRecordCreateDTO,
     InterviewRecordUpdateDTO,
-    RecordDetailCreateDTO,
-} from "@/features/records/api/recordsDTOList";
-import axios from "axios";
+} from "./recordsDTOList";
 
 const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 const TOKEN = import.meta.env.VITE_TOKEN;
@@ -16,9 +20,24 @@ const client = axios.create({
     },
 });
 
-export const fetchRecordById = async (interviewRecordId: string) => {
-    const response = await client.get(`/interview/${interviewRecordId}`);
-    return response.data;
+export const fetchRecordById = async (
+    interviewRecordId: string,
+): Promise<Record> => {
+    const response = await client.get<InterviewRecordResponseDTO>(
+        `/interview/${interviewRecordId}`,
+    );
+
+    const { enterpriseName, category, details, createdAt, updatedAt } =
+        response.data;
+
+    return new Record(
+        interviewRecordId,
+        enterpriseName,
+        category,
+        createdAt,
+        updatedAt,
+        details.map(({ question, answer }) => new Detail(question, answer)),
+    );
 };
 
 export const createDetail = async ({
@@ -64,7 +83,7 @@ export const updateDetail = async ({
 }: {
     interviewRecordId: string;
     detailIndex: number;
-    payload: { question: string; answer: string };
+    payload: Detail;
 }) => {
     try {
         const response = await client.put(

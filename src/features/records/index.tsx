@@ -5,6 +5,7 @@ import RecordForm from "./ui/RecordForm";
 import { fetchRecordById } from "./api/detailsApi";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
+import Record from "@/entities/records/model/Record";
 
 const RecordDetails = () => {
     const { id } = useParams<{ id: string | undefined }>();
@@ -12,12 +13,7 @@ const RecordDetails = () => {
         queryKey: ["record", id],
         queryFn: () => {
             if (!id) {
-                return {
-                    id: null, // id를 null로 설정하여 새로운 레코드를 생성할 수 있게 함
-                    enterpriseName: "",
-                    category: "",
-                    details: [],
-                };
+                return new Record(null, "", "", "", "", []);
             }
             return fetchRecordById(id);
         },
