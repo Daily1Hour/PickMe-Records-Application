@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { Stack, Heading, Button, HStack, Box } from "@chakra-ui/react";
 
@@ -20,22 +19,17 @@ const RecordForm: React.FC<{
 }> = ({ recordValues: formValues, recordId }) => {
     const navigate = useNavigate();
     const methods = useForm<FormDataValues>({
-        defaultValues: {
-            enterpriseName: "",
-            category: "",
-            details: [{ question: "", answer: "" }],
-        },
+        defaultValues: formValues,
     });
-
-    const { reset } = methods;
 
     const queryclient = useQueryClient();
 
-    const { mutateAsync: create } = useMutation({
+    const { mutate: create } = useMutation({
         mutationFn: ({ data }: { data: InterviewRecordCreateDTO }) =>
             createRecord(data),
-        onSuccess: () => {
+        onSuccess: ({ interviewRecordId }) => {
             queryclient.refetchQueries({ queryKey: ["side"] });
+            navigate(`/${interviewRecordId}`);
         },
     });
 
@@ -64,17 +58,12 @@ const RecordForm: React.FC<{
         }) => updateDetail(recordId, index, detail),
     });
 
-    useEffect(() => {
-        reset(formValues);
-    }, [formValues, reset]);
-
     const onSubmit = async (data: FormDataValues) => {
         try {
             if (!recordId) {
                 // recordId가 null일 때 새로운 레코드 생성
 
-                const newRecord = await create({ data });
-                navigate(`/${newRecord.interviewRecordId}`);
+                create({ data });
                 alert("저장했습니다.");
             } else {
                 // 기존 레코드 수정
