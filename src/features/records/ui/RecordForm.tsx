@@ -50,11 +50,13 @@ const RecordForm: React.FC<{
 
                         <TitleForm control={methods.control} />
 
-                        <QAForm
-                            name="details"
-                            details={recordValues.details || []}
-                            interviewRecordId={recordId || ""}
-                        />
+                        {recordValues && recordId && (
+                            <QAForm
+                                name="details"
+                                details={recordValues.details}
+                                interviewRecordId={recordId}
+                            />
+                        )}
 
                         <HStack justifyContent="flex-end">
                             <Button

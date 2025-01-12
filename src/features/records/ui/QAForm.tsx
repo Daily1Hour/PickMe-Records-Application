@@ -1,15 +1,15 @@
 import { useEffect } from "react";
+import { FaPlus, FaXmark } from "react-icons/fa6";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { Box, HStack, IconButton, VStack } from "@chakra-ui/react";
 
 import useRecordMutation from "../hook/useRecordMutation";
 import QAFormField from "./QAFormField";
-import { FaPlus, FaXmark } from "react-icons/fa6";
 
 interface QAFormProps {
     name: string;
     details: { question: string; answer: string }[];
-    interviewRecordId: string | null; // null 허용
+    interviewRecordId: string;
 }
 
 const QAForm: React.FC<QAFormProps> = ({
