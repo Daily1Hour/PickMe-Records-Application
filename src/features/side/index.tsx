@@ -3,9 +3,7 @@ import { Text, Box } from "@chakra-ui/react";
 
 import { usePagenation } from "./hook/usePagenation";
 import { fetchSidebarData } from "./api/sideApi";
-import SideItem from "./ui/SideItem";
-import PaginateControl from "./ui/PaginateControl";
-import PopoverLayout from "./ui/PopoverLayout";
+import { PopoverLayout, SideItem, PaginateControl } from "./ui";
 
 const Sidebar = () => {
     const { data, isError, error } = useQuery({
