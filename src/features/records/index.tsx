@@ -7,7 +7,7 @@ import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
 
 const RecordDetails = () => {
-    const { id } = useParams<{ id: string | undefined}>();
+    const { id } = useParams<{ id: string | undefined }>();
     const { data } = useQuery({
         queryKey: ["record", id],
         queryFn: () => {
@@ -21,7 +21,7 @@ const RecordDetails = () => {
             }
             return fetchRecordById(id);
         },
-        staleTime: 1000*60*60
+        staleTime: 1000 * 60 * 60,
     });
 
     return (
@@ -33,7 +33,7 @@ const RecordDetails = () => {
                             <PDFUploadForm />
                         </Box>
                         <RecordForm
-                            key={data.id}
+                            key={id}
                             recordValues={data}
                             recordId={id}
                         />
