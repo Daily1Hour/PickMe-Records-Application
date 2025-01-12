@@ -1,11 +1,10 @@
+import { useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import { Box, Flex, HStack } from "@chakra-ui/react";
 
-import PDFUploadForm from "./ui/PDFUploadForm";
-import RecordForm from "./ui/RecordForm";
-import { fetchRecordById } from "./api/detailsApi";
-import { useQuery } from "@tanstack/react-query";
-import { useParams } from "react-router-dom";
 import Record from "@/entities/records/model/Record";
+import { fetchRecordById } from "./api/detailsApi";
+import { PDFUploadForm, RecordForm } from "./ui";
 
 const RecordDetails = () => {
     const { id } = useParams<{ id: string | undefined }>();
