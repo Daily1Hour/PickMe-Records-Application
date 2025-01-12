@@ -1,10 +1,9 @@
 import { useEffect } from "react";
-import { useFieldArray, useFormContext, Controller } from "react-hook-form";
-import { Box, Button, HStack, VStack, Editable } from "@chakra-ui/react";
-import { Field } from "@/shared/chakra-ui/Field";
+import { useFieldArray, useFormContext } from "react-hook-form";
+import { Box, Button, HStack, Stack, VStack } from "@chakra-ui/react";
 
-import EditableControl from "./EditableControl";
 import useRecordMutation from "../hook/useRecordMutation";
+import QAFormField from "./QAFormField";
 
 interface QAFormProps {
     name: string;
@@ -17,7 +16,7 @@ const QAForm: React.FC<QAFormProps> = ({
     details,
     interviewRecordId,
 }) => {
-    const { control, resetField } = useFormContext();
+    const { resetField } = useFormContext();
     const { fields, append } = useFieldArray({
         name,
     });
@@ -62,44 +61,18 @@ const QAForm: React.FC<QAFormProps> = ({
                     borderWidth="1px"
                     borderRadius="md"
                 >
-                    <Field label="면접 질문" my={4}>
-                        <Controller
-                            name={`${name}.${detailIndex}.question`}
-                            control={control}
-                            render={({ field }) => (
-                                <Editable.Root
-                                    defaultValue={field.value}
-                                    onSubmit={field.onChange}
-                                    onChange={field.onChange}
-                                >
-                                    <Editable.Preview>
-                                        {field.value || "질문을 입력해주세요"}
-                                    </Editable.Preview>
-                                    <Editable.Textarea h="100px" />
-                                    <EditableControl />
-                                </Editable.Root>
-                            )}
+                    <Stack spaceY={4}>
+                        <QAFormField
+                            name={name}
+                            detailIndex={detailIndex}
+                            type="question"
                         />
-                    </Field>
-                    <Field label="답변">
-                        <Controller
-                            name={`${name}.${detailIndex}.answer`}
-                            control={control}
-                            render={({ field }) => (
-                                <Editable.Root
-                                    defaultValue={field.value}
-                                    onSubmit={field.onChange}
-                                    onChange={field.onChange}
-                                >
-                                    <Editable.Preview>
-                                        {field.value || "답변을 입력해주세요"}
-                                    </Editable.Preview>
-                                    <Editable.Textarea h="100px" />
-                                    <EditableControl />
-                                </Editable.Root>
-                            )}
+                        <QAFormField
+                            name={name}
+                            detailIndex={detailIndex}
+                            type="answer"
                         />
-                    </Field>
+                    </Stack>
                     <HStack justifyContent="flex-end">
                         <Button
                             m={4}
