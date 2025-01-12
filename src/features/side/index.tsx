@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { RxHamburgerMenu } from "react-icons/rx";
 import {
@@ -27,9 +27,7 @@ import { DeleteConfirm } from "./ui/deleteConfirm";
 import { fetchSidebarData } from "./api/sideApi";
 import { NavLink, useNavigate } from "react-router-dom";
 
-
 const Sidebar = () => {
-    const ref = useRef<HTMLButtonElement>(null);
     const [recordToDelete, setRecordToDelete] = useState<string | null>(null);
     const [isDialogOpen, setDialogOpen] = useState(false);
 
@@ -54,7 +52,7 @@ const Sidebar = () => {
     };
 
     return (
-        <PopoverRoot initialFocusEl={() => ref.current}>
+        <PopoverRoot>
             <PopoverTrigger asChild position="fixed">
                 <Button size="sm" variant="outline">
                     <RxHamburgerMenu />
@@ -64,16 +62,6 @@ const Sidebar = () => {
                 <PopoverHeader>
                     <Flex justify="space-between" align="center">
                         <Text>목록</Text>
-                        {/* <Button
-                            bg="none"
-                            color="gray"
-                            _hover={{ bg: "gray.100" }}
-                            onClick={() => {
-                                onSelect(null);
-                            }}
-                        >
-                            <GrFormAdd />
-                        </Button> */}
                         <NavLink to={`/`}>
                             <Button
                                 bg="none"
@@ -98,9 +86,7 @@ const Sidebar = () => {
                                 title={item.label}
                                 _hover={{ bg: "gray.100" }}
                                 cursor="pointer"
-                                onClick={() =>
-                                    navigate(`/${item.id}`)
-                                }
+                                onClick={() => navigate(`/${item.id}`)}
                             >
                                 <Text ml="4" minWidth="200px">
                                     {item.label}
