@@ -1,12 +1,6 @@
-import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
 import { RxHamburgerMenu } from "react-icons/rx";
-import {
-    GrFormPrevious,
-    GrFormNext,
-    GrFormClose,
-    GrFormAdd,
-} from "react-icons/gr";
+import { GrFormPrevious, GrFormNext, GrFormAdd } from "react-icons/gr";
 import {
     Button,
     PopoverArrow,
@@ -23,15 +17,11 @@ import {
 } from "@chakra-ui/react";
 
 import { usePagenation } from "./hook/usePagenation";
-import { DeleteConfirm } from "./ui/deleteConfirm";
 import { fetchSidebarData } from "./api/sideApi";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+import SideItem from "./ui/SideItem";
 
 const Sidebar = () => {
-    const [recordToDelete, setRecordToDelete] = useState<string | null>(null);
-    const [isDialogOpen, setDialogOpen] = useState(false);
-
-    const navigate = useNavigate();
     const { data, isError, error } = useQuery({
         queryKey: ["side"],
         queryFn: fetchSidebarData,
@@ -45,11 +35,6 @@ const Sidebar = () => {
 
     const { paginatedItems, handlePageChange, currentPage, totalPages } =
         usePagenation<{ id: string; label: string }>(formattedMenuItems || []);
-
-    const handleDelete = (interviewRecordId: string) => {
-        setRecordToDelete(interviewRecordId);
-        setDialogOpen(true);
-    };
 
     return (
         <PopoverRoot>
@@ -78,29 +63,7 @@ const Sidebar = () => {
                 <PopoverBody>
                     <Box minHeight="400px">
                         {paginatedItems.map((item) => (
-                            <Flex
-                                key={item.id}
-                                align="center"
-                                p="2"
-                                rounded="md"
-                                title={item.label}
-                                _hover={{ bg: "gray.100" }}
-                                cursor="pointer"
-                                onClick={() => navigate(`/${item.id}`)}
-                            >
-                                <Text ml="4" minWidth="200px">
-                                    {item.label}
-                                </Text>
-                                <Button
-                                    ml="auto"
-                                    bg="none"
-                                    color="gray"
-                                    cursor="pointer"
-                                    onClick={() => handleDelete(item.id)}
-                                >
-                                    <GrFormClose />
-                                </Button>
-                            </Flex>
+                            <SideItem item={item} key={item.id} />
                         ))}
                         {isError && (
                             <Text color="red.500">{error.message}</Text>
@@ -130,11 +93,6 @@ const Sidebar = () => {
                 </PopoverBody>
                 <PopoverCloseTrigger />
             </PopoverContent>
-            <DeleteConfirm
-                recordToDelete={recordToDelete}
-                isDialogOpen={isDialogOpen}
-                setDialogOpen={setDialogOpen}
-            />
         </PopoverRoot>
     );
 };
