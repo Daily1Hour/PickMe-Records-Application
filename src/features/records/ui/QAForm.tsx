@@ -25,8 +25,14 @@ const QAForm: React.FC<QAFormProps> = ({
 
     const queryclient = useQueryClient();
 
-    const { mutateAsync: createDetailMutation } = useMutation({
+    const { mutate: createDetailMutation } = useMutation({
         mutationFn: createDetail,
+        onSuccess: (response) => {
+            append({
+                question: response.question,
+                answer: response.answer,
+            });
+        },
     });
 
     const { mutate: deleteDetailMutation } = useMutation({
@@ -44,16 +50,9 @@ const QAForm: React.FC<QAFormProps> = ({
         if (!interviewRecordId) return; // recordId가 없으면 추가 불가
 
         try {
-            const newDetail = { question: "", answer: "" };
-
-            const response = await createDetailMutation({
+            createDetailMutation({
                 interviewRecordId,
-                data: newDetail,
-            });
-
-            append({
-                question: response.question,
-                answer: response.answer,
+                data: { question: "", answer: "" },
             });
         } catch (error) {
             console.error("Failed to create detail:", error);
