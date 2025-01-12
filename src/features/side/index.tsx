@@ -13,7 +13,7 @@ const Sidebar = () => {
     });
 
     const formattedMenuItems = data?.map((item) => ({
-        id: item.interviewRecordId,
+        id: item.id,
         label: `${item.enterpriseName} | ${item.category}`,
     }));
 
