@@ -1,9 +1,10 @@
 import { useEffect } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
-import { Box, Button, HStack, VStack } from "@chakra-ui/react";
+import { Box, HStack, IconButton, VStack } from "@chakra-ui/react";
 
 import useRecordMutation from "../hook/useRecordMutation";
 import QAFormField from "./QAFormField";
+import { FaPlus, FaXmark } from "react-icons/fa6";
 
 interface QAFormProps {
     name: string;
@@ -63,21 +64,20 @@ const QAForm: React.FC<QAFormProps> = ({
                 >
                     <QAFormField name={name} detailIndex={detailIndex} />
                     <HStack justifyContent="flex-end">
-                        <Button
-                            m={4}
-                            bg="none"
+                        <IconButton
+                            variant="outline"
                             size="sm"
                             onClick={() => handleDeleteDetail(detailIndex)}
                         >
-                            ✖
-                        </Button>
+                            <FaXmark />
+                        </IconButton>
                     </HStack>
                 </Box>
             ))}
             {interviewRecordId && ( // recordId가 있을 때만 버튼 표시
-                <Button bg="#009A6E" onClick={handleAddDetail} w="50px">
-                    +
-                </Button>
+                <IconButton bg="#009A6E" onClick={handleAddDetail} w={50}>
+                    <FaPlus />
+                </IconButton>
             )}
         </VStack>
     );
