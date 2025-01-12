@@ -1,10 +1,10 @@
 import { useEffect } from "react";
-import { FaPlus, FaXmark } from "react-icons/fa6";
+import { FaPlus } from "react-icons/fa6";
 import { useFieldArray, useFormContext } from "react-hook-form";
 import { Box, HStack, IconButton, VStack } from "@chakra-ui/react";
 
-import useRecordMutation from "../hook/useRecordMutation";
 import QAFormField from "./QAFormField";
+import DeleteRecord from "./DeleteRecord";
 
 interface QAFormProps {
     name: string;
@@ -21,7 +21,6 @@ const QAForm: React.FC<QAFormProps> = ({
     const { fields, append } = useFieldArray({
         name,
     });
-    const { deleteDetailMutation } = useRecordMutation();
 
     useEffect(() => {
         resetField(name, { defaultValue: details });
@@ -40,18 +39,6 @@ const QAForm: React.FC<QAFormProps> = ({
         }
     };
 
-    const handleDeleteDetail = async (detailIndex: number) => {
-        if (!interviewRecordId) return; // recordId가 없으면 삭제 불가
-        try {
-            deleteDetailMutation({
-                interviewRecordId,
-                detailIndex,
-            });
-        } catch (error) {
-            console.error("Failed to delete detail:", error);
-        }
-    };
-
     return (
         <VStack align="stretch">
             {fields.map((field, detailIndex) => (
@@ -64,13 +51,10 @@ const QAForm: React.FC<QAFormProps> = ({
                 >
                     <QAFormField name={name} detailIndex={detailIndex} />
                     <HStack justifyContent="flex-end">
-                        <IconButton
-                            variant="outline"
-                            size="sm"
-                            onClick={() => handleDeleteDetail(detailIndex)}
-                        >
-                            <FaXmark />
-                        </IconButton>
+                        <DeleteRecord
+                            interviewRecordId={interviewRecordId}
+                            detailIndex={detailIndex}
+                        />
                     </HStack>
                 </Box>
             ))}
