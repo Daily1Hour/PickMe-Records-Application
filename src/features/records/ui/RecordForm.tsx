@@ -11,12 +11,7 @@ import {
 import { createRecord, updateRecord, updateDetail } from "../api/detailsApi";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
-
-interface FormDataValues {
-    enterpriseName: string;
-    category: string;
-    details: { question: string; answer: string }[];
-}
+import FormDataValues from "../model/FormDataValues";
 
 const RecordForm: React.FC<{
     recordValues: FormDataValues;
@@ -74,11 +69,11 @@ const RecordForm: React.FC<{
 
     const onSubmit = async (data: FormDataValues) => {
         try {
-            if (! recordId) {
+            if (!recordId) {
                 // recordId가 null일 때 새로운 레코드 생성
 
                 const newRecord = await create({ data });
-                navigate(`/${newRecord.interviewRecordId}`)
+                navigate(`/${newRecord.interviewRecordId}`);
                 alert("저장했습니다.");
             } else {
                 // 기존 레코드 수정
