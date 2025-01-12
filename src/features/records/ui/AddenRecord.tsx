@@ -1,19 +1,13 @@
 import { IconButton } from "@chakra-ui/react";
-import { useFieldArray } from "react-hook-form";
+import { FieldValues, UseFieldArrayAppend } from "react-hook-form";
 import { FaPlus } from "react-icons/fa6";
 
 export default function AddenRecord({
-    interviewRecordId,
-    name,
+    append,
 }: {
-    interviewRecordId: string;
-    name: string;
+    append: UseFieldArrayAppend<FieldValues, string>;
 }) {
-    const { append } = useFieldArray({ name });
-
     const handleAddDetail = async () => {
-        if (!interviewRecordId) return; // recordId가 없으면 추가 불가
-
         try {
             append({
                 question: "",

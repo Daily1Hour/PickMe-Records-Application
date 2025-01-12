@@ -15,7 +15,7 @@ interface QAFormProps {
 const QAForm: React.FC<QAFormProps> = ({ details, interviewRecordId }) => {
     const name = "details";
     const { resetField } = useFormContext();
-    const { fields } = useFieldArray({ name });
+    const { fields, append } = useFieldArray({ name });
 
     useEffect(() => {
         resetField(name, { defaultValue: details });
@@ -42,7 +42,7 @@ const QAForm: React.FC<QAFormProps> = ({ details, interviewRecordId }) => {
                 </Box>
             ))}
 
-            <AddenRecord interviewRecordId={interviewRecordId} name={name} />
+            <AddenRecord append={append} />
         </VStack>
     );
 };
