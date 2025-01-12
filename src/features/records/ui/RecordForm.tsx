@@ -1,55 +1,32 @@
 import { useForm, FormProvider } from "react-hook-form";
 import { Stack, Heading, Button, HStack, Box } from "@chakra-ui/react";
 
-import QAForm from "./QAForm";
-import { createRecord, updateRecord, updateDetail } from "../api/detailsApi";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
 import FormDataValues from "../model/FormDataValues";
+import useRecordMutation from "../hook/useRecordMutation";
+import QAForm from "./QAForm";
 import TitleForm from "./TitleForm";
 
 const RecordForm: React.FC<{
     recordValues: FormDataValues;
     recordId?: string;
 }> = ({ recordValues: formValues, recordId }) => {
-    const navigate = useNavigate();
     const methods = useForm<FormDataValues>({
         defaultValues: formValues,
     });
 
-    const queryclient = useQueryClient();
-
-    const { mutate: create } = useMutation({
-        mutationFn: createRecord,
-        onSuccess: ({ interviewRecordId }) => {
-            queryclient.refetchQueries({ queryKey: ["side"] });
-            navigate(`/${interviewRecordId}`);
-        },
-    });
-
-    const { mutate: update } = useMutation({
-        mutationFn: updateRecord,
-        onSuccess: () => {
-            queryclient.refetchQueries({ queryKey: ["side"] });
-        },
-    });
-
-    const { mutate: updateDetailMutation } = useMutation({
-        mutationFn: updateDetail,
-    });
+    const { create, update, updateDetail } = useRecordMutation();
 
     const onSubmit = async (data: FormDataValues) => {
         try {
             if (!recordId) {
                 // recordId가 null일 때 새로운 레코드 생성
-
                 create({ data });
                 alert("저장했습니다.");
             } else {
                 // 기존 레코드 수정
                 update({ interviewRecordId: recordId, data });
                 data.details.forEach((detail, index) => {
-                    updateDetailMutation({
+                    updateDetail({
                         interviewRecordId: recordId,
                         detailIndex: index,
                         payload: detail,
