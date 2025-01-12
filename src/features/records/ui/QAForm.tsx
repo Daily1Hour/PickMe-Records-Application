@@ -5,7 +5,7 @@ import { Box, Button, HStack, VStack, Editable } from "@chakra-ui/react";
 import { Field } from "@/shared/chakra-ui/Field";
 
 import EditableControl from "./EditableControl";
-import { createDetail, deleteDetail } from "../api/detailsApi";
+import { deleteDetail } from "../api/detailsApi";
 
 interface QAFormProps {
     name: string;
@@ -25,16 +25,6 @@ const QAForm: React.FC<QAFormProps> = ({
 
     const queryclient = useQueryClient();
 
-    const { mutate: createDetailMutation } = useMutation({
-        mutationFn: createDetail,
-        onSuccess: (response) => {
-            append({
-                question: response.question,
-                answer: response.answer,
-            });
-        },
-    });
-
     const { mutate: deleteDetailMutation } = useMutation({
         mutationFn: deleteDetail,
         onSuccess: () => {
@@ -50,9 +40,9 @@ const QAForm: React.FC<QAFormProps> = ({
         if (!interviewRecordId) return; // recordId가 없으면 추가 불가
 
         try {
-            createDetailMutation({
-                interviewRecordId,
-                data: { question: "", answer: "" },
+            append({
+                question: "",
+                answer: "",
             });
         } catch (error) {
             console.error("Failed to create detail:", error);

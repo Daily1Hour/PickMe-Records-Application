@@ -1,7 +1,12 @@
 import { useQueryClient, useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 
-import { createRecord, updateRecord, updateDetail } from "../api/detailsApi";
+import {
+    createRecord,
+    updateRecord,
+    updateDetail,
+    deleteDetail,
+} from "../api/detailsApi";
 
 export default function useRecordMutation() {
     const queryClient = useQueryClient();
@@ -26,5 +31,17 @@ export default function useRecordMutation() {
         mutationFn: updateDetail,
     });
 
-    return { create, update, updateDetail: updateDetailMutation };
+    const { mutate: deleteDetailMutation } = useMutation({
+        mutationFn: deleteDetail,
+        onSuccess: () => {
+            queryClient.refetchQueries({ queryKey: ["record"] });
+        },
+    });
+
+    return {
+        create,
+        update,
+        updateDetail: updateDetailMutation,
+        deleteDetailMutation,
+    };
 }
