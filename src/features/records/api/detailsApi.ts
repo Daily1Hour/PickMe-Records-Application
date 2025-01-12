@@ -21,10 +21,13 @@ export const fetchRecordById = async (interviewRecordId: string) => {
     return response.data;
 };
 
-export const createDetail = async (
-    interviewRecordId: string,
-    data: RecordDetailCreateDTO,
-) => {
+export const createDetail = async ({
+    interviewRecordId,
+    data,
+}: {
+    interviewRecordId: string;
+    data: RecordDetailCreateDTO;
+}) => {
     const response = await client.post(
         `/interview/${interviewRecordId}/detail`,
         data,
@@ -32,10 +35,13 @@ export const createDetail = async (
     return response.data;
 };
 
-export const deleteDetail = async (
-    interviewRecordId: string,
-    detailIndex: number,
-) => {
+export const deleteDetail = async ({
+    interviewRecordId,
+    detailIndex,
+}: {
+    interviewRecordId: string;
+    detailIndex: number;
+}) => {
     const response = await client.delete(
         `/interview/${interviewRecordId}/detail/${detailIndex}`,
     );

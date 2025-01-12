@@ -9,10 +9,8 @@ import TitleForm from "./TitleForm";
 const RecordForm: React.FC<{
     recordValues: FormDataValues;
     recordId?: string;
-}> = ({ recordValues: formValues, recordId }) => {
-    const methods = useForm<FormDataValues>({
-        defaultValues: formValues,
-    });
+}> = ({ recordValues, recordId }) => {
+    const methods = useForm({ defaultValues: recordValues });
 
     const { create, update, updateDetail } = useRecordMutation();
 
@@ -54,7 +52,7 @@ const RecordForm: React.FC<{
 
                         <QAForm
                             name="details"
-                            details={formValues.details || []}
+                            details={recordValues.details || []}
                             interviewRecordId={recordId || ""}
                         />
 

@@ -1,15 +1,11 @@
 import { useEffect } from "react";
 import { useFieldArray, useFormContext, Controller } from "react-hook-form";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Box, Button, HStack, VStack, Editable } from "@chakra-ui/react";
+import { Field } from "@/shared/chakra-ui/Field";
 
 import EditableControl from "./EditableControl";
 import { createDetail, deleteDetail } from "../api/detailsApi";
-import { Field } from "@/shared/chakra-ui/Field";
-import {
-    useMutation,
-    useQueryClient,
-} from "@tanstack/react-query";
-import { RecordDetailCreateDTO } from "../api/recordsDTOList";
 
 interface QAFormProps {
     name: string;
@@ -23,33 +19,21 @@ const QAForm: React.FC<QAFormProps> = ({
     interviewRecordId,
 }) => {
     const { control, resetField } = useFormContext();
-    const { fields, append,  } = useFieldArray({
+    const { fields, append } = useFieldArray({
         name,
     });
 
     const queryclient = useQueryClient();
 
     const { mutateAsync: createDetailMutation } = useMutation({
-        mutationFn: ({
-            interviewRecordId,
-            data,
-        }: {
-            interviewRecordId: string;
-            data: RecordDetailCreateDTO;
-        }) => createDetail(interviewRecordId, data),
+        mutationFn: createDetail,
     });
 
     const { mutate: deleteDetailMutation } = useMutation({
-        mutationFn: ({
-            interviewRecordId,
-            detailIndex,
-        }: {
-            interviewRecordId: string;
-            detailIndex: number;
-        }) => deleteDetail(interviewRecordId, detailIndex),
-        onSuccess: ()=> {
+        mutationFn: deleteDetail,
+        onSuccess: () => {
             queryclient.refetchQueries({ queryKey: ["record"] });
-        }
+        },
     });
 
     useEffect(() => {
