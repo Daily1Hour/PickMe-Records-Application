@@ -1,6 +1,6 @@
 import { useEffect } from "react";
-import { useForm, FormProvider, Controller } from "react-hook-form";
-import { Stack, Heading, Button, Input, HStack, Box } from "@chakra-ui/react";
+import { useForm, FormProvider } from "react-hook-form";
+import { Stack, Heading, Button, HStack, Box } from "@chakra-ui/react";
 
 import QAForm from "./QAForm";
 import {
@@ -12,6 +12,7 @@ import { createRecord, updateRecord, updateDetail } from "../api/detailsApi";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import FormDataValues from "../model/FormDataValues";
+import TitleForm from "./TitleForm";
 
 const RecordForm: React.FC<{
     recordValues: FormDataValues;
@@ -98,35 +99,15 @@ const RecordForm: React.FC<{
                 >
                     <Stack>
                         <Heading>내 기록</Heading>
-                        <Stack gap="10">
-                            <Controller
-                                name="enterpriseName"
-                                control={methods.control}
-                                render={({ field }) => (
-                                    <Input
-                                        {...field}
-                                        variant="flushed"
-                                        placeholder="회사 이름"
-                                    />
-                                )}
-                            />
-                            <Controller
-                                name="category"
-                                control={methods.control}
-                                render={({ field }) => (
-                                    <Input
-                                        {...field}
-                                        variant="flushed"
-                                        placeholder="면접 유형"
-                                    />
-                                )}
-                            />
-                        </Stack>
+
+                        <TitleForm control={methods.control} />
+
                         <QAForm
                             name="details"
                             details={formValues.details || []}
                             interviewRecordId={recordId || ""}
                         />
+
                         <HStack justifyContent="flex-end">
                             <Button
                                 m="20px"
