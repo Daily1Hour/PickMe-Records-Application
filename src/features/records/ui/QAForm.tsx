@@ -1,11 +1,10 @@
 import { useEffect } from "react";
 import { useFieldArray, useFormContext, Controller } from "react-hook-form";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Box, Button, HStack, VStack, Editable } from "@chakra-ui/react";
 import { Field } from "@/shared/chakra-ui/Field";
 
 import EditableControl from "./EditableControl";
-import { deleteDetail } from "../api/detailsApi";
+import useRecordMutation from "../hook/useRecordMutation";
 
 interface QAFormProps {
     name: string;
@@ -22,15 +21,7 @@ const QAForm: React.FC<QAFormProps> = ({
     const { fields, append } = useFieldArray({
         name,
     });
-
-    const queryclient = useQueryClient();
-
-    const { mutate: deleteDetailMutation } = useMutation({
-        mutationFn: deleteDetail,
-        onSuccess: () => {
-            queryclient.refetchQueries({ queryKey: ["record"] });
-        },
-    });
+    const { deleteDetailMutation } = useRecordMutation();
 
     useEffect(() => {
         resetField(name, { defaultValue: details });
