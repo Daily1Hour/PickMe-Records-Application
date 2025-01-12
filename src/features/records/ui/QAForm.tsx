@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useFieldArray, useFormContext } from "react-hook-form";
-import { Box, Button, HStack, Stack, VStack } from "@chakra-ui/react";
+import { Box, Button, HStack, VStack } from "@chakra-ui/react";
 
 import useRecordMutation from "../hook/useRecordMutation";
 import QAFormField from "./QAFormField";
@@ -61,18 +61,7 @@ const QAForm: React.FC<QAFormProps> = ({
                     borderWidth="1px"
                     borderRadius="md"
                 >
-                    <Stack spaceY={4}>
-                        <QAFormField
-                            name={name}
-                            detailIndex={detailIndex}
-                            type="question"
-                        />
-                        <QAFormField
-                            name={name}
-                            detailIndex={detailIndex}
-                            type="answer"
-                        />
-                    </Stack>
+                    <QAFormField name={name} detailIndex={detailIndex} />
                     <HStack justifyContent="flex-end">
                         <Button
                             m={4}
