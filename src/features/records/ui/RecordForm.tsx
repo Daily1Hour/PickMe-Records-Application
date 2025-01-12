@@ -52,7 +52,6 @@ const RecordForm: React.FC<{
 
                         {recordValues && recordId && (
                             <QAForm
-                                name="details"
                                 details={recordValues.details}
                                 interviewRecordId={recordId}
                             />
