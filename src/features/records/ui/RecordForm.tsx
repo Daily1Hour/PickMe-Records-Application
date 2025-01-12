@@ -2,11 +2,6 @@ import { useForm, FormProvider } from "react-hook-form";
 import { Stack, Heading, Button, HStack, Box } from "@chakra-ui/react";
 
 import QAForm from "./QAForm";
-import {
-    InterviewRecordCreateDTO,
-    InterviewRecordUpdateDTO,
-    RecordDetailUpdateDTO,
-} from "../api/recordsDTOList";
 import { createRecord, updateRecord, updateDetail } from "../api/detailsApi";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
@@ -25,8 +20,7 @@ const RecordForm: React.FC<{
     const queryclient = useQueryClient();
 
     const { mutate: create } = useMutation({
-        mutationFn: ({ data }: { data: InterviewRecordCreateDTO }) =>
-            createRecord(data),
+        mutationFn: createRecord,
         onSuccess: ({ interviewRecordId }) => {
             queryclient.refetchQueries({ queryKey: ["side"] });
             navigate(`/${interviewRecordId}`);
@@ -34,28 +28,14 @@ const RecordForm: React.FC<{
     });
 
     const { mutate: update } = useMutation({
-        mutationFn: ({
-            recordId,
-            data,
-        }: {
-            recordId: string;
-            data: InterviewRecordUpdateDTO;
-        }) => updateRecord(recordId, data),
+        mutationFn: updateRecord,
         onSuccess: () => {
             queryclient.refetchQueries({ queryKey: ["side"] });
         },
     });
 
     const { mutate: updateDetailMutation } = useMutation({
-        mutationFn: ({
-            recordId,
-            index,
-            detail,
-        }: {
-            recordId: string;
-            index: number;
-            detail: RecordDetailUpdateDTO;
-        }) => updateDetail(recordId, index, detail),
+        mutationFn: updateDetail,
     });
 
     const onSubmit = async (data: FormDataValues) => {
@@ -67,9 +47,13 @@ const RecordForm: React.FC<{
                 alert("저장했습니다.");
             } else {
                 // 기존 레코드 수정
-                update({ recordId, data });
+                update({ interviewRecordId: recordId, data });
                 data.details.forEach((detail, index) => {
-                    updateDetailMutation({ recordId, index, detail });
+                    updateDetailMutation({
+                        interviewRecordId: recordId,
+                        detailIndex: index,
+                        payload: detail,
+                    });
                 });
                 alert("수정했습니다.");
             }
