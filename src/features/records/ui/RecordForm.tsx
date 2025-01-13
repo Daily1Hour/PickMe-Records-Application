@@ -34,7 +34,7 @@ const RecordForm: React.FC<{
     const { reset } = methods;
 
     const queryclient = useQueryClient();
-
+    
     const { mutateAsync: create } = useMutation({
         mutationFn: ({ data }: { data: InterviewRecordCreateDTO }) =>
             createRecord(data),
@@ -46,13 +46,16 @@ const RecordForm: React.FC<{
     const { mutate: update } = useMutation({
         mutationFn: ({
             recordId,
-            data,
+            updatedata,
         }: {
             recordId: string;
-            data: InterviewRecordUpdateDTO;
-        }) => updateRecord(recordId, data),
+            updatedata: InterviewRecordUpdateDTO;
+        }) => updateRecord(recordId, updatedata),
         onSuccess: () => {
-            queryclient.refetchQueries({ queryKey: ["side"] });
+            const queryKeys = [["side"], ["record"]]; // 리패치할 쿼리 키들
+            queryKeys.forEach((key) => {
+                queryclient.refetchQueries({ queryKey: key });
+            });
         },
     });
 
@@ -76,14 +79,12 @@ const RecordForm: React.FC<{
         try {
             if (! recordId) {
                 // recordId가 null일 때 새로운 레코드 생성
-
                 const newRecord = await create({ data });
                 navigate(`/${newRecord.interviewRecordId}`)
                 alert("저장했습니다.");
             } else {
                 // 기존 레코드 수정
-                console.log(data)
-                update({ recordId, data });
+                await update({ recordId, updatedata: data });
                 data.details.forEach((detail, index) => {
                     updateDetailMutation({ recordId, index, detail });
                 });
@@ -130,8 +131,8 @@ const RecordForm: React.FC<{
                         </Stack>
                         <QAForm
                             name="details"
-                            details={formValues.details || []}
-                            interviewRecordId={recordId || ""}
+                            details={formValues.details}
+                            interviewRecordId={recordId}
                         />
                         <HStack justifyContent="flex-end">
                             <Button

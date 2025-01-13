@@ -14,7 +14,7 @@ import { RecordDetailCreateDTO } from "../api/recordsDTOList";
 interface QAFormProps {
     name: string;
     details: { question: string; answer: string }[];
-    interviewRecordId: string | null; // null 허용
+    interviewRecordId: string | undefined;
 }
 
 const QAForm: React.FC<QAFormProps> = ({

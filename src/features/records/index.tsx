@@ -13,6 +13,7 @@ const RecordDetails = () => {
         queryFn: () => 
             fetchRecordById(id!),
         staleTime: 1000*60*60,
+        enabled: !!id,
         initialData: id ? undefined : {
             id: undefined,
             enterpriseName: "",
