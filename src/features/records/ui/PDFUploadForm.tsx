@@ -1,10 +1,9 @@
 import React, { useState } from "react";
 import { Box, VStack, Input, Text, Button, HStack } from "@chakra-ui/react";
-
-import { Field } from "../../../shared/chakra-ui/Field";
 import { FaRegFilePdf } from "react-icons/fa6";
 import { SlTrash } from "react-icons/sl";
 
+import { Field } from "@/shared/chakra-ui/Field";
 
 const PDFUploadForm: React.FC = () => {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);

@@ -1,34 +1,72 @@
-import { Stack, Heading, Button, Input, HStack, Box } from "@chakra-ui/react";
-import QAForm from "./QAForm";
+import { useEffect } from "react";
 import { useForm, FormProvider, Controller } from "react-hook-form";
-import { useEffect, useState } from "react";
+import { Stack, Heading, Button, Input, HStack, Box } from "@chakra-ui/react";
+
+import QAForm from "./QAForm";
 import {
-    createRecord,
-    updateDetail,
-    updateRecord,
-} from "../api/recordsApi";
-import { InterviewRecordCreateDTO, InterviewRecordUpdateDTO } from "../api/recordsDTOList"
+    InterviewRecordCreateDTO,
+    InterviewRecordUpdateDTO,
+    RecordDetailUpdateDTO,
+} from "../api/recordsDTOList";
+import { createRecord, updateRecord, updateDetail } from "../api/detailsApi";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 
 interface FormDataValues {
-    company: string;
+    enterpriseName: string;
     category: string;
-    questions: { question: string; answer: string }[];
+    details: { question: string; answer: string }[];
 }
 
-const RecordForm: React.FC<{ recordValues: FormDataValues; recordId?: string }> = ({
-    recordValues: formValues,
-    recordId: interviewRecordId,
-}) => {
-    const [recordId, setRecordId] = useState(interviewRecordId || null);  // recordId가 null로 초기화됩니다.
+const RecordForm: React.FC<{
+    recordValues: FormDataValues;
+    recordId?: string;
+}> = ({ recordValues: formValues, recordId }) => {
+    const navigate = useNavigate();
     const methods = useForm<FormDataValues>({
         defaultValues: {
-            company: "",
+            enterpriseName: "",
             category: "",
-            questions: [{ question: "", answer: "" }],
+            details: [{ question: "", answer: "" }],
         },
     });
 
     const { reset } = methods;
+
+    const queryclient = useQueryClient();
+
+    const { mutateAsync: create } = useMutation({
+        mutationFn: ({ data }: { data: InterviewRecordCreateDTO }) =>
+            createRecord(data),
+        onSuccess: () => {
+            queryclient.refetchQueries({ queryKey: ["side"] });
+        },
+    });
+
+    const { mutate: update } = useMutation({
+        mutationFn: ({
+            recordId,
+            data,
+        }: {
+            recordId: string;
+            data: InterviewRecordUpdateDTO;
+        }) => updateRecord(recordId, data),
+        onSuccess: () => {
+            queryclient.refetchQueries({ queryKey: ["side"] });
+        },
+    });
+
+    const { mutate: updateDetailMutation } = useMutation({
+        mutationFn: ({
+            recordId,
+            index,
+            detail,
+        }: {
+            recordId: string;
+            index: number;
+            detail: RecordDetailUpdateDTO;
+        }) => updateDetail(recordId, index, detail),
+    });
 
     useEffect(() => {
         reset(formValues);
@@ -36,32 +74,18 @@ const RecordForm: React.FC<{ recordValues: FormDataValues; recordId?: string }> 
 
     const onSubmit = async (data: FormDataValues) => {
         try {
-            if (recordId === null) {  // recordId가 null일 때 새로운 레코드 생성
-                const payload: InterviewRecordCreateDTO = {
-                    enterpriseName: data.company,
-                    category: data.category,
-                    details: data.questions.map((q) => ({
-                        question: q.question,
-                        answer: q.answer,
-                    })),
-                };
+            if (! recordId) {
+                // recordId가 null일 때 새로운 레코드 생성
 
-                const newRecord = await createRecord(payload);
-                setRecordId(newRecord.interviewRecordId);  // 새로운 레코드가 생성되면 ID를 설정
+                const newRecord = await create({ data });
+                navigate(`/${newRecord.interviewRecordId}`)
                 alert("저장했습니다.");
-            } else {  // 기존 레코드 수정
-                const updatedPayload: InterviewRecordUpdateDTO = {
-                    enterpriseName: data.company,
-                    category: data.category,
-                };
-
-                await updateRecord(recordId, updatedPayload);
-
-                for (let i = 0; i < data.questions.length; i++) {
-                    const detail = data.questions[i];
-                    await updateDetail(recordId, i, detail);
-                }
-
+            } else {
+                // 기존 레코드 수정
+                update({ recordId, data });
+                data.details.forEach((detail, index) => {
+                    updateDetailMutation({ recordId, index, detail });
+                });
                 alert("수정했습니다.");
             }
         } catch (error) {
@@ -81,7 +105,7 @@ const RecordForm: React.FC<{ recordValues: FormDataValues; recordId?: string }> 
                         <Heading>내 기록</Heading>
                         <Stack gap="10">
                             <Controller
-                                name="company"
+                                name="enterpriseName"
                                 control={methods.control}
                                 render={({ field }) => (
                                     <Input
@@ -104,8 +128,8 @@ const RecordForm: React.FC<{ recordValues: FormDataValues; recordId?: string }> 
                             />
                         </Stack>
                         <QAForm
-                            name="questions"
-                            details={formValues.questions || []}
+                            name="details"
+                            details={formValues.details || []}
                             interviewRecordId={recordId || ""}
                         />
                         <HStack justifyContent="flex-end">

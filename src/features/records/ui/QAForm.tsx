@@ -1,9 +1,15 @@
-import { Box, Button, HStack, VStack, Editable } from "@chakra-ui/react";
-import { Field } from "../../../shared/chakra-ui/Field";
-import EditableControl from "./editable-control";
-import { useFieldArray, useFormContext, Controller } from "react-hook-form";
 import { useEffect } from "react";
-import { createDetail, deleteDetail } from "@/pages/records/api/recordsApi";
+import { useFieldArray, useFormContext, Controller } from "react-hook-form";
+import { Box, Button, HStack, VStack, Editable } from "@chakra-ui/react";
+
+import EditableControl from "./EditableControl";
+import { createDetail, deleteDetail } from "../api/detailsApi";
+import { Field } from "@/shared/chakra-ui/Field";
+import {
+    useMutation,
+    useQueryClient,
+} from "@tanstack/react-query";
+import { RecordDetailCreateDTO } from "../api/recordsDTOList";
 
 interface QAFormProps {
     name: string;
@@ -11,10 +17,39 @@ interface QAFormProps {
     interviewRecordId: string | null; // null 허용
 }
 
-const QAForm: React.FC<QAFormProps> = ({ name, details, interviewRecordId }) => {
+const QAForm: React.FC<QAFormProps> = ({
+    name,
+    details,
+    interviewRecordId,
+}) => {
     const { control, resetField } = useFormContext();
-    const { fields, append, remove } = useFieldArray({
+    const { fields, append,  } = useFieldArray({
         name,
+    });
+
+    const queryclient = useQueryClient();
+
+    const { mutateAsync: createDetailMutation } = useMutation({
+        mutationFn: ({
+            interviewRecordId,
+            data,
+        }: {
+            interviewRecordId: string;
+            data: RecordDetailCreateDTO;
+        }) => createDetail(interviewRecordId, data),
+    });
+
+    const { mutate: deleteDetailMutation } = useMutation({
+        mutationFn: ({
+            interviewRecordId,
+            detailIndex,
+        }: {
+            interviewRecordId: string;
+            detailIndex: number;
+        }) => deleteDetail(interviewRecordId, detailIndex),
+        onSuccess: ()=> {
+            queryclient.refetchQueries({ queryKey: ["record"] });
+        }
     });
 
     useEffect(() => {
@@ -27,7 +62,11 @@ const QAForm: React.FC<QAFormProps> = ({ name, details, interviewRecordId }) => 
         try {
             const newDetail = { question: "", answer: "" };
 
-            const response = await createDetail(interviewRecordId, newDetail);
+            const response = await createDetailMutation({
+                interviewRecordId,
+                data: newDetail,
+            });
+
             append({
                 question: response.question,
                 answer: response.answer,
@@ -37,12 +76,13 @@ const QAForm: React.FC<QAFormProps> = ({ name, details, interviewRecordId }) => 
         }
     };
 
-    const handleDeleteDetail = async (index: number) => {
+    const handleDeleteDetail = async (detailIndex: number) => {
         if (!interviewRecordId) return; // recordId가 없으면 삭제 불가
-
         try {
-            await deleteDetail(interviewRecordId, index);
-            remove(index);
+            deleteDetailMutation({
+                interviewRecordId,
+                detailIndex,
+            });
         } catch (error) {
             console.error("Failed to delete detail:", error);
         }
@@ -50,8 +90,7 @@ const QAForm: React.FC<QAFormProps> = ({ name, details, interviewRecordId }) => 
 
     return (
         <VStack align="stretch">
-            
-            {fields.map((field, index) => (
+            {fields.map((field, detailIndex) => (
                 <Box
                     m={5}
                     key={field.id}
@@ -61,11 +100,16 @@ const QAForm: React.FC<QAFormProps> = ({ name, details, interviewRecordId }) => 
                 >
                     <Field label="면접 질문" my={4}>
                         <Controller
-                            name={`${name}.${index}.question`}
+                            name={`${name}.${detailIndex}.question`}
                             control={control}
                             render={({ field }) => (
-                                <Editable.Root defaultValue={field.value} onSubmit={field.onChange}>
-                                    <Editable.Preview>{field.value || "질문을 입력해주세요"}</Editable.Preview>
+                                <Editable.Root
+                                    defaultValue={field.value}
+                                    onSubmit={field.onChange}
+                                >
+                                    <Editable.Preview>
+                                        {field.value || "질문을 입력해주세요"}
+                                    </Editable.Preview>
                                     <Editable.Textarea {...field} h="100px" />
                                     <EditableControl />
                                 </Editable.Root>
@@ -74,11 +118,16 @@ const QAForm: React.FC<QAFormProps> = ({ name, details, interviewRecordId }) => 
                     </Field>
                     <Field label="답변">
                         <Controller
-                            name={`${name}.${index}.answer`}
+                            name={`${name}.${detailIndex}.answer`}
                             control={control}
                             render={({ field }) => (
-                                <Editable.Root defaultValue={field.value} onSubmit={field.onChange}>
-                                    <Editable.Preview>{field.value || "답변을 입력해주세요"}</Editable.Preview>
+                                <Editable.Root
+                                    defaultValue={field.value}
+                                    onSubmit={field.onChange}
+                                >
+                                    <Editable.Preview>
+                                        {field.value || "답변을 입력해주세요"}
+                                    </Editable.Preview>
                                     <Editable.Textarea {...field} h="100px" />
                                     <EditableControl />
                                 </Editable.Root>
@@ -90,7 +139,7 @@ const QAForm: React.FC<QAFormProps> = ({ name, details, interviewRecordId }) => 
                             m={4}
                             bg="none"
                             size="sm"
-                            onClick={() => handleDeleteDetail(index)}
+                            onClick={() => handleDeleteDetail(detailIndex)}
                         >
                             ✖
                         </Button>
