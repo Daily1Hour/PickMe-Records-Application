@@ -22,7 +22,7 @@ import {
     Box,
 } from "@chakra-ui/react";
 
-import { usePagenation } from "./hook/usePagenation";
+import { usePagination } from "./hook/usePagenation";
 import { DeleteConfirm } from "./ui/deleteConfirm";
 import { fetchSidebarData } from "./api/sideApi";
 import { NavLink, useNavigate } from "react-router-dom";
@@ -44,7 +44,7 @@ const Sidebar = () => {
     }));
 
     const { paginatedItems, handlePageChange, currentPage, totalPages } =
-        usePagenation<{ id: string; label: string }>(formattedMenuItems || []);
+        usePagination<{ id: string; label: string }>(formattedMenuItems || []);
 
     const handleDelete = (interviewRecordId: string) => {
         setRecordToDelete(interviewRecordId);
