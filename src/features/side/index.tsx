@@ -1,31 +1,13 @@
 import { useState } from "react";
+import { GrFormPrevious, GrFormNext } from "react-icons/gr";
 import { useQuery } from "@tanstack/react-query";
-import { NavLink } from "react-router-dom";
-import { RxHamburgerMenu } from "react-icons/rx";
-import {
-    GrFormPrevious,
-    GrFormNext,
-    GrFormAdd,
-} from "react-icons/gr";
-import {
-    Button,
-    PopoverArrow,
-    PopoverBody,
-    PopoverCloseTrigger,
-    PopoverContent,
-    PopoverHeader,
-    PopoverRoot,
-    PopoverTrigger,
-    Text,
-    Flex,
-    HStack,
-    Box,
-} from "@chakra-ui/react";
+import { Button, Text, HStack, Box } from "@chakra-ui/react";
 
 import { usePagination } from "./hook/usePagenation";
 import { fetchSidebarData } from "./api/sideApi";
 import { DeleteConfirm } from "./ui/deleteConfirm";
 import { Item } from "./ui/Item";
+import { PopoverLayout } from "./ui/PopoverLayout";
 
 const Sidebar = () => {
     const [idToDelete, setIdToDelete] = useState<string | null>(null);
@@ -51,71 +33,40 @@ const Sidebar = () => {
     };
 
     return (
-        <PopoverRoot>
-            <PopoverTrigger asChild position="fixed">
-                <Button size="sm" variant="outline">
-                    <RxHamburgerMenu />
-                </Button>
-            </PopoverTrigger>
-            <PopoverContent position="fixed" mt="10">
-                <PopoverHeader>
-                    <Flex justify="space-between" align="center">
-                        <Text>목록</Text>
-                        <NavLink to={`/`}>
-                            <Button
-                                bg="none"
-                                color="gray"
-                                _hover={{ bg: "gray.100" }}
-                                title="작성하기"
-                            >
-                                <GrFormAdd />
-                            </Button>
-                        </NavLink>
-                    </Flex>
-                </PopoverHeader>
-                <PopoverArrow />
-                <PopoverBody>
-                    <Box minHeight="400px">
-                        {paginatedItems.map((item) => (
-                            <Item
-                                item={item}
-                                handleDelete={handleDelete}
-                            />
-                        ))}
-                        {isError && (
-                            <Text color="red.500">{error.message}</Text>
-                        )}
-                    </Box>
-                    <HStack mt={4} justify="space-between">
-                        <Button
-                            size="sm"
-                            bg="none"
-                            onClick={() => handlePageChange("prev")}
-                            disabled={currentPage === 0}
-                        >
-                            <GrFormPrevious color="black" />
-                        </Button>
-                        <Text>
-                            {currentPage + 1} / {totalPages}
-                        </Text>
-                        <Button
-                            size="sm"
-                            bg="none"
-                            onClick={() => handlePageChange("next")}
-                            disabled={currentPage === totalPages - 1}
-                        >
-                            <GrFormNext color="black" />
-                        </Button>
-                    </HStack>
-                </PopoverBody>
-                <PopoverCloseTrigger />
-            </PopoverContent>
+        <PopoverLayout>
             <DeleteConfirm
                 recordToDelete={idToDelete}
                 isDialogOpen={isDialogOpen}
                 setDialogOpen={setDialogOpen}
             />
-        </PopoverRoot>
+            <Box minHeight="400px">
+                {paginatedItems.map((item) => (
+                    <Item item={item} handleDelete={handleDelete} />
+                ))}
+                {isError && <Text color="red.500">{error.message}</Text>}
+            </Box>
+            <HStack mt={4} justify="space-between">
+                <Button
+                    size="sm"
+                    bg="none"
+                    onClick={() => handlePageChange("prev")}
+                    disabled={currentPage === 0}
+                >
+                    <GrFormPrevious color="black" />
+                </Button>
+                <Text>
+                    {currentPage + 1} / {totalPages}
+                </Text>
+                <Button
+                    size="sm"
+                    bg="none"
+                    onClick={() => handlePageChange("next")}
+                    disabled={currentPage === totalPages - 1}
+                >
+                    <GrFormNext color="black" />
+                </Button>
+            </HStack>
+        </PopoverLayout>
     );
 };
 
