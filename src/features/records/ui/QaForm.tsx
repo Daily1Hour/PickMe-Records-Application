@@ -9,14 +9,10 @@ import { QaField } from "./QaField";
 interface QaFormProps {
     name: string;
     details: { question: string; answer: string }[];
-    interviewRecordId: string | undefined;
+    recordId: string;
 }
 
-export const QaForm: React.FC<QaFormProps> = ({
-    name,
-    details,
-    interviewRecordId,
-}) => {
+export const QaForm: React.FC<QaFormProps> = ({ name, details, recordId }) => {
     const { resetField } = useFormContext();
     const { fields, append } = useFieldArray({
         name,
@@ -29,30 +25,24 @@ export const QaForm: React.FC<QaFormProps> = ({
     }, [details, resetField, name]);
 
     const handleAddDetail = async () => {
-        if (!interviewRecordId) return; // recordId가 없으면 추가 불가
-
         try {
             const newDetail = { question: "", answer: "" };
 
             const response = await createDetailMutation({
-                interviewRecordId,
+                interviewRecordId: recordId,
                 data: newDetail,
             });
 
-            append({
-                question: response.question,
-                answer: response.answer,
-            });
+            append(response);
         } catch (error) {
             console.error("Failed to create detail:", error);
         }
     };
 
     const handleDeleteDetail = async (detailIndex: number) => {
-        if (!interviewRecordId) return; // recordId가 없으면 삭제 불가
         try {
             deleteDetailMutation({
-                interviewRecordId,
+                interviewRecordId: recordId,
                 detailIndex,
             });
         } catch (error) {
@@ -84,15 +74,9 @@ export const QaForm: React.FC<QaFormProps> = ({
                     </HStack>
                 </Box>
             ))}
-            {interviewRecordId && ( // recordId가 있을 때만 버튼 표시
-                <IconButton
-                    colorPalette="teal"
-                    onClick={handleAddDetail}
-                    w="50px"
-                >
-                    <GrFormAdd />
-                </IconButton>
-            )}
+            <IconButton colorPalette="teal" onClick={handleAddDetail} w="50px">
+                <GrFormAdd />
+            </IconButton>
         </VStack>
     );
 };

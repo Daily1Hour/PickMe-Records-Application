@@ -61,11 +61,13 @@ const RecordForm: React.FC<{
                     <Stack>
                         <Heading>내 기록</Heading>
                         <LabelForm />
-                        <QaForm
-                            name="details"
-                            details={recordValues.details}
-                            interviewRecordId={recordId}
-                        />
+                        {recordId && (
+                            <QaForm
+                                name="details"
+                                details={recordValues.details}
+                                recordId={recordId}
+                            />
+                        )}
                         <HStack justifyContent="flex-end">
                             <Button
                                 m="20px"
