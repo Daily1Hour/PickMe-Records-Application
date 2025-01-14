@@ -14,7 +14,7 @@ import { RecordDetailCreateDTO } from "../api/recordsDTOList";
 interface QAFormProps {
     name: string;
     details: { question: string; answer: string }[];
-    interviewRecordId: string | null; // null 허용
+    interviewRecordId: string | undefined;
 }
 
 const QAForm: React.FC<QAFormProps> = ({
@@ -106,11 +106,12 @@ const QAForm: React.FC<QAFormProps> = ({
                                 <Editable.Root
                                     defaultValue={field.value}
                                     onSubmit={field.onChange}
+                                    onChange={field.onChange}
                                 >
                                     <Editable.Preview>
                                         {field.value || "질문을 입력해주세요"}
                                     </Editable.Preview>
-                                    <Editable.Textarea {...field} h="100px" />
+                                    <Editable.Textarea h="100px" />
                                     <EditableControl />
                                 </Editable.Root>
                             )}
@@ -124,11 +125,12 @@ const QAForm: React.FC<QAFormProps> = ({
                                 <Editable.Root
                                     defaultValue={field.value}
                                     onSubmit={field.onChange}
+                                    onChange={field.onChange}
                                 >
                                     <Editable.Preview>
                                         {field.value || "답변을 입력해주세요"}
                                     </Editable.Preview>
-                                    <Editable.Textarea {...field} h="100px" />
+                                    <Editable.Textarea h="100px" />
                                     <EditableControl />
                                 </Editable.Root>
                             )}

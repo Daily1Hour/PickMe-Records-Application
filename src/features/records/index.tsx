@@ -2,26 +2,24 @@ import { Box, Flex, HStack } from "@chakra-ui/react";
 
 import PDFUploadForm from "./ui/PDFUploadForm";
 import RecordForm from "./ui/RecordForm";
-import { fetchRecordById } from "./api/detailsApi";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
+import { fetchRecordById } from "./api/detailsApi";
 
 const RecordDetails = () => {
     const { id } = useParams<{ id: string | undefined}>();
     const { data } = useQuery({
         queryKey: ["record", id],
-        queryFn: () => {
-            if (!id) {
-                return {
-                    id: null, // id를 null로 설정하여 새로운 레코드를 생성할 수 있게 함
-                    enterpriseName: "",
-                    category: "",
-                    details: [],
-                };
-            }
-            return fetchRecordById(id);
-        },
-        staleTime: 1000*60*60
+        queryFn: () => 
+            fetchRecordById(id!),
+        staleTime: 1000*60*60,
+        enabled: !!id,
+        initialData: id ? undefined : {
+            id: undefined,
+            enterpriseName: "",
+            category: "",
+            details: [],
+        }
     });
 
     return (
@@ -33,7 +31,7 @@ const RecordDetails = () => {
                             <PDFUploadForm />
                         </Box>
                         <RecordForm
-                            key={data.id}
+                            key={data?.id}
                             recordValues={data}
                             recordId={id}
                         />
