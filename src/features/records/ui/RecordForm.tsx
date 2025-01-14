@@ -84,7 +84,7 @@ const RecordForm: React.FC<{
                 alert("저장했습니다.");
             } else {
                 // 기존 레코드 수정
-                await update({ recordId, updatedata: data });
+                update({ recordId, updatedata: data });
                 data.details.forEach((detail, index) => {
                     updateDetailMutation({ recordId, index, detail });
                 });
