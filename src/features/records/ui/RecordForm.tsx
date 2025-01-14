@@ -1,10 +1,11 @@
 import { useEffect } from "react";
-import { useForm, FormProvider, Controller } from "react-hook-form";
+import { useForm, FormProvider } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { Stack, Heading, Button, Input, HStack, Box } from "@chakra-ui/react";
+import { Stack, Heading, Button, HStack, Box } from "@chakra-ui/react";
 
-import QAForm from "./QAForm";
 import { useRecordMutation } from "../hook/useRecordMutation";
+import { QAForm } from "./QAForm";
+import { LabelForm } from "./LableForm";
 
 interface FormDataValues {
     enterpriseName: string;
@@ -59,30 +60,7 @@ const RecordForm: React.FC<{
                 >
                     <Stack>
                         <Heading>내 기록</Heading>
-                        <Stack gap="10">
-                            <Controller
-                                name="enterpriseName"
-                                control={methods.control}
-                                render={({ field }) => (
-                                    <Input
-                                        {...field}
-                                        variant="flushed"
-                                        placeholder="회사 이름"
-                                    />
-                                )}
-                            />
-                            <Controller
-                                name="category"
-                                control={methods.control}
-                                render={({ field }) => (
-                                    <Input
-                                        {...field}
-                                        variant="flushed"
-                                        placeholder="면접 유형"
-                                    />
-                                )}
-                            />
-                        </Stack>
+                        <LabelForm />
                         <QAForm
                             name="details"
                             details={recordValues.details}

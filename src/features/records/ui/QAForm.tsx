@@ -14,7 +14,7 @@ interface QAFormProps {
     interviewRecordId: string | undefined;
 }
 
-const QAForm: React.FC<QAFormProps> = ({
+export const QAForm: React.FC<QAFormProps> = ({
     name,
     details,
     interviewRecordId,
@@ -153,5 +153,3 @@ const QAForm: React.FC<QAFormProps> = ({
         </VStack>
     );
 };
-
-export default QAForm;
