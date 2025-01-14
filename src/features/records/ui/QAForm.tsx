@@ -1,6 +1,6 @@
 import { useEffect } from "react";
+import { GrFormAdd , GrClose } from "react-icons/gr";
 import { useFieldArray, useFormContext, Controller } from "react-hook-form";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import {
     Box,
     HStack,
@@ -8,12 +8,10 @@ import {
     Editable,
     IconButton,
 } from "@chakra-ui/react";
-import { GrFormAdd , GrClose } from "react-icons/gr";
 
 import { Field } from "@/shared/chakra-ui/Field";
-import { RecordDetailCreateDTO } from "../api/recordsDTOList";
-import { createDetail, deleteDetail } from "../api/detailsApi";
 import EditableControl from "./EditableControl";
+import { useQaMutation } from "../hook/useQaMutation";
 
 interface QAFormProps {
     name: string;
@@ -31,30 +29,7 @@ export const QAForm: React.FC<QAFormProps> = ({
         name,
     });
 
-    const queryclient = useQueryClient();
-
-    const { mutateAsync: createDetailMutation } = useMutation({
-        mutationFn: ({
-            interviewRecordId,
-            data,
-        }: {
-            interviewRecordId: string;
-            data: RecordDetailCreateDTO;
-        }) => createDetail(interviewRecordId, data),
-    });
-
-    const { mutate: deleteDetailMutation } = useMutation({
-        mutationFn: ({
-            interviewRecordId,
-            detailIndex,
-        }: {
-            interviewRecordId: string;
-            detailIndex: number;
-        }) => deleteDetail(interviewRecordId, detailIndex),
-        onSuccess: () => {
-            queryclient.refetchQueries({ queryKey: ["record"] });
-        },
-    });
+    const { createDetailMutation, deleteDetailMutation } = useQaMutation();
 
     useEffect(() => {
         resetField(name, { defaultValue: details });
