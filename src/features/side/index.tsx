@@ -5,9 +5,7 @@ import { Button, Text, HStack, Box } from "@chakra-ui/react";
 
 import { usePagination } from "./hook/usePagenation";
 import { fetchSidebarData } from "./api/sideApi";
-import { DeleteConfirm } from "./ui/deleteConfirm";
-import { Item } from "./ui/Item";
-import { PopoverLayout } from "./ui/PopoverLayout";
+import { PopoverLayout, Item, DeleteConfirm } from "./ui";
 
 const Sidebar = () => {
     const [idToDelete, setIdToDelete] = useState<string | null>(null);
