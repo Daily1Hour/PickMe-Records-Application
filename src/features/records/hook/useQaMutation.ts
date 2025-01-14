@@ -4,7 +4,7 @@ import { createDetail, deleteDetail } from "../api/detailsApi";
 import { RecordDetailCreateDTO } from "../api/recordsDTOList";
 
 export const useQaMutation = () => {
-    
+
     const queryclient = useQueryClient();
 
     const { mutateAsync: createDetailMutation } = useMutation({

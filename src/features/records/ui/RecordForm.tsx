@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Stack, Heading, Button, HStack, Box } from "@chakra-ui/react";
 
 import { useRecordMutation } from "../hook/useRecordMutation";
-import { QAForm } from "./QAForm";
+import { QaForm } from "./QaForm";
 import { LabelForm } from "./LableForm";
 
 interface FormDataValues {
@@ -61,7 +61,7 @@ const RecordForm: React.FC<{
                     <Stack>
                         <Heading>내 기록</Heading>
                         <LabelForm />
-                        <QAForm
+                        <QaForm
                             name="details"
                             details={recordValues.details}
                             interviewRecordId={recordId}
