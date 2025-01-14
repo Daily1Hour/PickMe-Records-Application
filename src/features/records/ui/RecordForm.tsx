@@ -15,14 +15,10 @@ interface FormDataValues {
 const RecordForm: React.FC<{
     recordValues: FormDataValues;
     recordId?: string;
-}> = ({ recordValues: formValues, recordId }) => {
+}> = ({ recordValues, recordId }) => {
     const navigate = useNavigate();
     const methods = useForm<FormDataValues>({
-        defaultValues: {
-            enterpriseName: "",
-            category: "",
-            details: [{ question: "", answer: "" }],
-        },
+        defaultValues: recordValues,
     });
 
     const { reset } = methods;
@@ -30,15 +26,15 @@ const RecordForm: React.FC<{
     const { create, update, updateDetailMutation } = useRecordMutation();
 
     useEffect(() => {
-        reset(formValues);
-    }, [formValues, reset]);
+        reset(recordValues);
+    }, [recordValues, reset]);
 
     const onSubmit = async (data: FormDataValues) => {
         try {
-            if (! recordId) {
+            if (!recordId) {
                 // recordId가 null일 때 새로운 레코드 생성
                 const newRecord = await create({ data });
-                navigate(`/${newRecord.interviewRecordId}`)
+                navigate(`/${newRecord.interviewRecordId}`);
                 alert("저장했습니다.");
             } else {
                 // 기존 레코드 수정
@@ -89,7 +85,7 @@ const RecordForm: React.FC<{
                         </Stack>
                         <QAForm
                             name="details"
-                            details={formValues.details}
+                            details={recordValues.details}
                             interviewRecordId={recordId}
                         />
                         <HStack justifyContent="flex-end">
