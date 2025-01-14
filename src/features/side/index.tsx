@@ -28,7 +28,7 @@ import { fetchSidebarData } from "./api/sideApi";
 import { DeleteConfirm } from "./ui/deleteConfirm";
 
 const Sidebar = () => {
-    const [recordToDelete, setRecordToDelete] = useState<string | null>(null);
+    const [idToDelete, setIdToDelete] = useState<string | null>(null);
     const [isDialogOpen, setDialogOpen] = useState(false);
 
     const navigate = useNavigate();
@@ -47,7 +47,7 @@ const Sidebar = () => {
         usePagination<{ id: string; label: string }>(formattedMenuItems || []);
 
     const handleDelete = (interviewRecordId: string) => {
-        setRecordToDelete(interviewRecordId);
+        setIdToDelete(interviewRecordId);
         setDialogOpen(true);
     };
 
@@ -131,7 +131,7 @@ const Sidebar = () => {
                 <PopoverCloseTrigger />
             </PopoverContent>
             <DeleteConfirm
-                recordToDelete={recordToDelete}
+                recordToDelete={idToDelete}
                 isDialogOpen={isDialogOpen}
                 setDialogOpen={setDialogOpen}
             />

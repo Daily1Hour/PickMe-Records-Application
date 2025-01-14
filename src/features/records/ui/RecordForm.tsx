@@ -1,5 +1,7 @@
 import { useEffect } from "react";
 import { useForm, FormProvider, Controller } from "react-hook-form";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useNavigate } from "react-router-dom";
 import { Stack, Heading, Button, Input, HStack, Box } from "@chakra-ui/react";
 
 import QAForm from "./QAForm";
@@ -9,8 +11,6 @@ import {
     RecordDetailUpdateDTO,
 } from "../api/recordsDTOList";
 import { createRecord, updateRecord, updateDetail } from "../api/detailsApi";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { useNavigate } from "react-router-dom";
 
 interface FormDataValues {
     enterpriseName: string;
