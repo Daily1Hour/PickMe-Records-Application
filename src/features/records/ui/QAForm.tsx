@@ -1,12 +1,19 @@
 import { useEffect } from "react";
 import { useFieldArray, useFormContext, Controller } from "react-hook-form";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { RecordDetailCreateDTO } from "../api/recordsDTOList";
-import { Box, Button, HStack, VStack, Editable } from "@chakra-ui/react";
+import {
+    Box,
+    HStack,
+    VStack,
+    Editable,
+    IconButton,
+} from "@chakra-ui/react";
+import { GrFormAdd , GrClose } from "react-icons/gr";
 
 import { Field } from "@/shared/chakra-ui/Field";
-import EditableControl from "./EditableControl";
+import { RecordDetailCreateDTO } from "../api/recordsDTOList";
 import { createDetail, deleteDetail } from "../api/detailsApi";
+import EditableControl from "./EditableControl";
 
 interface QAFormProps {
     name: string;
@@ -20,7 +27,7 @@ export const QAForm: React.FC<QAFormProps> = ({
     interviewRecordId,
 }) => {
     const { control, resetField } = useFormContext();
-    const { fields, append,  } = useFieldArray({
+    const { fields, append } = useFieldArray({
         name,
     });
 
@@ -44,9 +51,9 @@ export const QAForm: React.FC<QAFormProps> = ({
             interviewRecordId: string;
             detailIndex: number;
         }) => deleteDetail(interviewRecordId, detailIndex),
-        onSuccess: ()=> {
+        onSuccess: () => {
             queryclient.refetchQueries({ queryKey: ["record"] });
-        }
+        },
     });
 
     useEffect(() => {
@@ -134,21 +141,22 @@ export const QAForm: React.FC<QAFormProps> = ({
                         />
                     </Field>
                     <HStack justifyContent="flex-end">
-                        <Button
+                        <IconButton
                             m={4}
-                            bg="none"
+                            variant={"ghost"}
                             size="sm"
                             onClick={() => handleDeleteDetail(detailIndex)}
+                            aria-label="delete"
                         >
-                            ✖
-                        </Button>
+                            <GrClose color="grey" />
+                        </IconButton>
                     </HStack>
                 </Box>
             ))}
             {interviewRecordId && ( // recordId가 있을 때만 버튼 표시
-                <Button bg="#009A6E" onClick={handleAddDetail} w="50px">
-                    +
-                </Button>
+                <IconButton colorPalette="teal" onClick={handleAddDetail} w="50px">
+                    <GrFormAdd  />
+                </IconButton>
             )}
         </VStack>
     );

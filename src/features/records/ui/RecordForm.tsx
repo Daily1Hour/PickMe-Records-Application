@@ -22,9 +22,9 @@ const RecordForm: React.FC<{
         defaultValues: recordValues,
     });
 
-    const { reset } = methods;
+    const { reset } = methods; // useForm hook
 
-    const { create, update, updateDetailMutation } = useRecordMutation();
+    const { create, update, updateDetailMutation } = useRecordMutation(); // custom hook
 
     useEffect(() => {
         reset(recordValues);
@@ -70,7 +70,7 @@ const RecordForm: React.FC<{
                             <Button
                                 m="20px"
                                 type="submit"
-                                bg="#009A6E"
+                                colorPalette="teal"
                                 borderRadius="30px"
                                 w="100px"
                             >
