@@ -1,16 +1,10 @@
 import { useEffect } from "react";
 import { useForm, FormProvider, Controller } from "react-hook-form";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import { Stack, Heading, Button, Input, HStack, Box } from "@chakra-ui/react";
 
 import QAForm from "./QAForm";
-import {
-    InterviewRecordCreateDTO,
-    InterviewRecordUpdateDTO,
-    RecordDetailUpdateDTO,
-} from "../api/recordsDTOList";
-import { createRecord, updateRecord, updateDetail } from "../api/detailsApi";
+import { useRecordMutation } from "../hook/useRecordMutation";
 
 interface FormDataValues {
     enterpriseName: string;
@@ -33,43 +27,7 @@ const RecordForm: React.FC<{
 
     const { reset } = methods;
 
-    const queryclient = useQueryClient();
-    
-    const { mutateAsync: create } = useMutation({
-        mutationFn: ({ data }: { data: InterviewRecordCreateDTO }) =>
-            createRecord(data),
-        onSuccess: () => {
-            queryclient.refetchQueries({ queryKey: ["side"] });
-        },
-    });
-
-    const { mutate: update } = useMutation({
-        mutationFn: ({
-            recordId,
-            updatedata,
-        }: {
-            recordId: string;
-            updatedata: InterviewRecordUpdateDTO;
-        }) => updateRecord(recordId, updatedata),
-        onSuccess: () => {
-            const queryKeys = [["side"], ["record"]]; // 리패치할 쿼리 키들
-            queryKeys.forEach((key) => {
-                queryclient.refetchQueries({ queryKey: key });
-            });
-        },
-    });
-
-    const { mutate: updateDetailMutation } = useMutation({
-        mutationFn: ({
-            recordId,
-            index,
-            detail,
-        }: {
-            recordId: string;
-            index: number;
-            detail: RecordDetailUpdateDTO;
-        }) => updateDetail(recordId, index, detail),
-    });
+    const { create, update, updateDetailMutation } = useRecordMutation();
 
     useEffect(() => {
         reset(formValues);
