@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useQuery } from "@tanstack/react-query";
+import { NavLink, useNavigate } from "react-router-dom";
 import { RxHamburgerMenu } from "react-icons/rx";
 import {
     GrFormPrevious,
@@ -23,9 +24,8 @@ import {
 } from "@chakra-ui/react";
 
 import { usePagination } from "./hook/usePagenation";
-import { DeleteConfirm } from "./ui/deleteConfirm";
 import { fetchSidebarData } from "./api/sideApi";
-import { NavLink, useNavigate } from "react-router-dom";
+import { DeleteConfirm } from "./ui/deleteConfirm";
 
 const Sidebar = () => {
     const [recordToDelete, setRecordToDelete] = useState<string | null>(null);
