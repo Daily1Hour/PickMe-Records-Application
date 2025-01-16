@@ -6,21 +6,14 @@ import { Stack, Heading, Button, HStack, Box } from "@chakra-ui/react";
 import { useRecordMutation } from "../hook/useRecordMutation";
 import { QaForm } from "./QaForm";
 import { LabelForm } from "./LableForm";
+import { Record } from "@/entities/records/model/Record";
 
-interface FormDataValues {
-    enterpriseName: string;
-    category: string;
-    details: { question: string; answer: string }[];
-}
-
-const RecordForm: React.FC<{
-    recordValues: FormDataValues;
-    recordId?: string;
-}> = ({ recordValues, recordId }) => {
+const RecordForm: React.FC<{ recordValues: Record }> = ({ recordValues }) => {
     const navigate = useNavigate();
-    const methods = useForm<FormDataValues>({
+    const methods = useForm<Record>({
         defaultValues: recordValues,
     });
+    const recordId = recordValues.recordId;
 
     const { reset } = methods; // useForm hook
 
@@ -30,7 +23,7 @@ const RecordForm: React.FC<{
         reset(recordValues);
     }, [recordValues, reset]);
 
-    const onSubmit = async (data: FormDataValues) => {
+    const onSubmit = async (data: Record) => {
         try {
             if (!recordId) {
                 // recordId가 null일 때 새로운 레코드 생성
@@ -63,7 +56,6 @@ const RecordForm: React.FC<{
                         <LabelForm />
                         {recordId && (
                             <QaForm
-                                name="details"
                                 details={recordValues.details}
                                 recordId={recordId}
                             />

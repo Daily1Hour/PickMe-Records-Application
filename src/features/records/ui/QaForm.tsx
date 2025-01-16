@@ -5,14 +5,13 @@ import { Box, VStack } from "@chakra-ui/react";
 import { QaField } from "./QaField";
 import { AddDetail } from "./AddDetail";
 import { DeleteDetail } from "./DeleteDetail";
+import { Detail } from "@/entities/records/model/Record";
 
-interface QaFormProps {
-    name: string;
-    details: { question: string; answer: string }[];
+export const QaForm: React.FC<{
+    details: Detail[];
     recordId: string;
-}
-
-export const QaForm: React.FC<QaFormProps> = ({ name, details, recordId }) => {
+}> = ({ details, recordId }) => {
+    const name = "details";
     const { resetField } = useFormContext();
     const { fields, append } = useFieldArray({
         name,

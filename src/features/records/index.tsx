@@ -5,21 +5,16 @@ import { useParams } from "react-router-dom";
 import PDFUploadForm from "./ui/PDFUploadForm";
 import RecordForm from "./ui/RecordForm";
 import { fetchRecordById } from "./api/detailsApi";
+import { Record } from "@/entities/records/model/Record";
 
 const RecordDetails = () => {
-    const { id } = useParams<{ id: string | undefined}>();
-    const { data } = useQuery({
+    const { id } = useParams<{ id: string | undefined }>();
+    const { data } = useQuery<Record>({
         queryKey: ["record", id],
-        queryFn: () => 
-            fetchRecordById(id!),
-        staleTime: 1000*60*60,
+        queryFn: () => fetchRecordById(id!),
+        staleTime: 1000 * 60 * 60,
         enabled: !!id,
-        initialData: id ? undefined : {
-            id: undefined,
-            enterpriseName: "",
-            category: "",
-            details: [],
-        }
+        initialData: id ? undefined : Record.empty(),
     });
 
     return (
@@ -31,9 +26,8 @@ const RecordDetails = () => {
                             <PDFUploadForm />
                         </Box>
                         <RecordForm
-                            key={data?.id}
+                            key={data?.recordId}
                             recordValues={data}
-                            recordId={id}
                         />
                     </HStack>
                 </Flex>
