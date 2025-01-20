@@ -1,4 +1,3 @@
-
 export interface InterviewRecordResponseDTO {
     interviewRecordId: string;
     enterpriseName: string;

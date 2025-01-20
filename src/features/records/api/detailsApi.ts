@@ -1,4 +1,4 @@
-import { Detail, Record } from "@/entities/records/model/Record";
+import { Record } from "@/entities/records/model/Record";
 import {
     InterviewRecordResponseDTO,
     RecordDetailCreateDTO,
@@ -7,6 +7,7 @@ import axios from "axios";
 import { dtoToRecord } from "../service/dtoToRecord";
 import { recordToCreateDTO, recordToUpdateDTO } from "../service/reocrdToDto";
 import { detailToDto } from "../service/detailToDto";
+import { Detail } from "@/entities/records/model/Detail";
 
 const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 const TOKEN = import.meta.env.VITE_TOKEN;

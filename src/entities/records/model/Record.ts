@@ -1,3 +1,5 @@
+import { Detail } from "./Detail";
+
 export class Record {
     constructor(
         public recordId: string,
@@ -11,8 +13,4 @@ export class Record {
     static empty() {
         return new Record("", "", "", "", "", []);
     }
-}
-
-export class Detail {
-    constructor(public question: string, public answer: string) {}
 }
