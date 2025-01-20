@@ -20,8 +20,10 @@ const RecordForm: React.FC<{ recordValues: Record }> = ({ recordValues }) => {
     const { create, update, updateDetailMutation } = useRecordMutation(); // custom hook
 
     useEffect(() => {
-        reset(recordValues);
-    }, [recordValues, reset]);
+        if (!recordId) {
+            reset({ enterpriseName: "", category: "", details: [] });
+        }
+    }, [recordId, reset]);
 
     const onSubmit = async (data: Record) => {
         try {
