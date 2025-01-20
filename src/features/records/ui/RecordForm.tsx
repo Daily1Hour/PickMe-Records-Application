@@ -21,7 +21,7 @@ const RecordForm: React.FC<{ record: Record }> = ({ record }) => {
 
     useEffect(() => {
         if (!recordId) {
-            reset({ enterpriseName: "", category: "", details: [] });
+            reset(Record.empty());
         }
     }, [recordId, reset]);
 
