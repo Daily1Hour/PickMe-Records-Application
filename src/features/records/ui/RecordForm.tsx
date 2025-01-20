@@ -1,90 +1,38 @@
 import { useEffect } from "react";
-import { useForm, FormProvider, Controller } from "react-hook-form";
-import { Stack, Heading, Button, Input, HStack, Box } from "@chakra-ui/react";
-
-import QAForm from "./QAForm";
-import {
-    InterviewRecordCreateDTO,
-    InterviewRecordUpdateDTO,
-    RecordDetailUpdateDTO,
-} from "../api/recordsDTOList";
-import { createRecord, updateRecord, updateDetail } from "../api/detailsApi";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useForm, FormProvider } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
+import { Stack, Heading, Button, HStack, Box } from "@chakra-ui/react";
 
-interface FormDataValues {
-    enterpriseName: string;
-    category: string;
-    details: { question: string; answer: string }[];
-}
+import { useRecordMutation } from "../hook/useRecordMutation";
+import { QaForm } from "./QaForm";
+import { LabelForm } from "./LableForm";
+import { Record } from "@/entities/records/model/Record";
 
-const RecordForm: React.FC<{
-    recordValues: FormDataValues;
-    recordId?: string;
-}> = ({ recordValues: formValues, recordId }) => {
+const RecordForm: React.FC<{ recordValues: Record }> = ({ recordValues }) => {
     const navigate = useNavigate();
-    const methods = useForm<FormDataValues>({
-        defaultValues: {
-            enterpriseName: "",
-            category: "",
-            details: [{ question: "", answer: "" }],
-        },
+    const methods = useForm<Record>({
+        defaultValues: recordValues,
     });
+    const recordId = recordValues.recordId;
 
-    const { reset } = methods;
+    const { reset } = methods; // useForm hook
 
-    const queryclient = useQueryClient();
-    
-    const { mutateAsync: create } = useMutation({
-        mutationFn: ({ data }: { data: InterviewRecordCreateDTO }) =>
-            createRecord(data),
-        onSuccess: () => {
-            queryclient.refetchQueries({ queryKey: ["side"] });
-        },
-    });
-
-    const { mutate: update } = useMutation({
-        mutationFn: ({
-            recordId,
-            updatedata,
-        }: {
-            recordId: string;
-            updatedata: InterviewRecordUpdateDTO;
-        }) => updateRecord(recordId, updatedata),
-        onSuccess: () => {
-            const queryKeys = [["side"], ["record"]]; // 리패치할 쿼리 키들
-            queryKeys.forEach((key) => {
-                queryclient.refetchQueries({ queryKey: key });
-            });
-        },
-    });
-
-    const { mutate: updateDetailMutation } = useMutation({
-        mutationFn: ({
-            recordId,
-            index,
-            detail,
-        }: {
-            recordId: string;
-            index: number;
-            detail: RecordDetailUpdateDTO;
-        }) => updateDetail(recordId, index, detail),
-    });
+    const { create, update, updateDetailMutation } = useRecordMutation(); // custom hook
 
     useEffect(() => {
-        reset(formValues);
-    }, [formValues, reset]);
+        reset(recordValues);
+    }, [recordValues, reset]);
 
-    const onSubmit = async (data: FormDataValues) => {
+    const onSubmit = async (data: Record) => {
         try {
-            if (! recordId) {
+            if (!recordId) {
                 // recordId가 null일 때 새로운 레코드 생성
                 const newRecord = await create({ data });
-                navigate(`/${newRecord.interviewRecordId}`)
+                navigate(`/${newRecord.interviewRecordId}`);
                 alert("저장했습니다.");
             } else {
                 // 기존 레코드 수정
-                await update({ recordId, updatedata: data });
+                update({ recordId, updatedata: data });
                 data.details.forEach((detail, index) => {
                     updateDetailMutation({ recordId, index, detail });
                 });
@@ -105,40 +53,18 @@ const RecordForm: React.FC<{
                 >
                     <Stack>
                         <Heading>내 기록</Heading>
-                        <Stack gap="10">
-                            <Controller
-                                name="enterpriseName"
-                                control={methods.control}
-                                render={({ field }) => (
-                                    <Input
-                                        {...field}
-                                        variant="flushed"
-                                        placeholder="회사 이름"
-                                    />
-                                )}
+                        <LabelForm />
+                        {recordId && (
+                            <QaForm
+                                details={recordValues.details}
+                                recordId={recordId}
                             />
-                            <Controller
-                                name="category"
-                                control={methods.control}
-                                render={({ field }) => (
-                                    <Input
-                                        {...field}
-                                        variant="flushed"
-                                        placeholder="면접 유형"
-                                    />
-                                )}
-                            />
-                        </Stack>
-                        <QAForm
-                            name="details"
-                            details={formValues.details}
-                            interviewRecordId={recordId}
-                        />
+                        )}
                         <HStack justifyContent="flex-end">
                             <Button
                                 m="20px"
                                 type="submit"
-                                bg="#009A6E"
+                                colorPalette="teal"
                                 borderRadius="30px"
                                 w="100px"
                             >
