@@ -5,7 +5,7 @@ import { Stack, Heading, Button, HStack, Box } from "@chakra-ui/react";
 
 import { useRecordMutation } from "../hook/useRecordMutation";
 import { QaForm } from "./QaForm";
-import { LabelForm } from "./LableForm";
+import { LabelForm } from "./LabelForm";
 import { Record } from "@/entities/records/model/Record";
 
 const RecordForm: React.FC<{ recordValues: Record }> = ({ recordValues }) => {
