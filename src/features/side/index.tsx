@@ -26,7 +26,7 @@ const Sidebar = () => {
         <PopoverLayout>
             <Box minHeight="400px">
                 {paginatedItems.map((item) => (
-                    <Item item={item} />
+                    <Item item={item} key={item.id} />
                 ))}
                 {isError && <Text color="red.500">{error.message}</Text>}
             </Box>
