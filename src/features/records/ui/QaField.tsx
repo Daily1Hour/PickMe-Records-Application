@@ -17,10 +17,11 @@ export const QaField = ({
         answer: "답변",
     };
 
+    console.log("QaField");
     return (
         <Stack spaceY={4}>
             {types.map((type) => (
-                <Field label={`${korType[type]}`}>
+                <Field key={type} label={`${korType[type]}`}>
                     <Controller
                         name={`${name}.${detailIndex}.${type}`}
                         control={control}

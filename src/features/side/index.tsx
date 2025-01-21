@@ -39,7 +39,7 @@ const Sidebar = () => {
             />
             <Box minHeight="400px">
                 {paginatedItems.map((item) => (
-                    <Item item={item} handleDelete={handleDelete} />
+                    <Item item={item} key={item.id} handleDelete={handleDelete} />
                 ))}
                 {isError && <Text color="red.500">{error.message}</Text>}
             </Box>

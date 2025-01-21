@@ -1,25 +1,20 @@
-import { useEffect } from "react";
-import { useFieldArray, useFormContext } from "react-hook-form";
 import { Box, VStack } from "@chakra-ui/react";
+import { useFieldArray } from "react-hook-form";
 
-import { QaField } from "./QaField";
 import { AddDetail } from "./AddDetail";
 import { DeleteDetail } from "./DeleteDetail";
-import { Detail } from "@/entities/records/model/Detail";
+import { QaField } from "./QaField";
 
 export const QaForm: React.FC<{
-    details: Detail[];
     recordId: string;
-}> = ({ details, recordId }) => {
+}> = ({ recordId }) => {
+    console.log("QaForm")
     const name = "details";
-    const { resetField } = useFormContext();
-    const { fields, append } = useFieldArray({
-        name,
-    });
+    const { fields, append } = useFieldArray({ name });
 
-    useEffect(() => {
-        resetField(name, { defaultValue: details });
-    }, [details, resetField, name]);
+    // useEffect(() => {
+    //     resetField(name, { defaultValue: details });
+    // }, [details, resetField]);
 
     return (
         <VStack align="stretch">

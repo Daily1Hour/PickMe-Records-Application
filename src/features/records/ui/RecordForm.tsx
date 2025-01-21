@@ -1,29 +1,21 @@
-import { useEffect } from "react";
-import { useForm, FormProvider } from "react-hook-form";
+import { Box, Button, Heading, HStack, Stack } from "@chakra-ui/react";
+import { FormProvider, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-import { Stack, Heading, Button, HStack, Box } from "@chakra-ui/react";
 
-import { useRecordMutation } from "../hook/useRecordMutation";
-import { QaForm } from "./QaForm";
-import { LabelForm } from "./LabelForm";
 import { Record } from "@/entities/records/model/Record";
+import { useRecordMutation } from "../hook/useRecordMutation";
+import { LabelForm } from "./LabelForm";
+import { QaForm } from "./QaForm";
 
 const RecordForm: React.FC<{ record: Record }> = ({ record }) => {
     const navigate = useNavigate();
     const methods = useForm<Record>({
-        defaultValues: record,
+        defaultValues: record.recordId ? record : Record.empty(),
     });
     const recordId = record.recordId;
 
-    const { reset } = methods; // useForm hook
-
+    console.log("RecordForm");
     const { create, update, updateDetailMutation } = useRecordMutation(); // custom hook
-
-    useEffect(() => {
-        if (!recordId) {
-            reset(Record.empty());
-        }
-    }, [recordId, reset]);
 
     const onSubmit = async (data: Record) => {
         try {
@@ -46,6 +38,10 @@ const RecordForm: React.FC<{ record: Record }> = ({ record }) => {
         }
     };
 
+    // useEffect(() => {
+    //     methods.reset(record);
+    // }, [record, methods]);
+
     return (
         <Box>
             <FormProvider {...methods}>
@@ -56,12 +52,7 @@ const RecordForm: React.FC<{ record: Record }> = ({ record }) => {
                     <Stack>
                         <Heading>내 기록</Heading>
                         <LabelForm />
-                        {recordId && (
-                            <QaForm
-                                details={record.details}
-                                recordId={recordId}
-                            />
-                        )}
+                        {recordId && <QaForm recordId={recordId} />}
                         <HStack justifyContent="flex-end">
                             <Button
                                 m="20px"
