@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { Stack, Heading, Button, HStack, Box } from "@chakra-ui/react";
@@ -12,11 +12,10 @@ import { DeleteConfirm } from "./deleteConfirm";
 const RecordForm: React.FC<{ record: Record }> = ({ record }) => {
     const navigate = useNavigate();
     const methods = useForm<Record>({
-        defaultValues: record,
+        defaultValues: record.recordId ? record : Record.empty(),
     });
     const recordId = record.recordId;
 
-    const { reset } = methods; // useForm hook
     const [isDialogOpen, setDialogOpen] = useState(false);
     const [idToDelete, setIdToDelete] = useState<string | null>(null);
 
@@ -26,12 +25,6 @@ const RecordForm: React.FC<{ record: Record }> = ({ record }) => {
         setIdToDelete(recordId);
         setDialogOpen(true);
     };
-
-    useEffect(() => {
-        if (!recordId) {
-            reset(Record.empty());
-        }
-    }, [recordId, reset]);
 
     const onSubmit = async (data: Record) => {
         try {
