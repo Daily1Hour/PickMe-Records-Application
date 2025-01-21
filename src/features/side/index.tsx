@@ -1,16 +1,12 @@
-import { useState } from "react";
 import { GrFormPrevious, GrFormNext } from "react-icons/gr";
 import { useQuery } from "@tanstack/react-query";
 import { Button, Text, HStack, Box } from "@chakra-ui/react";
 
 import { usePagination } from "./hook/usePagenation";
 import { fetchSidebarData } from "./api/sideApi";
-import { PopoverLayout, Item, DeleteConfirm } from "./ui";
+import { PopoverLayout, Item } from "./ui";
 
 const Sidebar = () => {
-    const [idToDelete, setIdToDelete] = useState<string | null>(null);
-    const [isDialogOpen, setDialogOpen] = useState(false);
-
     const { data, isError, error } = useQuery({
         queryKey: ["side"],
         queryFn: fetchSidebarData,
@@ -25,21 +21,12 @@ const Sidebar = () => {
     const { paginatedItems, handlePageChange, currentPage, totalPages } =
         usePagination<{ id: string; label: string }>(formattedMenuItems || []);
 
-    const handleDelete = (interviewRecordId: string) => {
-        setIdToDelete(interviewRecordId);
-        setDialogOpen(true);
-    };
 
     return (
         <PopoverLayout>
-            <DeleteConfirm
-                recordToDelete={idToDelete}
-                isDialogOpen={isDialogOpen}
-                setDialogOpen={setDialogOpen}
-            />
             <Box minHeight="400px">
                 {paginatedItems.map((item) => (
-                    <Item item={item} handleDelete={handleDelete} />
+                    <Item item={item} />
                 ))}
                 {isError && <Text color="red.500">{error.message}</Text>}
             </Box>

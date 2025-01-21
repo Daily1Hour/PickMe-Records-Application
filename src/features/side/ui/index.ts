@@ -1,3 +1,3 @@
 export {Item} from './Item';
 export {PopoverLayout} from './PopoverLayout';
-export {DeleteConfirm} from './deleteConfirm';
+export {DeleteConfirm} from '../../records/ui/deleteConfirm';

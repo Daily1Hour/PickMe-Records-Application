@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { Stack, Heading, Button, HStack, Box } from "@chakra-ui/react";
@@ -7,6 +7,7 @@ import { useRecordMutation } from "../hook/useRecordMutation";
 import { QaForm } from "./QaForm";
 import { LabelForm } from "./LabelForm";
 import { Record } from "@/entities/records/model/Record";
+import { DeleteConfirm } from "./deleteConfirm";
 
 const RecordForm: React.FC<{ record: Record }> = ({ record }) => {
     const navigate = useNavigate();
@@ -16,8 +17,15 @@ const RecordForm: React.FC<{ record: Record }> = ({ record }) => {
     const recordId = record.recordId;
 
     const { reset } = methods; // useForm hook
+    const [isDialogOpen, setDialogOpen] = useState(false);
+    const [idToDelete, setIdToDelete] = useState<string | null>(null);
 
     const { create, update, updateDetailMutation } = useRecordMutation(); // custom hook
+
+    const handleDelete = (recordId: string) => {
+        setIdToDelete(recordId);
+        setDialogOpen(true);
+    };
 
     useEffect(() => {
         if (!recordId) {
@@ -48,6 +56,11 @@ const RecordForm: React.FC<{ record: Record }> = ({ record }) => {
 
     return (
         <Box>
+            <DeleteConfirm
+                recordToDelete={idToDelete}
+                isDialogOpen={isDialogOpen}
+                setDialogOpen={setDialogOpen}
+            />
             <FormProvider {...methods}>
                 <form
                     onSubmit={methods.handleSubmit(onSubmit)}
@@ -72,6 +85,15 @@ const RecordForm: React.FC<{ record: Record }> = ({ record }) => {
                             >
                                 {recordId ? "수정" : "저장"}
                             </Button>
+                            {recordId ? (
+                                <Button
+                                    borderRadius="30px"
+                                    w="100px"
+                                    onClick={() => handleDelete(recordId)}
+                                >
+                                    삭제
+                                </Button>
+                            ) : null}
                         </HStack>
                     </Stack>
                 </form>
