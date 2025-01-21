@@ -21,6 +21,7 @@ export default defineConfig(({ mode }) => {
         ],
         build: {
             emptyOutDir: false,
+            target: "esnext",
         },
         server: {
             // 개발 서버 설정

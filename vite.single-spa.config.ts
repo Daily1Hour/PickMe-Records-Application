@@ -38,6 +38,7 @@ export default defineConfig(({ mode }) => {
         build: {
             cssCodeSplit: false, // css 코드 분할 여부
             emptyOutDir: false, // 빌드시 기존 파일 삭제 여부
+            target: "esnext", // 빌드 대상
         },
     };
 });
