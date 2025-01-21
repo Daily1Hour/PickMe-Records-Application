@@ -9,7 +9,7 @@ import { Record } from "@/entities/records/model/Record";
 
 const RecordDetails = () => {
     const { id } = useParams<{ id: string | undefined }>();
-    const { data } = useQuery<Record>({
+    const { data:record } = useQuery<Record>({
         queryKey: ["record", id],
         queryFn: () => fetchRecordById(id!),
         staleTime: 1000 * 60 * 60,
@@ -18,7 +18,7 @@ const RecordDetails = () => {
     });
 
     return (
-        data && (
+        record && (
             <Box minH="100vh" py={10}>
                 <Flex direction="column" align="center" maxW="800px" mx="auto">
                     <HStack gap={4}>
@@ -26,8 +26,8 @@ const RecordDetails = () => {
                             <PDFUploadForm />
                         </Box>
                         <RecordForm
-                            key={data?.recordId}
-                            recordValues={data}
+                            key={record?.recordId}
+                            record={record}
                         />
                     </HStack>
                 </Flex>

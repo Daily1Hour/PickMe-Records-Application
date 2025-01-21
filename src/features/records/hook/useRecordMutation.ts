@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { createRecord, updateRecord, updateDetail } from "../api/detailsApi";
-import { Detail, Record } from "@/entities/records/model/Record";
+import { Record, Detail } from "@/entities/records/model/";
 
 export function useRecordMutation() {
     const queryclient = useQueryClient();

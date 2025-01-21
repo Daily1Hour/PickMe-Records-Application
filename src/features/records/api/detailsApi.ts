@@ -1,4 +1,4 @@
-import { Detail, Record } from "@/entities/records/model/Record";
+import { Record } from "@/entities/records/model/Record";
 import {
     InterviewRecordResponseDTO,
     RecordDetailCreateDTO,
@@ -7,14 +7,15 @@ import axios from "axios";
 import { dtoToRecord } from "../service/dtoToRecord";
 import { recordToCreateDTO, recordToUpdateDTO } from "../service/reocrdToDto";
 import { detailToDto } from "../service/detailToDto";
+import { Detail } from "@/entities/records/model/Detail";
+import { accessToken } from "@/shared/api/token";
 
 const SERVER_URL = import.meta.env.VITE_SERVER_URL;
-const TOKEN = import.meta.env.VITE_TOKEN;
 
 const client = axios.create({
     baseURL: `${SERVER_URL}/records`,
     headers: {
-        Authorization: `Bearer ${TOKEN}`,
+        Authorization: `Bearer ${accessToken}`,
         "Content-Type": "application/json",
     },
 });

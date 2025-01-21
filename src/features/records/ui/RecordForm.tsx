@@ -5,23 +5,25 @@ import { Stack, Heading, Button, HStack, Box } from "@chakra-ui/react";
 
 import { useRecordMutation } from "../hook/useRecordMutation";
 import { QaForm } from "./QaForm";
-import { LabelForm } from "./LableForm";
+import { LabelForm } from "./LabelForm";
 import { Record } from "@/entities/records/model/Record";
 
-const RecordForm: React.FC<{ recordValues: Record }> = ({ recordValues }) => {
+const RecordForm: React.FC<{ record: Record }> = ({ record }) => {
     const navigate = useNavigate();
     const methods = useForm<Record>({
-        defaultValues: recordValues,
+        defaultValues: record,
     });
-    const recordId = recordValues.recordId;
+    const recordId = record.recordId;
 
     const { reset } = methods; // useForm hook
 
     const { create, update, updateDetailMutation } = useRecordMutation(); // custom hook
 
     useEffect(() => {
-        reset(recordValues);
-    }, [recordValues, reset]);
+        if (!recordId) {
+            reset(Record.empty());
+        }
+    }, [recordId, reset]);
 
     const onSubmit = async (data: Record) => {
         try {
@@ -56,7 +58,7 @@ const RecordForm: React.FC<{ recordValues: Record }> = ({ recordValues }) => {
                         <LabelForm />
                         {recordId && (
                             <QaForm
-                                details={recordValues.details}
+                                details={record.details}
                                 recordId={recordId}
                             />
                         )}

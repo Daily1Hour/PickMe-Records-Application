@@ -5,7 +5,7 @@ import { Box, VStack } from "@chakra-ui/react";
 import { QaField } from "./QaField";
 import { AddDetail } from "./AddDetail";
 import { DeleteDetail } from "./DeleteDetail";
-import { Detail } from "@/entities/records/model/Record";
+import { Detail } from "@/entities/records/model/Detail";
 
 export const QaForm: React.FC<{
     details: Detail[];

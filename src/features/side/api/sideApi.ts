@@ -1,12 +1,13 @@
+import { accessToken } from "@/shared/api/token";
 import axios from "axios";
 
 const SERVER_URL = import.meta.env.VITE_SERVER_URL;
-const TOKEN = import.meta.env.VITE_TOKEN;
+
 
 const client = axios.create({
     baseURL: `${SERVER_URL}/records`,
     headers: {
-      Authorization: `Bearer ${TOKEN}`,
+      Authorization: `Bearer ${accessToken}`,
       "Content-Type": "application/json"
     }});
 
