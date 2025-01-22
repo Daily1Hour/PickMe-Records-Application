@@ -26,8 +26,6 @@ const RecordForm: React.FC<{ record: Record }> = ({ record }) => {
         setDialogOpen(true);
     };
 
-    console.log("RecordForm");
-
     const onSubmit = async (data: Record) => {
         try {
             if (!recordId) {
@@ -64,11 +62,7 @@ const RecordForm: React.FC<{ record: Record }> = ({ record }) => {
                     <Stack>
                         <Heading>내 기록</Heading>
                         <LabelForm />
-                        {recordId && (
-                            <QaForm
-                                recordId={recordId}
-                            />
-                        )}
+                        {recordId && <QaForm recordId={recordId} />}
                         <HStack justifyContent="flex-end">
                             <Button
                                 m="20px"

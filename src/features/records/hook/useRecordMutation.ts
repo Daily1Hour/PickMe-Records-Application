@@ -5,7 +5,7 @@ import { Record, Detail } from "@/entities/records/model/";
 
 export function useRecordMutation() {
     const queryclient = useQueryClient();
-    
+
     const { mutateAsync: create } = useMutation({
         mutationFn: ({ data }: { data: Record }) =>
             createRecord(data),
@@ -22,11 +22,9 @@ export function useRecordMutation() {
             recordId: string;
             updatedata: Record;
         }) => updateRecord(recordId, updatedata),
-        onSuccess: () => {
-            const queryKeys = [["side"], ["record"]]; // 리패치할 쿼리 키들
-            queryKeys.forEach((key) => {
-                queryclient.refetchQueries({ queryKey: key });
-            });
+        onSuccess: (_data, { recordId }) => {
+            queryclient.refetchQueries({ queryKey: ["side"] });
+            queryclient.refetchQueries({ queryKey: ["record", recordId] });
         },
     });
 
