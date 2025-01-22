@@ -16,7 +16,6 @@ const RecordDetails = () => {
         enabled: !!id,
         initialData: id ? undefined : Record.empty(),
     });
-    console.log("RecordDetails");
 
     return (
         record && (

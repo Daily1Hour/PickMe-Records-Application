@@ -17,8 +17,6 @@ export const QaField = ({
         answer: "답변",
     };
 
-    console.log("QaField");
-
     return (
         <Stack spaceY={4}>
             {types.map((type) => (

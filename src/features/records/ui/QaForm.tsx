@@ -13,8 +13,6 @@ export const QaForm: React.FC<{
         name,
     });
 
-    console.log("QaForm");
-
     return (
         <VStack align="stretch">
             {fields.map((field, detailIndex) => (
