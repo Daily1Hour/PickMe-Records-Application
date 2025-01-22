@@ -26,6 +26,8 @@ const RecordForm: React.FC<{ record: Record }> = ({ record }) => {
         setDialogOpen(true);
     };
 
+    console.log("RecordForm");
+
     const onSubmit = async (data: Record) => {
         try {
             if (!recordId) {
@@ -64,7 +66,6 @@ const RecordForm: React.FC<{ record: Record }> = ({ record }) => {
                         <LabelForm />
                         {recordId && (
                             <QaForm
-                                details={record.details}
                                 recordId={recordId}
                             />
                         )}

@@ -16,6 +16,7 @@ const RecordDetails = () => {
         enabled: !!id,
         initialData: id ? undefined : Record.empty(),
     });
+    console.log("RecordDetails");
 
     return (
         record && (
@@ -26,7 +27,7 @@ const RecordDetails = () => {
                             <PDFUploadForm />
                         </Box>
                         <RecordForm
-                            key={record?.recordId}
+                            key={record.updatedAt}
                             record={record}
                         />
                     </HStack>
