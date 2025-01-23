@@ -5,22 +5,26 @@ import { Button, Text, HStack, Box } from "@chakra-ui/react";
 import { usePagination } from "./hook/usePagenation";
 import { fetchSidebarData } from "./api/sideApi";
 import { PopoverLayout, Item } from "./ui";
+import { Summary } from "@/entities/records/model/Summary";
 
 const Sidebar = () => {
-    const { data, isError, error } = useQuery({
+    const {
+        data: side,
+        isError,
+        error,
+    } = useQuery<Summary[]>({
         queryKey: ["side"],
         queryFn: fetchSidebarData,
         refetchOnWindowFocus: false,
     });
 
-    const formattedMenuItems = data?.map((item) => ({
+    const formattedMenuItems = side?.map((item) => ({
         id: item.interviewRecordId,
         label: `${item.enterpriseName} | ${item.category}`,
     }));
 
     const { paginatedItems, handlePageChange, currentPage, totalPages } =
         usePagination<{ id: string; label: string }>(formattedMenuItems || []);
-
 
     return (
         <PopoverLayout>
