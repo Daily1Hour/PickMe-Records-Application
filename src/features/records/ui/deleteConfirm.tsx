@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { Toaster, toaster } from "@/shared/chakra-ui/toaster";
 import { useRecordMutation } from "../hook/useRecordMutation";
-import { useNavigate } from "react-router-dom";
+import router from "@/app/router";
 
 export const DeleteConfirm = ({
     recordToDelete,
@@ -21,7 +21,6 @@ export const DeleteConfirm = ({
     setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
     const { deleteMutation } = useRecordMutation();
-    const navigate = useNavigate();
 
     const handleDeleteConfirmation = async () => {
         if (!recordToDelete) return;
@@ -31,7 +30,7 @@ export const DeleteConfirm = ({
             setDialogOpen(false);
             toaster.create({ title: "삭제했습니다.", type: "success" });
             setTimeout(() => {
-                navigate("/");
+                router.navigate("/");
             }, 1000);
         } catch (err) {
             toaster.create({ title: "실패했습니다.", type: "error" });

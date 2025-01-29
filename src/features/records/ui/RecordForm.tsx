@@ -1,6 +1,6 @@
-import { useState } from "react";
+import React, { useState } from "react";
+import router from "@/app/router";
 import { useForm, FormProvider } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 import { Stack, Heading, Button, HStack, Box } from "@chakra-ui/react";
 
 import { useRecordMutation } from "../hook/useRecordMutation";
@@ -10,7 +10,6 @@ import { Record } from "@/entities/records/model/Record";
 import { DeleteConfirm } from "./deleteConfirm";
 
 const RecordForm: React.FC<{ record: Record }> = ({ record }) => {
-    const navigate = useNavigate();
     const methods = useForm<Record>({
         defaultValues: record.recordId ? record : Record.empty(),
     });
@@ -31,7 +30,7 @@ const RecordForm: React.FC<{ record: Record }> = ({ record }) => {
             if (!recordId) {
                 // recordId가 null일 때 새로운 레코드 생성
                 const newRecord = await create({ data });
-                navigate(`/${newRecord.interviewRecordId}`);
+                router.navigate(`/${newRecord.interviewRecordId}`);
                 alert("저장했습니다.");
             } else {
                 // 기존 레코드 수정
@@ -90,4 +89,4 @@ const RecordForm: React.FC<{ record: Record }> = ({ record }) => {
     );
 };
 
-export default RecordForm;
+export default React.memo(RecordForm);

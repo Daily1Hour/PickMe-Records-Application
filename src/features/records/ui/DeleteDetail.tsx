@@ -1,9 +1,8 @@
-import React from "react";
 import { HStack, IconButton } from "@chakra-ui/react";
 import { GrClose } from "react-icons/gr";
 import { useQaMutation } from "../hook/useQaMutation";
 
-export const DeleteDetail = React.memo( ({
+export const DeleteDetail = ({
     recordId,
     detailIndex,
 }: {
@@ -36,4 +35,4 @@ export const DeleteDetail = React.memo( ({
             </IconButton>
         </HStack>
     );
-});
+};
