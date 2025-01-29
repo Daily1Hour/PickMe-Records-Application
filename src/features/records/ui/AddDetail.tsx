@@ -1,10 +1,11 @@
+import React from "react";
 import { GrFormAdd } from "react-icons/gr";
 import { UseFieldArrayAppend, FieldValues } from "react-hook-form";
 import { IconButton } from "@chakra-ui/react";
 
 import { useQaMutation } from "../hook/useQaMutation";
 
-export const AddDetail = ({recordId, append}:{recordId:string, append:UseFieldArrayAppend<FieldValues, string>}) => {
+export const AddDetail = React.memo(({recordId, append}:{recordId:string, append:UseFieldArrayAppend<FieldValues, string>}) => {
 
     const { createDetailMutation } = useQaMutation();
     const handleAddDetail = async () => {
@@ -26,4 +27,4 @@ export const AddDetail = ({recordId, append}:{recordId:string, append:UseFieldAr
             <GrFormAdd />
         </IconButton>
     );
-};
+});

@@ -83,4 +83,4 @@ const PDFUploadForm: React.FC = () => {
     );
 };
 
-export default PDFUploadForm;
+export default React.memo(PDFUploadForm);
