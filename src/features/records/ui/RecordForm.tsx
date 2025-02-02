@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import router from "@/app/router";
 import { useForm, FormProvider } from "react-hook-form";
 import { Stack, Heading, Button, HStack, Box } from "@chakra-ui/react";
 
+import { navigateTo } from "@/shared/api/router";
 import { useRecordMutation } from "../hook/useRecordMutation";
 import { QaForm } from "./QaForm";
 import { LabelForm } from "./LabelForm";
 import { Record } from "@/entities/records/model/Record";
-import { DeleteConfirm } from "./deleteConfirm";
+import { DeleteConfirm } from "./DeleteConfirm";
 
 const RecordForm: React.FC<{ record: Record }> = ({ record }) => {
     const methods = useForm<Record>({
@@ -30,7 +30,7 @@ const RecordForm: React.FC<{ record: Record }> = ({ record }) => {
             if (!recordId) {
                 // recordId가 null일 때 새로운 레코드 생성
                 const newRecord = await create({ data });
-                router.navigate(`/${newRecord.interviewRecordId}`);
+                navigateTo(`/${newRecord.interviewRecordId}`);
                 alert("저장했습니다.");
             } else {
                 // 기존 레코드 수정
