@@ -3,9 +3,10 @@ import { create } from "zustand"
 
 type RecordStore = {
     record: Record
+    setRecord: (record: Record) => void;
 }
 
 export const useRecordStore = create<RecordStore>((set) => ({
     record: Record.empty(),
-    setRecord: (record: Record) => set({ record })
+    setRecord: (record) => set({ record })
 }))

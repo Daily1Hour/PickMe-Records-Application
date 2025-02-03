@@ -5,9 +5,7 @@ import { QaField } from "./QaField";
 import { AddDetail } from "./AddDetail";
 import { DeleteDetail } from "./DeleteDetail";
 
-export const QaForm: React.FC<{
-    recordId: string;
-}> = ({ recordId }) => {
+export const QaForm = () => {
     const name = "details";
     const { fields, append } = useFieldArray({
         name,
@@ -24,13 +22,10 @@ export const QaForm: React.FC<{
                     borderRadius="md"
                 >
                     <QaField name={name} detailIndex={detailIndex} />
-                    <DeleteDetail
-                        recordId={recordId}
-                        detailIndex={detailIndex}
-                    />
+                    <DeleteDetail detailIndex={detailIndex} />
                 </Box>
             ))}
-            <AddDetail recordId={recordId} append={append} />
+            <AddDetail append={append} />
         </VStack>
     );
 };

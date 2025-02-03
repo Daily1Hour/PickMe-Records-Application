@@ -1,15 +1,11 @@
 import { HStack, IconButton } from "@chakra-ui/react";
 import { GrClose } from "react-icons/gr";
 import { useQaMutation } from "../hook/useQaMutation";
+import { useRecordStore } from "../store/recodStore";
 
-export const DeleteDetail = ({
-    recordId,
-    detailIndex,
-}: {
-    recordId: string;
-    detailIndex: number;
-}) => {
+export const DeleteDetail = ({ detailIndex }: { detailIndex: number }) => {
     const { deleteDetailMutation } = useQaMutation();
+    const recordId = useRecordStore((state) => state.record.recordId);
 
     const handleDeleteDetail = async (detailIndex: number) => {
         try {
