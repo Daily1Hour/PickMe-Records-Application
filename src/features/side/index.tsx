@@ -9,7 +9,7 @@ import { Summary } from "@/entities/records/model/Summary";
 
 const Sidebar = () => {
     const {
-        data: side,
+        data: summary,
         isError,
         error,
     } = useQuery<Summary[]>({
@@ -18,7 +18,7 @@ const Sidebar = () => {
         refetchOnWindowFocus: false,
     });
 
-    const formattedMenuItems = side?.map((item) => ({
+    const formattedMenuItems = summary?.map((item) => ({
         id: item.interviewRecordId,
         label: `${item.enterpriseName} | ${item.category}`,
     }));
