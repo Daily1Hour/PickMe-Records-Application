@@ -4,7 +4,7 @@ import { Button, Text, HStack, Box } from "@chakra-ui/react";
 
 import { usePagination } from "./hook/usePagenation";
 import { fetchSidebarData } from "./api/sideApi";
-import { PopoverLayout, Item } from "./ui";
+import { Item, DrawerLayout } from "./ui";
 import { Summary } from "@/entities/records/model/Summary";
 
 const Sidebar = () => {
@@ -27,7 +27,7 @@ const Sidebar = () => {
         usePagination<{ id: string; label: string }>(formattedMenuItems || []);
 
     return (
-        <PopoverLayout>
+        <DrawerLayout>
             <Box minHeight="400px">
                 {paginatedItems.map((item) => (
                     <Item item={item} key={item.id} />
@@ -55,7 +55,7 @@ const Sidebar = () => {
                     <GrFormNext color="black" />
                 </Button>
             </HStack>
-        </PopoverLayout>
+        </DrawerLayout>
     );
 };
 
