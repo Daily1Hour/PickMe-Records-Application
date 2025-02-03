@@ -15,7 +15,6 @@ export const AddDetail = ({
     const handleAddDetail = async () => {
         try {
             const newDetail = { question: "", answer: "" };
-
             const response = await createDetailMutation({
                 interviewRecordId: record.recordId,
                 data: newDetail,
