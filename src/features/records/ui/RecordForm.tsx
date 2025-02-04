@@ -1,25 +1,26 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 import { Stack, Heading, Button, HStack, Box } from "@chakra-ui/react";
 
+import { navigateTo } from "@/shared/api/router";
 import { useRecordMutation } from "../hook/useRecordMutation";
 import { QaForm } from "./QaForm";
 import { LabelForm } from "./LabelForm";
 import { Record } from "@/entities/records/model/Record";
-import { DeleteConfirm } from "./deleteConfirm";
+import { DeleteConfirm } from "./DeleteConfirm";
+import { useRecordStore } from "../store/recodStore";
 
-const RecordForm: React.FC<{ record: Record }> = ({ record }) => {
-    const navigate = useNavigate();
+const RecordForm = () => {
+    const { record, setRecord } = useRecordStore();
+
     const methods = useForm<Record>({
-        defaultValues: record.recordId ? record : Record.empty(),
+        defaultValues: record || Record.empty(),
     });
     const recordId = record.recordId;
-
     const [isDialogOpen, setDialogOpen] = useState(false);
     const [idToDelete, setIdToDelete] = useState<string | null>(null);
 
-    const { create, update, updateDetailMutation } = useRecordMutation(); // custom hook
+    const { create, update, updateDetailMutation } = useRecordMutation();
 
     const handleDelete = (recordId: string) => {
         setIdToDelete(recordId);
@@ -29,16 +30,15 @@ const RecordForm: React.FC<{ record: Record }> = ({ record }) => {
     const onSubmit = async (data: Record) => {
         try {
             if (!recordId) {
-                // recordId가 null일 때 새로운 레코드 생성
                 const newRecord = await create({ data });
-                navigate(`/${newRecord.interviewRecordId}`);
+                navigateTo(`/${newRecord.interviewRecordId}`);
                 alert("저장했습니다.");
             } else {
-                // 기존 레코드 수정
                 update({ recordId, updatedata: data });
                 data.details.forEach((detail, index) => {
                     updateDetailMutation({ recordId, index, detail });
                 });
+                setRecord(data);
                 alert("수정했습니다.");
             }
         } catch (error) {
@@ -62,7 +62,7 @@ const RecordForm: React.FC<{ record: Record }> = ({ record }) => {
                     <Stack>
                         <Heading>내 기록</Heading>
                         <LabelForm />
-                        {recordId && <QaForm recordId={recordId} />}
+                        {recordId && <QaForm />}
                         <HStack justifyContent="flex-end">
                             <Button
                                 m="20px"
@@ -90,4 +90,4 @@ const RecordForm: React.FC<{ record: Record }> = ({ record }) => {
     );
 };
 
-export default RecordForm;
+export default React.memo(RecordForm);

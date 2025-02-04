@@ -1,7 +1,8 @@
+import React from "react";
 import { Editable, IconButton } from "@chakra-ui/react";
 import { LuCheck, LuPencilLine, LuX } from "react-icons/lu";
 
-const EditableControl: React.FC = () =>{
+const EditableControl: React.FC = () => {
     return (
         <Editable.Control>
             <Editable.EditTrigger asChild>
@@ -23,4 +24,4 @@ const EditableControl: React.FC = () =>{
     );
 };
 
-export default EditableControl;
+export default React.memo(EditableControl);

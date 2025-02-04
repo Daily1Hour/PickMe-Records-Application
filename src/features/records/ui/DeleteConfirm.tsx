@@ -8,8 +8,9 @@ import {
     DialogCloseTrigger,
 } from "@chakra-ui/react";
 import { Toaster, toaster } from "@/shared/chakra-ui/toaster";
+
+import { navigateTo } from "@/shared/api/router";
 import { useRecordMutation } from "../hook/useRecordMutation";
-import { useNavigate } from "react-router-dom";
 
 export const DeleteConfirm = ({
     recordToDelete,
@@ -21,7 +22,6 @@ export const DeleteConfirm = ({
     setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
     const { deleteMutation } = useRecordMutation();
-    const navigate = useNavigate();
 
     const handleDeleteConfirmation = async () => {
         if (!recordToDelete) return;
@@ -31,8 +31,9 @@ export const DeleteConfirm = ({
             setDialogOpen(false);
             toaster.create({ title: "삭제했습니다.", type: "success" });
             setTimeout(() => {
-                navigate("/");
+                navigateTo("/");
             }, 1000);
+            // eslint-disable-next-line @typescript-eslint/no-unused-vars
         } catch (err) {
             toaster.create({ title: "실패했습니다.", type: "error" });
         }

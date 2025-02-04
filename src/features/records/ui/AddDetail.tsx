@@ -3,9 +3,14 @@ import { UseFieldArrayAppend, FieldValues } from "react-hook-form";
 import { IconButton } from "@chakra-ui/react";
 
 import { useQaMutation } from "../hook/useQaMutation";
+import { useRecordStore } from "../store/recodStore";
 
-export const AddDetail = ({recordId, append}:{recordId:string, append:UseFieldArrayAppend<FieldValues, string>}) => {
-
+export const AddDetail = ({
+    append,
+}: {
+    append: UseFieldArrayAppend<FieldValues, string>;
+}) => {
+    const recordId = useRecordStore((state) => state.record.recordId);
     const { createDetailMutation } = useQaMutation();
     const handleAddDetail = async () => {
         try {

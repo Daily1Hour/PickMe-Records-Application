@@ -1,5 +1,7 @@
+import { Summary } from "@/entities/records/model/Summary";
 import { accessToken } from "@/shared/api/token";
 import axios from "axios";
+import { dtoToSide } from "../service/dtoToSide";
 
 const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 
@@ -11,7 +13,8 @@ const client = axios.create({
         "Content-Type": "application/json"
     }
 });
-export const fetchSidebarData = async (): Promise<{ interviewRecordId: string; enterpriseName: string; category: string }[]> => {
+
+export const fetchSidebarData = async (): Promise<Summary[]> => {
     const response = await client.get('/sidebar');
-    return response.data;
+    return dtoToSide(response.data);
 };
