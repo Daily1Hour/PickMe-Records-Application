@@ -51,6 +51,11 @@ export const deleteDetail = async (
     return response.data;
 };
 
+export const deleteRecord = async ( interviewRecordId: string ) => {
+    const response = await client.delete(`/interview/${interviewRecordId}`);
+    return response.data;
+}
+
 export const createRecord = async (
     data: Record,
 ): Promise<{ interviewRecordId: string }> => {

@@ -14,6 +14,7 @@ export const LabelForm = () => {
         <Stack gap="10">
             {types.map((type) => (
                 <Controller
+                    key={type}
                     name={type}
                     control={control}
                     render={({ field }) => (

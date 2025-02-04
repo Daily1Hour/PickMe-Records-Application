@@ -1,4 +1,3 @@
-import { useState } from "react";
 import {
     DialogRoot,
     DialogContent,
@@ -8,8 +7,9 @@ import {
     Text,
     DialogCloseTrigger,
 } from "@chakra-ui/react";
-
-import { deleteRecord } from "../api/sideApi";
+import { Toaster, toaster } from "@/shared/chakra-ui/toaster";
+import { useRecordMutation } from "../hook/useRecordMutation";
+import { useNavigate } from "react-router-dom";
 
 export const DeleteConfirm = ({
     recordToDelete,
@@ -20,24 +20,21 @@ export const DeleteConfirm = ({
     isDialogOpen: boolean;
     setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }) => {
-    const [loading, setLoading] = useState(false);
-    const [error, setError] = useState<string | null>(null);
+    const { deleteMutation } = useRecordMutation();
+    const navigate = useNavigate();
 
     const handleDeleteConfirmation = async () => {
         if (!recordToDelete) return;
 
-        setLoading(true);
-        setError(null);
-
         try {
-            await deleteRecord(recordToDelete);
-            alert("삭제했습니다.");
+            deleteMutation({ recordId: recordToDelete });
             setDialogOpen(false);
+            toaster.create({ title: "삭제했습니다.", type: "success" });
+            setTimeout(() => {
+                navigate("/");
+            }, 1000);
         } catch (err) {
-            setError("Failed to delete the record.");
-            console.error(err);
-        } finally {
-            setLoading(false);
+            toaster.create({ title: "실패했습니다.", type: "error" });
         }
     };
 
@@ -46,6 +43,7 @@ export const DeleteConfirm = ({
             open={isDialogOpen}
             onOpenChange={(e) => setDialogOpen(e.open)}
         >
+            <Toaster />
             <DialogContent padding={4} position="fixed" left="500px">
                 <Text>정말 삭제하시겠습니까?</Text>
                 <DialogFooter>

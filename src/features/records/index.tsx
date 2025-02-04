@@ -26,7 +26,7 @@ const RecordDetails = () => {
                             <PDFUploadForm />
                         </Box>
                         <RecordForm
-                            key={record?.recordId}
+                            key={record.updatedAt}
                             record={record}
                         />
                     </HStack>
