@@ -10,13 +10,14 @@ export const AddDetail = ({
 }: {
     append: UseFieldArrayAppend<FieldValues, string>;
 }) => {
-    const { record } = useRecordStore();
+    const recordId = useRecordStore((state) => state.record.recordId);
     const { createDetailMutation } = useQaMutation();
     const handleAddDetail = async () => {
         try {
             const newDetail = { question: "", answer: "" };
+
             const response = await createDetailMutation({
-                interviewRecordId: record.recordId,
+                interviewRecordId: recordId,
                 data: newDetail,
             });
 
