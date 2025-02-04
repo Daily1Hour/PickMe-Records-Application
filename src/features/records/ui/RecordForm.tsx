@@ -1,18 +1,18 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
 import { Stack, Heading, Button, HStack, Box } from "@chakra-ui/react";
 
+import { navigateTo } from "@/shared/api/router";
 import { useRecordMutation } from "../hook/useRecordMutation";
 import { QaForm } from "./QaForm";
 import { LabelForm } from "./LabelForm";
 import { Record } from "@/entities/records/model/Record";
-import { DeleteConfirm } from "./deleteConfirm";
+import { DeleteConfirm } from "./DeleteConfirm";
 import { useRecordStore } from "../store/recodStore";
 
 const RecordForm = () => {
-    const navigate = useNavigate();
     const { record, setRecord } = useRecordStore();
+
     const methods = useForm<Record>({
         defaultValues: record || Record.empty(),
     });
@@ -31,7 +31,7 @@ const RecordForm = () => {
         try {
             if (!recordId) {
                 const newRecord = await create({ data });
-                navigate(`/${newRecord.interviewRecordId}`);
+                navigateTo(`/${newRecord.interviewRecordId}`);
                 alert("저장했습니다.");
             } else {
                 update({ recordId, updatedata: data });
@@ -90,4 +90,4 @@ const RecordForm = () => {
     );
 };
 
-export default RecordForm;
+export default React.memo(RecordForm);
