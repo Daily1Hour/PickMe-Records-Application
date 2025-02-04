@@ -1,21 +1,31 @@
 import { Box, Flex, HStack } from "@chakra-ui/react";
 import { useQuery } from "@tanstack/react-query";
 import { useParams } from "react-router-dom";
+import { useEffect } from "react";
 
 import PDFUploadForm from "./ui/PDFUploadForm";
 import RecordForm from "./ui/RecordForm";
 import { fetchRecordById } from "./api/detailsApi";
 import { Record } from "@/entities/records/model/Record";
+import { useRecordStore } from "./store/recodStore";
 
 const RecordDetails = () => {
+    const { record, setRecord } = useRecordStore();
     const { id } = useParams<{ id: string | undefined }>();
-    const { data:record } = useQuery<Record>({
+
+    const { data: fetchedRecord } = useQuery<Record>({
         queryKey: ["record", id],
         queryFn: () => fetchRecordById(id!),
         staleTime: 1000 * 60 * 60,
         enabled: !!id,
         initialData: id ? undefined : Record.empty(),
     });
+
+    useEffect(() => {
+        if (fetchedRecord) {
+            setRecord(fetchedRecord);
+        }
+    }, [fetchedRecord, setRecord]);
 
     return (
         record && (
@@ -25,10 +35,7 @@ const RecordDetails = () => {
                         <Box w="600px">
                             <PDFUploadForm />
                         </Box>
-                        <RecordForm
-                            key={record.updatedAt}
-                            record={record}
-                        />
+                        <RecordForm key={record.updatedAt} />
                     </HStack>
                 </Flex>
             </Box>

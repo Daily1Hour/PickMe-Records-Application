@@ -1,3 +1,2 @@
-export {Item} from './Item';
-export {PopoverLayout} from './PopoverLayout';
-export {DeleteConfirm} from '../../records/ui/deleteConfirm';
+export { Item } from './Item';
+export { DrawerLayout } from './DrawerLayout';

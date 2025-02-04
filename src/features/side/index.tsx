@@ -4,16 +4,21 @@ import { Button, Text, HStack, Box } from "@chakra-ui/react";
 
 import { usePagination } from "./hook/usePagenation";
 import { fetchSidebarData } from "./api/sideApi";
-import { PopoverLayout, Item } from "./ui";
+import { Item, DrawerLayout } from "./ui";
+import { Summary } from "@/entities/records/model/Summary";
 
 const Sidebar = () => {
-    const { data, isError, error } = useQuery({
+    const {
+        data: summary,
+        isError,
+        error,
+    } = useQuery<Summary[]>({
         queryKey: ["side"],
         queryFn: fetchSidebarData,
         refetchOnWindowFocus: false,
     });
 
-    const formattedMenuItems = data?.map((item) => ({
+    const formattedMenuItems = summary?.map((item) => ({
         id: item.interviewRecordId,
         label: `${item.enterpriseName} | ${item.category}`,
     }));
@@ -21,16 +26,15 @@ const Sidebar = () => {
     const { paginatedItems, handlePageChange, currentPage, totalPages } =
         usePagination<{ id: string; label: string }>(formattedMenuItems || []);
 
-
     return (
-        <PopoverLayout>
+        <DrawerLayout>
             <Box minHeight="400px">
                 {paginatedItems.map((item) => (
                     <Item item={item} key={item.id} />
                 ))}
                 {isError && <Text color="red.500">{error.message}</Text>}
             </Box>
-            <HStack mt={4} justify="space-between">
+            <HStack mt={2} justify="space-between">
                 <Button
                     size="sm"
                     bg="none"
@@ -51,7 +55,7 @@ const Sidebar = () => {
                     <GrFormNext color="black" />
                 </Button>
             </HStack>
-        </PopoverLayout>
+        </DrawerLayout>
     );
 };
 
