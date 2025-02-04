@@ -34,7 +34,7 @@ const Sidebar = () => {
                 ))}
                 {isError && <Text color="red.500">{error.message}</Text>}
             </Box>
-            <HStack mt={4} justify="space-between">
+            <HStack mt={2} justify="space-between">
                 <Button
                     size="sm"
                     bg="none"

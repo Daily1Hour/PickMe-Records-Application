@@ -22,24 +22,23 @@ export const DrawerLayout = ({ children }: { children: ReactNode }) => {
                     <RxHamburgerMenu />
                 </Button>
             </DrawerTrigger>
-            <DrawerContent position="fixed" mt="10">
+            <DrawerContent position="fixed" minHeight="100vh">
                 <DrawerHeader>
                     <Flex justify="space-between" align="center">
+                        <DrawerCloseTrigger>
+                            <Button bg="none" color="gray">
+                                <RxHamburgerMenu />
+                            </Button>
+                        </DrawerCloseTrigger>
                         <Text>목록</Text>
                         <NavLink to={`/`}>
-                            <Button
-                                bg="none"
-                                color="gray"
-                                _hover={{ bg: "gray.100" }}
-                                title="작성하기"
-                            >
+                            <Button bg="none" color="gray" title="작성하기">
                                 <GrFormAdd />
                             </Button>
                         </NavLink>
                     </Flex>
                 </DrawerHeader>
                 <DrawerBody>{children}</DrawerBody>
-                <DrawerCloseTrigger />
             </DrawerContent>
         </DrawerRoot>
     );

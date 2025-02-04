@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { Box, VStack, Input, Text, Button, HStack } from "@chakra-ui/react";
 import { FaRegFilePdf } from "react-icons/fa6";
-import { SlTrash } from "react-icons/sl";
 
 import { Field } from "@/shared/chakra-ui/Field";
+import { GrFormTrash } from "react-icons/gr";
 
 const PDFUploadForm: React.FC = () => {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
@@ -37,6 +37,8 @@ const PDFUploadForm: React.FC = () => {
             position="fixed"
             alignContent="center"
             top="50px"
+            borderWidth="1px"
+            borderRadius="md"
         >
             <VStack align="stretch">
                 <Field label="이력서를 업로드해주세요.">
@@ -49,25 +51,20 @@ const PDFUploadForm: React.FC = () => {
                 {selectedFile && (
                     <HStack justify="space-between" width="100%">
                         <Text>
-                            <FaRegFilePdf />{" "}
+                            <FaRegFilePdf />
                             <strong>{selectedFile.name}</strong>
                         </Text>
                         <Button
-                            colorScheme="red"
-                            size="sm"
+                            bg="none"
+                            color="gray"
                             onClick={handleFileDelete}
                         >
-                            <SlTrash />
+                            <GrFormTrash />
                         </Button>
                     </HStack>
                 )}
                 {pdfURL && (
-                    <Box
-                        mt={4}
-                        borderWidth="1px"
-                        borderRadius="md"
-                        overflow="hidden"
-                    >
+                    <Box mt={4} overflow="hidden">
                         <iframe
                             src={pdfURL}
                             width="100%"
