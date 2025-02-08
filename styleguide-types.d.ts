@@ -13,3 +13,13 @@ declare module "@styleguide/Button" {
     const Button: React.FC<ButtonProps>;
     export default Button;
 }
+
+declare module "@styleguide/List" {
+    type props = {
+        children: React.ReactNode;
+        bordered?: boolean;
+        separator?: boolean;
+    };
+    const List: React.FC<props>;
+    export default List;
+}
