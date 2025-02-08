@@ -1,7 +1,7 @@
 import { RouterProvider } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ChakraProvider } from "@chakra-ui/react";
-import chakraUiSystem from "@styleguide/chakra-ui-system";
+import { chakraUiSystem } from "@styleguide/react";
 
 import router from "./router";
 

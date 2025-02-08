@@ -1,6 +1,6 @@
 import { useFieldArray } from "react-hook-form";
 import { Box } from "@chakra-ui/react";
-import List from "@styleguide/List";
+import { List } from "@styleguide/react";
 
 import { QaField } from "./QaField";
 import { AddDetail } from "./AddDetail";

@@ -1,25 +1,25 @@
-declare module "@styleguide/GlobalStyles" {
+declare module "@styleguide/global" {
     export {};
 }
 
-declare module "@styleguide/chakra-ui-system" {
-    import { SystemContext } from "@chakra-ui/react";
+declare module "@styleguide/react" {
+    import {
+        SystemContext,
+        ButtonProps,
+        IconButtonProps,
+    } from "@chakra-ui/react";
+
     const chakraUiSystem: SystemContext;
-    export default chakraUiSystem;
-}
 
-declare module "@styleguide/Button" {
-    import { ButtonProps } from "@chakra-ui/react";
     const Button: React.FC<ButtonProps>;
-    export default Button;
-}
 
-declare module "@styleguide/List" {
-    type props = {
+    const IconButton: React.FC<IconButtonProps>;
+
+    const List: React.FC<{
         children: React.ReactNode;
         bordered?: boolean;
         separator?: boolean;
-    };
-    const List: React.FC<props>;
-    export default List;
+    }>;
+
+    export { chakraUiSystem, Button, IconButton, List };
 }
