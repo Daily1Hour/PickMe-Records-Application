@@ -1,7 +1,7 @@
 import { MdAdd } from "react-icons/md";
 import { NavLink } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { Flex, Text } from "@chakra-ui/react";
+import { Text } from "@chakra-ui/react";
 import {
     DrawerLayout,
     DrawerHeader,
@@ -9,12 +9,13 @@ import {
     DrawerFooter,
     PaginateController,
     IconButton,
+    List,
+    Item,
 } from "@styleguide/react";
 
 import { Summary } from "@/entities/records/model/Summary";
 import { usePagination } from "./hook/usePagination";
 import { fetchSidebarData } from "./api/sideApi";
-import { Item } from "./ui";
 
 const Sidebar = () => {
     const {
@@ -33,7 +34,10 @@ const Sidebar = () => {
     }));
 
     const { paginatedItems, handlePageChange, currentPage, totalPages } =
-        usePagination<{ id: string; label: string }>(formattedMenuItems || []);
+        usePagination<{
+            id: string;
+            label: string;
+        }>(formattedMenuItems || []);
 
     return (
         <DrawerLayout>
@@ -44,18 +48,24 @@ const Sidebar = () => {
             </DrawerHeader>
 
             <DrawerBody>
-                <Flex w="100%" justify="center">
-                    <NavLink to={`/`}>
-                        <IconButton size="xs" title="작성하기">
-                            <MdAdd />
-                        </IconButton>
-                    </NavLink>
-                </Flex>
+                <List>
+                    <Item justify="center">
+                        <NavLink to={`/`}>
+                            <IconButton size="xs" title="작성하기">
+                                <MdAdd />
+                            </IconButton>
+                        </NavLink>
+                    </Item>
 
-                {paginatedItems.map((item) => (
-                    <Item item={item} key={item.id} />
-                ))}
-                {isError && <Text color="red.500">{error.message}</Text>}
+                    {paginatedItems.map((item) => (
+                        <Item key={item.id}>
+                            <NavLink to={`/${item.id}`}>
+                                <Text m={3}>{item.label}</Text>
+                            </NavLink>
+                        </Item>
+                    ))}
+                    {isError && <Text color="red.500">{error.message}</Text>}
+                </List>
             </DrawerBody>
 
             <DrawerFooter>
