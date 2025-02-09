@@ -1,11 +1,14 @@
+import { MdAdd } from "react-icons/md";
+import { NavLink } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { Text } from "@chakra-ui/react";
+import { Flex, Text } from "@chakra-ui/react";
 import {
     DrawerLayout,
     DrawerHeader,
     DrawerBody,
     DrawerFooter,
     PaginateController,
+    IconButton,
 } from "@styleguide/react";
 
 import { Summary } from "@/entities/records/model/Summary";
@@ -41,6 +44,14 @@ const Sidebar = () => {
             </DrawerHeader>
 
             <DrawerBody>
+                <Flex w="100%" justify="center">
+                    <NavLink to={`/`}>
+                        <IconButton size="xs" title="작성하기">
+                            <MdAdd />
+                        </IconButton>
+                    </NavLink>
+                </Flex>
+
                 {paginatedItems.map((item) => (
                     <Item item={item} key={item.id} />
                 ))}
