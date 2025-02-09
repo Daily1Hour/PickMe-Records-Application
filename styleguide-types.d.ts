@@ -26,6 +26,14 @@ declare module "@styleguide/react" {
     const DrawerBody: React.FC<{ children: React.ReactNode }>;
     const DrawerFooter: React.FC<{ children: React.ReactNode }>;
 
+    const PaginateController: React.FC<{
+        handlePageChange: (
+            direction: "next" | "prev" | "first" | "last",
+        ) => void;
+        currentPage: number;
+        totalPages: number;
+    }>;
+
     export {
         chakraUiSystem,
         Button,
@@ -35,5 +43,6 @@ declare module "@styleguide/react" {
         DrawerHeader,
         DrawerBody,
         DrawerFooter,
+        PaginateController,
     };
 }

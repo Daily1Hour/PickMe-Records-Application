@@ -1,10 +1,15 @@
-import { GrFormPrevious, GrFormNext } from "react-icons/gr";
 import { useQuery } from "@tanstack/react-query";
-import { Button, Text, HStack, Box } from "@chakra-ui/react";
-import { DrawerLayout, DrawerHeader, DrawerBody } from "@styleguide/react";
+import { Text } from "@chakra-ui/react";
+import {
+    DrawerLayout,
+    DrawerHeader,
+    DrawerBody,
+    DrawerFooter,
+    PaginateController,
+} from "@styleguide/react";
 
 import { Summary } from "@/entities/records/model/Summary";
-import { usePagination } from "./hook/usePagenation";
+import { usePagination } from "./hook/usePagination";
 import { fetchSidebarData } from "./api/sideApi";
 import { Item } from "./ui";
 
@@ -36,34 +41,17 @@ const Sidebar = () => {
             </DrawerHeader>
 
             <DrawerBody>
-                <Box minHeight="400px">
-                    {paginatedItems.map((item) => (
-                        <Item item={item} key={item.id} />
-                    ))}
-                    {isError && <Text color="red.500">{error.message}</Text>}
-                </Box>
-                <HStack mt={2} justify="space-between">
-                    <Button
-                        size="sm"
-                        bg="none"
-                        onClick={() => handlePageChange("prev")}
-                        disabled={currentPage === 0}
-                    >
-                        <GrFormPrevious color="black" />
-                    </Button>
-                    <Text>
-                        {currentPage + 1} / {totalPages}
-                    </Text>
-                    <Button
-                        size="sm"
-                        bg="none"
-                        onClick={() => handlePageChange("next")}
-                        disabled={currentPage === totalPages - 1}
-                    >
-                        <GrFormNext color="black" />
-                    </Button>
-                </HStack>
+                {paginatedItems.map((item) => (
+                    <Item item={item} key={item.id} />
+                ))}
+                {isError && <Text color="red.500">{error.message}</Text>}
             </DrawerBody>
+
+            <DrawerFooter>
+                <PaginateController
+                    {...{ handlePageChange, currentPage, totalPages }}
+                />
+            </DrawerFooter>
         </DrawerLayout>
     );
 };
