@@ -9,6 +9,8 @@ declare module "@styleguide/react" {
         ButtonProps,
         IconButtonProps,
         FlexProps,
+        NavLinkProps,
+        DrawerContentProps,
     } from "@chakra-ui/react";
 
     const chakraUiSystem: SystemContext;
@@ -23,10 +25,12 @@ declare module "@styleguide/react" {
         separator?: boolean;
     }>;
     const Item: ForwardRefExoticComponent<
-        FlexProps & RefAttributes<HTMLDivElement>
+        FlexProps & NavLinkProps & RefAttributes<HTMLDivElement>
     >;
 
-    const DrawerLayout: React.FC<{ children: React.ReactNode }>;
+    const DrawerLayout: ForwardRefExoticComponent<
+        DrawerContentProps & RefAttributes<HTMLDivElement>
+    >;
     const DrawerHeader: React.FC<{ children: React.ReactNode }>;
     const DrawerBody: React.FC<{ children: React.ReactNode }>;
     const DrawerFooter: React.FC<{ children: React.ReactNode }>;

@@ -48,20 +48,16 @@ const Sidebar = () => {
             </DrawerHeader>
 
             <DrawerBody>
-                <List>
-                    <Item justify="center">
-                        <NavLink to={`/`}>
-                            <IconButton size="xs" title="작성하기">
-                                <MdAdd />
-                            </IconButton>
-                        </NavLink>
+                <List separator>
+                    <Item justify="center" as={NavLink} to={`/`}>
+                        <IconButton size="xs" title="작성하기">
+                            <MdAdd />
+                        </IconButton>
                     </Item>
 
                     {paginatedItems.map((item) => (
-                        <Item key={item.id}>
-                            <NavLink to={`/${item.id}`}>
-                                <Text m={3}>{item.label}</Text>
-                            </NavLink>
+                        <Item key={item.id} as={NavLink} to={`/${item.id}`}>
+                            <Text m={3}>{item.label}</Text>
                         </Item>
                     ))}
                     {isError && <Text color="red.500">{error.message}</Text>}
