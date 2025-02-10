@@ -15,6 +15,8 @@ declare module "@styleguide/react" {
 
     const chakraUiSystem: SystemContext;
 
+    const Container: React.FC<{ children: React.ReactNode }>;
+
     const Button: React.FC<ButtonProps>;
 
     const IconButton: React.FC<IconButtonProps>;
@@ -45,6 +47,7 @@ declare module "@styleguide/react" {
 
     export {
         chakraUiSystem,
+        Container,
         Button,
         IconButton,
         List,

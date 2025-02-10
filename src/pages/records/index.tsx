@@ -1,12 +1,14 @@
-import Sidebar from "@/features/side";
 import { Outlet } from "react-router-dom";
+import { Container } from "@styleguide/react";
+
+import Sidebar from "@/features/side";
 
 const RecordPage = () => {
     return (
-        <>
+        <Container>
             <Sidebar />
-            <Outlet/>
-        </>
+            <Outlet />
+        </Container>
     );
 };
 
