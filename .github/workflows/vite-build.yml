@@ -17,6 +17,7 @@ jobs:
     env: # 환경 변수 설정
       VITE_MF_TYPE: ${{ vars.VITE_MF_TYPE }}
       VITE_SERVER_URL: ${{ vars.VITE_SERVER_URL }}
+      VITE_STYLEGUIDE_URL: ${{ vars.VITE_STYLEGUIDE_URL }}
 
     steps:
       - name: Checkout repository
