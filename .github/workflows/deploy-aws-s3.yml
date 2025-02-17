@@ -12,9 +12,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
       - name: Get latest run ID # Gradle Build 워크플로우의 ID를 가져옴
         id: get_run_id
         run: |
@@ -42,4 +39,4 @@ jobs:
 
       - name: Upload file to S3
         run: |
-          aws s3 cp ${{ vars.TARGET_FILE }} ${{ vars.S3_BUCKET }}
+          aws s3 sync ${{ vars.TARGET_FILE }} ${{ vars.S3_BUCKET }} --delete

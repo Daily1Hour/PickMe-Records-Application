@@ -1,5 +1,6 @@
 import { useFieldArray } from "react-hook-form";
-import { Box, VStack } from "@chakra-ui/react";
+import { Box } from "@chakra-ui/react";
+import { List } from "@styleguide/react";
 
 import { QaField } from "./QaField";
 import { AddDetail } from "./AddDetail";
@@ -12,20 +13,16 @@ export const QaForm = () => {
     });
 
     return (
-        <VStack align="stretch">
-            {fields.map((field, detailIndex) => (
-                <Box
-                    key={field.id}
-                    m={5}
-                    p={4}
-                    borderWidth="1px"
-                    borderRadius="md"
-                >
-                    <QaField name={name} detailIndex={detailIndex} />
-                    <DeleteDetail detailIndex={detailIndex} />
-                </Box>
-            ))}
+        <>
+            <List bordered separator>
+                {fields.map((field, detailIndex) => (
+                    <Box p="16px" w="100%" key={field.id}>
+                        <QaField name={name} detailIndex={detailIndex} />
+                        <DeleteDetail detailIndex={detailIndex} />
+                    </Box>
+                ))}
+            </List>
             <AddDetail append={append} />
-        </VStack>
+        </>
     );
 };
