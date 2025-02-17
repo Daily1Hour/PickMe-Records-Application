@@ -9,8 +9,9 @@
     "build:single-spa": "vite build --mode single-spa",
     "test": "echo \"Error: no test specified\"",
     "preview": "vite preview",
+    "preview:single-spa": "vite preview --mode single-spa",
     "lint": "npx steiger ./src",
-    "start": "npm run build && npm run build:single-spa && npm run preview"
+    "start": "npm run build && npm run build:single-spa && npm run preview:single-spa"
   },
   "dependencies": {
     "@chakra-ui/react": "^3.2.3",
