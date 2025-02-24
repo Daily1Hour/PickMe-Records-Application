@@ -19,6 +19,7 @@ const RecordForm = () => {
         defaultValues: record || Record.empty(),
         resolver: yupResolver(RecordSchema),
     });
+
     const recordId = record.recordId;
     const [isDialogOpen, setDialogOpen] = useState(false);
     const [idToDelete, setIdToDelete] = useState<string | null>(null);
