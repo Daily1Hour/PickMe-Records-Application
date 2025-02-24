@@ -40,6 +40,7 @@ jobs:
         env:
           VITE_PUBLIC_URL: ${{ vars.VITE_GH_PAGE_URL }}
           VITE_TOKEN_URL: ${{ vars.VITE_GH_PAGE_AUTH_PARCEL_URL }}
+          VITE_STYLEGUIDE_URL: ${{ vars.VITE_GH_PAGE_STYLEGUIDE_URL }}
         run: |
           npm run build
 
@@ -47,6 +48,7 @@ jobs:
         env:
           VITE_PUBLIC_URL: ${{ vars.VITE_PUBLIC_URL }}
           VITE_TOKEN_URL: ${{ vars.VITE_AUTH_PARCEL_URL }}
+          VITE_STYLEGUIDE_URL: ${{ vars.VITE_STYLEGUIDE_URL }}
         run: |
           npm run build:single-spa
 
