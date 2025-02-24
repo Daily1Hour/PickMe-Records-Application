@@ -10,8 +10,14 @@ export const usePagination = <T>(menuItems: T[]) => {
         (currentPage + 1) * itemsPerPage,
     );
 
-    const handlePageChange = (direction: "next" | "prev") => {
-        if (direction === "next" && currentPage < totalPages - 1) {
+    const handlePageChange = (
+        direction: "next" | "prev" | "first" | "last",
+    ) => {
+        if (direction === "first") {
+            setCurrentPage(0);
+        } else if (direction === "last") {
+            setCurrentPage(totalPages - 1);
+        } else if (direction === "next" && currentPage < totalPages - 1) {
             setCurrentPage(currentPage + 1);
         } else if (direction === "prev" && currentPage > 0) {
             setCurrentPage(currentPage - 1);
@@ -19,4 +25,4 @@ export const usePagination = <T>(menuItems: T[]) => {
     };
 
     return { paginatedItems, handlePageChange, currentPage, totalPages };
-}
+};
