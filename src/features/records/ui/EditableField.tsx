@@ -11,12 +11,13 @@ export default function EditableField({
     onChange: React.FormEventHandler;
     label: string;
 }) {
+    const maxLength = 1000;
     const [textLength, setTextLength] = useState<number>(value.length);
 
     return (
         <Field label={label}>
             <Editable.Root
-                maxLength={1000}
+                maxLength={maxLength}
                 defaultValue={value}
                 onSubmit={onChange}
                 onChange={onChange}
@@ -25,10 +26,11 @@ export default function EditableField({
                 <Editable.Preview>
                     {value || `${label}을 입력해주세요`}
                 </Editable.Preview>
-
                 <Editable.Textarea h="100px" />
 
-                <Text color="gray.400">{textLength} / 1000</Text>
+                <Text color="gray.400">
+                    {!!textLength && `${textLength} / ${maxLength}`}
+                </Text>
 
                 <EditableControl />
             </Editable.Root>
