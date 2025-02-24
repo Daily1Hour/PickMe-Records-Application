@@ -9,6 +9,7 @@ import { recordToCreateDTO, recordToUpdateDTO } from "../service/reocrdToDto";
 import { detailToDto } from "../service/detailToDto";
 import { Detail } from "@/entities/records/model/Detail";
 import { accessToken } from "@/shared/api/token";
+import { RecordType } from "../model/RecordSchema";
 
 const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 
@@ -51,13 +52,13 @@ export const deleteDetail = async (
     return response.data;
 };
 
-export const deleteRecord = async ( interviewRecordId: string ) => {
+export const deleteRecord = async (interviewRecordId: string) => {
     const response = await client.delete(`/interview/${interviewRecordId}`);
     return response.data;
 }
 
 export const createRecord = async (
-    data: Record,
+    data: RecordType,
 ): Promise<{ interviewRecordId: string }> => {
     try {
         const dto = recordToCreateDTO(data);
@@ -72,7 +73,7 @@ export const createRecord = async (
 
 export const updateRecord = async (
     interviewRecordId: string,
-    data: Record,
+    data: RecordType,
 ): Promise<InterviewRecordResponseDTO> => {
     try {
         const dto = recordToUpdateDTO(data);

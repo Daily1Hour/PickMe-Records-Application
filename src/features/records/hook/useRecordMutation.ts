@@ -1,13 +1,14 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 import { createRecord, updateRecord, updateDetail, deleteRecord } from "../api/detailsApi";
-import { Record, Detail } from "@/entities/records/model/";
+import { Detail } from "@/entities/records/model/";
+import { RecordType } from "../model/RecordSchema";
 
 export function useRecordMutation() {
     const queryclient = useQueryClient();
 
     const { mutateAsync: create } = useMutation({
-        mutationFn: ({ data }: { data: Record }) =>
+        mutationFn: ({ data }: { data: RecordType }) =>
             createRecord(data),
         onSuccess: () => {
             queryclient.refetchQueries({ queryKey: ["side"] });
@@ -20,7 +21,7 @@ export function useRecordMutation() {
             updatedata,
         }: {
             recordId: string;
-            updatedata: Record;
+            updatedata: RecordType;
         }) => updateRecord(recordId, updatedata),
         onSuccess: (_data, { recordId }) => {
             queryclient.refetchQueries({ queryKey: ["side"] });
