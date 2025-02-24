@@ -11,11 +11,10 @@ export const QaField = ({
     name: string;
     detailIndex: number;
 }) => {
-    const [countText, setCountText] = useState(0);
-
     const types = ["question", "answer"];
     const {
         control,
+        getValues,
         formState: { errors },
     } = useFormContext();
     const korType: Record<string, string> = {
@@ -23,6 +22,25 @@ export const QaField = ({
         answer: "답변",
     };
 
+    const defaultCountQuestion = getValues(
+        `${name}.${detailIndex}.question`,
+    ).length;
+    const defaultCountAnswer = getValues(
+        `${name}.${detailIndex}.answer`,
+    ).length;
+
+    const countQuestion = useState<number>(defaultCountQuestion);
+    const countAnswer = useState<number>(defaultCountAnswer);
+    const countState = {
+        question: {
+            get: countQuestion[0],
+            set: countQuestion[1],
+        },
+        answer: {
+            get: countAnswer[0],
+            set: countAnswer[1],
+        },
+    };
     console.log(errors);
 
     return (
@@ -36,7 +54,9 @@ export const QaField = ({
                             <Editable.Root
                                 maxLength={1000}
                                 onValueChange={(e) =>
-                                    setCountText(e.value.length)
+                                    (countState as any)[type].set(
+                                        e.value.length,
+                                    )
                                 }
                                 defaultValue={field.value}
                                 onSubmit={field.onChange}
@@ -47,8 +67,10 @@ export const QaField = ({
                                         `${korType[type]}을 입력해주세요`}
                                 </Editable.Preview>
                                 <Editable.Textarea h="100px" />
-                                <Text color="gray.400">{countText}/1000</Text>
-                                <EditableControl />
+                                <Text color="gray.400">
+                                    {(countState as any)[type].get}/1000
+                                </Text>
+                                <EditableControl></EditableControl>
                             </Editable.Root>
                         )}
                     />
