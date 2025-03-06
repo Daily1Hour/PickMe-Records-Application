@@ -1,13 +1,14 @@
-import { Summary } from "@/entities/records/model/Summary";
-import { accessToken } from "@/shared/api/token";
 import axios from "axios";
+
+import { accessToken } from "@/shared/api/token";
+import { Summary } from "@/entities/records/model/Summary";
 import { dtoToSide } from "../service/dtoToSide";
 
 const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 
 
 const client = axios.create({
-    baseURL: `${SERVER_URL}/records`,
+    baseURL: `${SERVER_URL}/record`,
     headers: {
         Authorization: `Bearer ${accessToken}`,
         "Content-Type": "application/json"
