@@ -4,13 +4,13 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { Stack, Heading, Button, HStack, Box } from "@chakra-ui/react";
 
 import { navigateTo } from "@/shared/api/router";
+import { Record } from "@/entities/records/model";
+import { RecordSchema, RecordType } from "../model/RecordSchema";
+import { useRecordStore } from "../store/recodStore";
 import { useRecordMutation } from "../hook/useRecordMutation";
 import { QaForm } from "./QaForm";
 import { LabelForm } from "./LabelForm";
-import { Record } from "@/entities/records/model/Record";
 import { DeleteConfirm } from "./DeleteConfirm";
-import { useRecordStore } from "../store/recodStore";
-import { RecordSchema, RecordType } from "../model/RecordSchema";
 
 const RecordForm = () => {
     const { record } = useRecordStore();

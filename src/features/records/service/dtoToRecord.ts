@@ -1,5 +1,5 @@
+import { Record, Detail } from "@/entities/records/model";
 import { InterviewRecordResponseDTO } from "../api/recordsDTOList";
-import { Record, Detail } from "@/entities/records/model/";
 
 export function dtoToRecord(dto: InterviewRecordResponseDTO) {
     return new Record(

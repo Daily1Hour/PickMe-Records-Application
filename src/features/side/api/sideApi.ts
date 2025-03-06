@@ -1,6 +1,6 @@
 import { client } from "@/shared/api";
-import { Summary } from "@/entities/records/model/Summary";
-import { dtoToSide } from "../service/dtoToSide";
+import { Summary } from "@/entities/records/model";
+import { dtoToSide } from "../service";
 
 export const fetchSidebarData = async (): Promise<Summary[]> => {
     const response = await client.get("/sidebar");

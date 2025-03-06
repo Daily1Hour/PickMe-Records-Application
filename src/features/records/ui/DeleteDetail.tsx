@@ -1,5 +1,6 @@
-import { HStack, IconButton } from "@chakra-ui/react";
 import { GrClose } from "react-icons/gr";
+import { HStack, IconButton } from "@chakra-ui/react";
+
 import { useQaMutation } from "../hook/useQaMutation";
 import { useRecordStore } from "../store/recodStore";
 

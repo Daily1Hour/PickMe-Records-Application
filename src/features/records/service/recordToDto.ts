@@ -1,8 +1,8 @@
+import { RecordType } from "../model/RecordSchema";
 import {
     InterviewRecordCreateDTO,
     InterviewRecordUpdateDTO,
 } from "../api/recordsDTOList";
-import { RecordType } from "../model/RecordSchema";
 
 export function recordToCreateDTO(record: RecordType) {
     return {

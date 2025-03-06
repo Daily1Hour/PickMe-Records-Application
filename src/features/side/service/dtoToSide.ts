@@ -1,4 +1,4 @@
-import { Summary } from "@/entities/records/model/Summary";
+import { Summary } from "@/entities/records/model";
 import { InterviewRecordSidebarDTO } from "@/features/records/api/recordsDTOList";
 
 export function dtoToSide(dto: InterviewRecordSidebarDTO[]) {

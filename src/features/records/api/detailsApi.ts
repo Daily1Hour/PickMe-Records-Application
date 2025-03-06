@@ -1,14 +1,16 @@
 import { client } from "@/shared/api";
-import { Record } from "@/entities/records/model/Record";
-import { Detail } from "@/entities/records/model/Detail";
+import { Record, Detail } from "@/entities/records/model";
+import { RecordType } from "../model/RecordSchema";
+import {
+    dtoToRecord,
+    recordToCreateDTO,
+    recordToUpdateDTO,
+    detailToDto,
+} from "../service";
 import {
     InterviewRecordResponseDTO,
     RecordDetailCreateDTO,
-} from "@/features/records/api/recordsDTOList";
-import { RecordType } from "../model/RecordSchema";
-import { dtoToRecord } from "../service/dtoToRecord";
-import { recordToCreateDTO, recordToUpdateDTO } from "../service/reocrdToDto";
-import { detailToDto } from "../service/detailToDto";
+} from "./recordsDTOList";
 
 export const fetchRecordById = async (
     interviewRecordId: string,

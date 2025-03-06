@@ -1,5 +1,5 @@
-import { RecordDetailUpdateDTO } from "../api/recordsDTOList";
 import { Detail } from "@/entities/records/model";
+import { RecordDetailUpdateDTO } from "../api/recordsDTOList";
 
 export function detailToDto(detail: Detail) {
     return {
