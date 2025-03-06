@@ -28,16 +28,7 @@ export interface InterviewRecordUpdateDTO {
     category: string;
 }
 
-
 export interface RecordDetailCreateDTO {
     question: string;
     answer: string;
-}
-
-export interface InterviewRecordSidebarDTO {
-    interviewRecordId: string;
-    enterpriseName: string;
-    category: string;
-    createdAt: string;
-    updatedAt: string;
 }
