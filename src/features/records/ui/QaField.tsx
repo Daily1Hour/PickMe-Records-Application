@@ -1,7 +1,7 @@
 import { Controller, useFormContext } from "react-hook-form";
-import { Editable, Stack } from "@chakra-ui/react";
-import EditableControl from "./EditableControl";
-import { Field } from "@/shared/chakra-ui/Field";
+import { Stack } from "@chakra-ui/react";
+
+import EditableField from "./EditableField";
 
 export const QaField = ({
     name,
@@ -11,35 +11,22 @@ export const QaField = ({
     detailIndex: number;
 }) => {
     const types = ["question", "answer"];
-    const { control } = useFormContext();
     const korType: Record<string, string> = {
         question: "면접 질문",
         answer: "답변",
     };
+    const { control } = useFormContext();
 
     return (
         <Stack spaceY={4}>
             {types.map((type) => (
-                <Field key={type} label={`${korType[type]}`}>
-                    <Controller
-                        name={`${name}.${detailIndex}.${type}`}
-                        control={control}
-                        render={({ field }) => (
-                            <Editable.Root
-                                defaultValue={field.value}
-                                onSubmit={field.onChange}
-                                onChange={field.onChange}
-                            >
-                                <Editable.Preview>
-                                    {field.value ||
-                                        `${korType[type]}을 입력해주세요`}
-                                </Editable.Preview>
-                                <Editable.Textarea h="100px" />
-                                <EditableControl />
-                            </Editable.Root>
-                        )}
-                    />
-                </Field>
+                <Controller
+                    name={`${name}.${detailIndex}.${type}`}
+                    control={control}
+                    render={({ field }) => (
+                        <EditableField {...field} label={korType[type]} />
+                    )}
+                />
             ))}
         </Stack>
     );
