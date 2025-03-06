@@ -13,7 +13,7 @@ import {
     Item,
 } from "@styleguide/react";
 
-import { Summary } from "@/entities/records/model/Summary";
+import { Summary } from "@/entities/records/model";
 import { usePagination } from "./hook/usePagination";
 import { fetchSidebarData } from "./api/sideApi";
 

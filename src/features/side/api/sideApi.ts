@@ -1,20 +1,8 @@
-import { Summary } from "@/entities/records/model/Summary";
-import { accessToken } from "@/shared/api/token";
-import axios from "axios";
-import { dtoToSide } from "../service/dtoToSide";
-
-const SERVER_URL = import.meta.env.VITE_SERVER_URL;
-
-
-const client = axios.create({
-    baseURL: `${SERVER_URL}/records`,
-    headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json"
-    }
-});
+import { client } from "@/shared/api";
+import { Summary } from "@/entities/records/model";
+import { dtoToSide } from "../service";
 
 export const fetchSidebarData = async (): Promise<Summary[]> => {
-    const response = await client.get('/sidebar');
+    const response = await client.get("/sidebar");
     return dtoToSide(response.data);
 };

@@ -1,10 +1,10 @@
-import { Record } from "@/entities/records/model/Record";
+import { RecordType } from "../model/RecordSchema";
 import {
     InterviewRecordCreateDTO,
     InterviewRecordUpdateDTO,
 } from "../api/recordsDTOList";
 
-export function recordToCreateDTO(record: Record) {
+export function recordToCreateDTO(record: RecordType) {
     return {
         enterpriseName: record.enterpriseName,
         category: record.category,
@@ -15,7 +15,7 @@ export function recordToCreateDTO(record: Record) {
     } as InterviewRecordCreateDTO;
 }
 
-export function recordToUpdateDTO(record: Record) {
+export function recordToUpdateDTO(record: RecordType) {
     return {
         enterpriseName: record.enterpriseName,
         category: record.category,

@@ -1,6 +1,6 @@
 import React from "react";
-import { Editable, IconButton } from "@chakra-ui/react";
 import { LuCheck, LuPencilLine, LuX } from "react-icons/lu";
+import { Editable, IconButton } from "@chakra-ui/react";
 
 const EditableControl: React.FC = () => {
     return (

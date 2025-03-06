@@ -1,21 +1,25 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useForm, FormProvider } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { Stack, Heading, Button, HStack, Box } from "@chakra-ui/react";
 
 import { navigateTo } from "@/shared/api/router";
+import { Record } from "@/entities/records/model";
+import { RecordSchema, RecordType } from "../model/RecordSchema";
+import { useRecordStore } from "../store/recodStore";
 import { useRecordMutation } from "../hook/useRecordMutation";
 import { QaForm } from "./QaForm";
 import { LabelForm } from "./LabelForm";
-import { Record } from "@/entities/records/model/Record";
 import { DeleteConfirm } from "./DeleteConfirm";
-import { useRecordStore } from "../store/recodStore";
 
 const RecordForm = () => {
-    const { record, setRecord } = useRecordStore();
+    const { record } = useRecordStore();
 
-    const methods = useForm<Record>({
+    const methods = useForm<RecordType>({
         defaultValues: record || Record.empty(),
+        resolver: yupResolver(RecordSchema),
     });
+
     const recordId = record.recordId;
     const [isDialogOpen, setDialogOpen] = useState(false);
     const [idToDelete, setIdToDelete] = useState<string | null>(null);
@@ -27,7 +31,7 @@ const RecordForm = () => {
         setDialogOpen(true);
     };
 
-    const onSubmit = async (data: Record) => {
+    const onSubmit = async (data: RecordType) => {
         try {
             if (!recordId) {
                 const newRecord = await create({ data });
@@ -38,8 +42,8 @@ const RecordForm = () => {
                 data.details.forEach((detail, index) => {
                     updateDetailMutation({ recordId, index, detail });
                 });
-                setRecord(data);
                 alert("수정했습니다.");
+                console.log(data);
             }
         } catch (error) {
             console.error("Error processing the record:", error);
@@ -90,4 +94,4 @@ const RecordForm = () => {
     );
 };
 
-export default React.memo(RecordForm);
+export default RecordForm;
