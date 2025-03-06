@@ -1,6 +1,6 @@
 import axios from "axios";
 
-import { accessToken } from "@/shared/api/token";
+import { accessToken } from "@/shared/api/tokens";
 import {
     InterviewRecordResponseDTO,
     RecordDetailCreateDTO,
@@ -15,7 +15,7 @@ import { RecordType } from "../model/RecordSchema";
 const SERVER_URL = import.meta.env.VITE_SERVER_URL;
 
 const client = axios.create({
-    baseURL: `${SERVER_URL}/record`,
+    baseURL: `${SERVER_URL}`,
     headers: {
         Authorization: `Bearer ${accessToken}`,
         "Content-Type": "application/json",
