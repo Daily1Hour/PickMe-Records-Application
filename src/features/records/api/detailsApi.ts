@@ -1,26 +1,14 @@
-import axios from "axios";
-
-import { accessToken } from "@/shared/api/tokens";
+import { client } from "@/shared/api";
+import { Record } from "@/entities/records/model/Record";
+import { Detail } from "@/entities/records/model/Detail";
 import {
     InterviewRecordResponseDTO,
     RecordDetailCreateDTO,
 } from "@/features/records/api/recordsDTOList";
-import { Record } from "@/entities/records/model/Record";
-import { Detail } from "@/entities/records/model/Detail";
+import { RecordType } from "../model/RecordSchema";
 import { dtoToRecord } from "../service/dtoToRecord";
 import { recordToCreateDTO, recordToUpdateDTO } from "../service/reocrdToDto";
 import { detailToDto } from "../service/detailToDto";
-import { RecordType } from "../model/RecordSchema";
-
-const SERVER_URL = import.meta.env.VITE_SERVER_URL;
-
-const client = axios.create({
-    baseURL: `${SERVER_URL}`,
-    headers: {
-        Authorization: `Bearer ${accessToken}`,
-        "Content-Type": "application/json",
-    },
-});
 
 export const fetchRecordById = async (
     interviewRecordId: string,
